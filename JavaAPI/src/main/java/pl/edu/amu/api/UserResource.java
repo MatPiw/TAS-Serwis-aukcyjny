@@ -20,6 +20,7 @@ public interface UserResource {
     @POST
     public User saveUser(User user);
 
+
     @GET
     @Path("/{login}")
     public User getUser(@PathParam("login") final String login);

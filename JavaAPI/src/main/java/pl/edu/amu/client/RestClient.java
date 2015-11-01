@@ -16,14 +16,16 @@ public class RestClient {
         System.out.println(responseData);
         
         //Zadanie 4
-        Response saveUserResponse = target.path("users").request().post(Entity.json(new User("Mr. hue", "huecov")));
+        Response saveUserResponse = target.path("users").request()
+                .post(Entity.json(new User("huecov", "123v", "Ukasz", "Marcin", "hue@cov.pl", "Poznan", "wichrowe 18",
+                        "123456789", "12-345")));
         System.out.println("Status zapisu usera: " + saveUserResponse.getStatus());
         saveUserResponse.close();
 
         String usersAsJsonString = target.path("users").request().get(String.class);
         System.out.println("Pobrana lista userow: " + usersAsJsonString);
 
-        User user = target.path("users/chemik").request().get(User.class);
-        System.out.println("Pobranie usera 'chemik': " + user);
+        User user = target.path("users/huecov").request().get(User.class);
+        System.out.println("Pobranie usera 'huecov': " + user);
     }
 }

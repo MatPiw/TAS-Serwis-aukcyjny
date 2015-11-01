@@ -16,6 +16,13 @@
     </repositories>
 
     <dependencies>
+    <!--SQL -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.0.5</version>
+        </dependency>
+
     <!-- Jersey -->
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>

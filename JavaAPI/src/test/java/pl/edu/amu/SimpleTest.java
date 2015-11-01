@@ -47,6 +47,6 @@ public class SimpleTest extends JerseyTest {
         final User user = target("users").path("/usr123").request().get(User.class);
         
         //then
-        assertEquals(user.getName(), "Mr. White");
+        assertEquals(user.getFirstName(), "Mr. White");
     }
 }
