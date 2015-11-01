@@ -17,7 +17,6 @@ public class UserResourceImpl implements UserResource {
 
     @Override
     public List<User> getUsers(){
-        ArrayList<User> userList = null;
         try {
             DBConnection database= new DBConnection();
             Connection connection = database.getConnection();
