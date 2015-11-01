@@ -22,12 +22,13 @@ public class UserResourceImpl implements UserResource {
             DBConnection database= new DBConnection();
             Connection connection = database.getConnection();
             DBDownloader downloader= new DBDownloader();
-            userList = downloader.getAllUsers(connection);
+            downloader.getAllUsers(connection, users);
 
         } catch (Exception e) {
-            //throw e;
+            e.printStackTrace();
+            System.out.println("coœ nie wysz³o");
         }
-        return userList;
+        return users;
     }
 
     @Override
