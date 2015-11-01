@@ -12,6 +12,11 @@ Prosty serwis aukcyjny wykonany w architekturze 3-warstwowej. Strona ma umożliw
   - [ ] GUI
   - [ ] logowanie / rejestracja
 - Warstwa biznesowa (Rest API)
-  - [ ] postawienie serwera
+  - [x] postawienie serwera
+  - [x] polacznenie z baza
+  - [x] pobieranie informacji z bazy (poprawic nadpisywanie)
+  - [ ] ogarniecie metody POST
+  - [ ] ogarniecie metody PATCH
+  - [ ] zapisywanie informacji do bazy
 - Warstwa bazy danych
   - [x] Stworzenie bazy danych
