@@ -4,7 +4,7 @@
         get_include_path()
         . PATH_SEPARATOR . "./appl/controllers/"
         . PATH_SEPARATOR . "./libs/"
-        . PATH_SEPARATOR . "./appl_backend/controllers/"
+        . PATH_SEPARATOR . "./appl_serwis/controllers/"
     );
 
     function __autoloadControllers($class_name)
@@ -24,7 +24,6 @@
         return true;
     }
 
-
     function __autoloadSerwisControllers($class_name)
     {
 
@@ -34,6 +33,8 @@
         }
         else
         {
+            $class_name = str_replace('Controller', '.controller', $class_name);
+
             if (file_exists(dirRoot . 'appl_serwis/controllers/' . $class_name . '.php'))
             {
                 include(dirRoot . 'appl_serwis/controllers/' . $class_name . '.php');
@@ -42,6 +43,7 @@
 
         return true;
     }
+
 
     function __autoloadLibs($class_name)
     {
