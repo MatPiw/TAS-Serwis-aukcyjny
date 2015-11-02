@@ -34,9 +34,22 @@ class usersController extends controller
 
     private function logging()
 	{
-		$login=$_POST['login'];
-		$pass=$_POST['pass'];
-		
+		$parameter=$_POST['login'].':'.(md5($_POST['pass']));
+		$file = '127.0.01/users/'.$parameter;
+		$file_headers = @get_headers($file);
+		if($file_headers[0] == 'HTTP/1.1 404 Not Found') {
+			$_SESSION['logged']=true;
+			$json = file_get_contents($file);
+			$obj = json_decode($json);
+			$_SESSION['userId']=$obj['id'];
+			$_SESSION['firstName']=$obj['firstName'];
+			return true;
+		}
+		else {
+			$_SESSION['logged']=false;
+			return false;
+		}
+
 		$json = file_get_contents('127.0.01/login/'.$login.'/'.$pass.'/');
 		$obj = json_decode($json);
 		if($json['response'] == true)
