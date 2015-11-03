@@ -21,7 +21,7 @@ Prosty serwis aukcyjny wykonany w architekturze 3-warstwowej. Strona ma umożliw
 - Warstwa bazy danych
   - [x] Stworzenie bazy danych
 
-## Funkcjonalnoć
+## Funkcjonalnosć
 - [x] logowanie
 - [ ] rejestracja
 - [ ] edycja danych osobowych
