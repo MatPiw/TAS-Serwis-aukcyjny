@@ -20,3 +20,16 @@ Prosty serwis aukcyjny wykonany w architekturze 3-warstwowej. Strona ma umożliw
   - [ ] zapisywanie informacji do bazy
 - Warstwa bazy danych
   - [x] Stworzenie bazy danych
+
+## Funkcjonalnoć
+- [x] logowanie
+- [ ] rejestracja
+- [ ] edycja danych osobowych
+- [ ] dodawanie ogloszenia
+- [ ] edycja ogloszenia
+- [ ] licytacja
+- [ ] kup teraz
+- [ ] dodawanie komentarzy
+- [ ] wyswietlanie profilu uzytkownika
+- [ ] usuwanie komentarzy (admin)
+- [ ] usuwanie ofert
