@@ -9,7 +9,7 @@
     define( dbPass, '' );
     define( dbHost, 'localhost' );
 
-    define('dirRoot', 'C:/xampp/htdocs/php/');
-    define('dirWww', 'http://127.0.0.1/php/');
+    define('dirRoot', 'C:/xampp/htdocs/tas-serwis-aukcyjny/serwis/');
+    define('dirWww', 'http://127.0.0.1/tas-serwis-aukcyjny/serwis/');
 
     define('DEFAULT_LOGOUT_TIME', '60'); // minutes

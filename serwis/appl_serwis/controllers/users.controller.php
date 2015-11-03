@@ -15,7 +15,7 @@ class usersController extends controller
         parent::__construct($_view, $_action, $_params, '_serwis');
     }
 
-    public function loginAction($_pars)
+    public function loginAction()
     {
         
 		if($_POST['login'])
@@ -32,35 +32,41 @@ class usersController extends controller
 		}
     }
 
+    public function logoutAction()
+    {
+        session_unset();
+        $this->view->assign("message", "Zostałeś wylogowany.");
+        $this->view->assign("inc_static", "users/loginAction.html");
+        $this->loginAction();
+
+    }
+
     private function logging()
 	{
-		$parameter=$_POST['login'].':'.(md5($_POST['pass']));
-		$file = '127.0.01/users/'.$parameter;
+		$login=$_POST['login'];
+        $password=md5($_POST['pass']);
+		$file = 'http://localhost:8080/users/'.$login;
 		$file_headers = @get_headers($file);
-		if($file_headers[0] == 'HTTP/1.1 404 Not Found') {
-			$_SESSION['logged']=true;
+		if($file_headers[0] != 'HTTP/1.1 404 Not Found') {
 			$json = file_get_contents($file);
 			$obj = json_decode($json);
-			$_SESSION['userId']=$obj['id'];
-			$_SESSION['firstName']=$obj['firstName'];
-			return true;
+            if($obj->{'login'} == $login && $password == $obj->{'hashPassword'})
+            {
+                $_SESSION['logged']=true;
+                //$_SESSION['userId']=$obj->{'id'};
+                $_SESSION['firstName']=$obj->{'firstName'};
+                return true;
+            }
+            else
+            {
+                $_SESSION['logged']=false;
+                return false;
+            }
 		}
 		else {
 			$_SESSION['logged']=false;
 			return false;
 		}
 
-		$json = file_get_contents('127.0.01/login/'.$login.'/'.$pass.'/');
-		$obj = json_decode($json);
-		if($json['response'] == true)
-		{
-			$_SESSION['logged']=true;
-			return true;
-		}
-		else
-		{
-			$_SESSION['logged']=false;
-			return false;
-		}
 	}
 }
