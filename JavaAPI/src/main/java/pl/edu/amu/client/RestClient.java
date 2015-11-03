@@ -1,6 +1,6 @@
 package pl.edu.amu.client;
 
-import pl.edu.amu.api.dto.User;
+import pl.edu.amu.rest.dao.User;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;

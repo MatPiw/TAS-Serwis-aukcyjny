@@ -1,12 +1,10 @@
 package pl.edu.amu.tools;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.List;
-import pl.edu.amu.api.dto.User;
+import pl.edu.amu.rest.dao.User;
 
 public class DBDownloader {
 

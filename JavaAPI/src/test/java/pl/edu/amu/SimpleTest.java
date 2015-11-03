@@ -3,9 +3,8 @@ package pl.edu.amu;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Test;
-import pl.edu.amu.rest.HelloResourceImpl;
-import pl.edu.amu.rest.UserResourceImpl;
-import pl.edu.amu.api.dto.User;
+import pl.edu.amu.rest.UserResource;
+import pl.edu.amu.rest.dao.User;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Application;
@@ -17,14 +16,14 @@ public class SimpleTest extends JerseyTest {
 
     @Override
     protected Application configure() {
-        return new ResourceConfig(HelloResourceImpl.class, UserResourceImpl.class);
+        return new ResourceConfig( UserResource.class);
     }
  
-    @Test
+    /*@Test
     public void shouldSayHallo() {
         final String hello = target("hello").path("/Mr. White").request().get(String.class);
         assertEquals("hello: Mr. White", hello);
-    }
+    }*/
 
     @Test
     public void shouldSaveUser() {
