@@ -66,12 +66,14 @@ class usersController extends controller
             $obj = json_decode($json);
             if($obj->{'login'} == $login && $hashCode == $obj->{'hashPassword'})
             {
+                unset($_POST['login']);
                 $this->view->assign("message", "YOur account has been created. You can log in now.");
                 $this->view->assign("inc_static", "users/loginAction.html");
                 $this->loginAction();
             }
             else
             {
+                unset($_POST['login']);
                 $this->view->assign("message", "A problem occoured with your confirmation link, please contact us for further instructions.");
                 $this->view->assign("inc_static", "users/loginAction.html");
                 $this->loginAction();
