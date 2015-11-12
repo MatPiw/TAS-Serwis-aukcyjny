@@ -1,5 +1,7 @@
 package pl.edu.amu.rest.dao;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import java.sql.Date;
 
 public class User{
@@ -15,6 +17,7 @@ public class User{
     private String phone;
     private String zipCode;
     private Date createdAt;
+    private Boolean confirmed;
 
     public User() {
         //
@@ -128,6 +131,10 @@ public class User{
     public void setPermissions(Boolean permissions) {
         this.permissions = permissions;
     }
+
+    public Boolean getConfirmed() { return confirmed; }
+
+    public void setConfirmed(Boolean confirmed) { this.confirmed = confirmed; }
 
     @Override
     public boolean equals(Object o) {
