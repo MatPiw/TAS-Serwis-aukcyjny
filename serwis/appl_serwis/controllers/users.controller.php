@@ -94,9 +94,15 @@ class usersController extends controller
         $json['zipc']=$_POST['zipc'];
         $json['phone']=$_POST['phone'];
 
-        $file = 'http://localhost:8080/register/'.json_encode($json);
-        $file_headers = @get_headers($file);
-        if($file_headers[0] != 'HTTP/1.1 404 Not Found')
+        $uri= 'http://localhost:8080/users/';
+
+        $response = \Httpful\Request::post($uri)
+            ->sendsJson()                               // tell it we're sending (Content-Type) JSON...
+            //->authenticateWith('username', 'password')  // authenticate with basic auth...
+            ->body('{"json":"is awesome"}')             // attach a body/payload...
+            ->send();
+
+        if($response != 'HTTP/1.1 404 Not Found')
         {
             $to = $_POST['email'];
             $subject = "Los Peneros Hermanos- Confirmation e-mail";

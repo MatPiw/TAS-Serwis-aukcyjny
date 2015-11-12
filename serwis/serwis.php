@@ -7,7 +7,7 @@
     error_reporting(E_ALL^E_NOTICE);
 
     include('config/config.php');
-
+    include(dirRoot . 'libs/httpful.phar');
     include(dirRoot . 'libs/class.controller.php');
     include(dirRoot . 'libs/smarty-3/libs/Smarty.class.php');
     include(dirRoot . 'libs/class.userRightsConfig.php');
