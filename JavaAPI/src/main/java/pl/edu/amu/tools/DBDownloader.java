@@ -1,6 +1,7 @@
 package pl.edu.amu.tools;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
@@ -32,6 +33,38 @@ public class DBDownloader {
                 userList.add(user);            }
             //return userList;
         } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public void saveUser(Connection connection, User user) throws Exception {
+        String login = user.getLogin();
+        String firstName = user.getFirstName();
+        String lastName = user.getLastName();
+        String email = user.getEmail();
+        Boolean permissions = user.getPermissions();
+        String address = user.getAddress();
+        String city = user.getCity();
+        String phone = user.getPhone();
+        String zipCode = user.getZipCode();
+        String hashPassword = user.getHashPassword();
+        Date createdAt = user.getCreatedAt();
+        Boolean confirmed = user.getConfirmed();
+
+        int result = 0;
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "INSERT INTO users VALUES('"
+                            + login + "','" + hashPassword + "',"
+                            + permissions + ",'" + firstName + "','"
+                            + lastName + "','" + email + "','"
+                            + city + "','" + address + "','"
+                            + phone + "','" + zipCode + "',"
+                            + confirmed + ",'" + createdAt + "')");
+            System.out.println(ps);
+            result = ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("Query Status: " + result);
             throw e;
         }
     }
