@@ -1,6 +1,5 @@
 package pl.edu.amu.rest.dao;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.sql.Date;
 

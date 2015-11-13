@@ -8,9 +8,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by adrian.perek on 2015-03-22.
- */
+
 public class UserRepository {
 
     private final List<User> users = new ArrayList<>();
