@@ -54,15 +54,18 @@ public class DBDownloader {
         int result = 0;
         try {
             PreparedStatement ps = connection.prepareStatement(
-                    "INSERT INTO users VALUES('"
+                    "INSERT INTO users(LOGIN, HASH_PASSWORD, PERMISSIONS, FIRST_NAME," +
+                            "LAST_NAME, EMAIL, CITY, ADDRESS, PHONE, ZIP_CODE,CONFIRMED, CREATED_AT)" +
+                            " VALUES('"
                             + login + "','" + hashPassword + "',"
                             + permissions + ",'" + firstName + "','"
                             + lastName + "','" + email + "','"
                             + city + "','" + address + "','"
                             + phone + "','" + zipCode + "',"
                             + confirmed + ",'" + createdAt + "')");
-            System.out.println(ps);
+            //System.out.println(ps);
             result = ps.executeUpdate();
+            System.out.println("Dodano uzytkownika " + login + " do bazy danych.");
         } catch (Exception e) {
             System.out.println("Query Status: " + result);
             throw e;
