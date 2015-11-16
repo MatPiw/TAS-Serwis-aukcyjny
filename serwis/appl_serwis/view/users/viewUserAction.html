@@ -4,25 +4,26 @@
 <div class="col-md-9">
 
 
-Imię: {$profileData.firstName}<br>
-Nazwisko: {$profileData.lastName}<br>
-Email: {$profileData.email}<br>
+Imię: {$profileData->firstName}<br>
+Nazwisko: {$profileData->lastName}<br>
+Email: {$profileData->email}<br>
 <br><br>
 Użytkownik wziął udział w aukcjach:<br><br>
-<table>
+<table border="1px solid" style="border: 1px solid">
     <tr>
         <th>Tytuł</th>
         <th>Zdjęcie</th>
         <th>Data</th>
     </tr>
-{foreach $profileData.auctions as $i}
+{foreach $profileData->userOffers as $i}
     <tr>
-        <td>{$i.title}</td>
-        <td>{$i.photo_path}</td>
-        <td>{$i.finishedAt}</td>
+        <td>{$i->title}</td>
+        <td><img width="100" src="{$i->picturePath}"></td>
+        <td>{$i->finishedAt}</td>
     </tr>
 {/foreach}
-</table>
+</table><br>
+    <br><br>
 
 Użytkownik otrzymał następujące komentarze:<br><br>
 <table>
@@ -31,15 +32,15 @@ Użytkownik otrzymał następujące komentarze:<br><br>
         <th>Ocena</th>
         <th>Data</th>
     </tr>
-    {foreach $profileData.comments as $i}
+    {foreach $profileData->comments as $i}
     <tr>
-        <td>{$i.comment}</td>
-        {if $i.positive == 1}
+        <td>{$i->comment}</td>
+        {if $i->positive == 1}
             <td>POZYTYWNY</td>
         {else}
             <td>NEGATYWNY</td>
         {/if}
-        <td>{$i.createdAt}</td>
+        <td>{$i->createdAt}</td>
     </tr>
     {/foreach}
 </table>

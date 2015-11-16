@@ -38,11 +38,9 @@
                     <a href="#">Contact</a>
                 </li>
 
-
-
                 {if $smarty.session.logged == true}
                 <li>
-                    <a href="{$dirWww}serwis/users/viewUser/">MÃ³j profil</a>
+                    <a href="{$dirWww}serwis/users/viewUser/login:{$smarty.session.userLogin}/">Mój profil</a>
                 </li>
                 {else}
                 <li>

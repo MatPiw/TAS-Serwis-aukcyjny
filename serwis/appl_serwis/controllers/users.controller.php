@@ -18,10 +18,10 @@ class usersController extends controller
     public function viewUserAction($_pars)
     {
         $params=$this->params->getParams($_pars);
-        $userId=$params['id'];
-        $profileArray= (array) $this->getUserInfo($userId);
-        $this->view->assign('profileData', $profileArray);
-        $this->view->assign('id', $userId);
+        $userLogin=$params['login'];
+        $profileObject= $this->getUserInfo($userLogin);
+        $this->view->assign('profileData', $profileObject);
+        $this->view->assign('id', $userLogin);
     }
 
     public function loginAction()
@@ -88,9 +88,9 @@ class usersController extends controller
         }
     }
 
-    private function getUserInfo($_id)
+    private function getUserInfo($_login)
     {
-        $file = 'http://localhost:8080/users/'.$_id;
+        $file = 'http://localhost:8080/users/'.$_login;
         $file_headers = @get_headers($file);
         if($file_headers[0] != 'HTTP/1.1 404 Not Found') {
             $json = file_get_contents($file);
@@ -174,7 +174,7 @@ class usersController extends controller
             if($obj->{'login'} == $login && $password == $obj->{'hashPassword'})
             {
                 $_SESSION['logged']=true;
-                //$_SESSION['userId']=$obj->{'id'};
+                $_SESSION['userLogin']=$obj->{'login'};
                 $_SESSION['firstName']=$obj->{'firstName'};
                 return true;
             }
