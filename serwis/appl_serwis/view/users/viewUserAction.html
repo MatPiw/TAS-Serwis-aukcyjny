@@ -1,0 +1,39 @@
+Imię: {$profileData.firstName}<br>
+Nazwisko: {$profileData.lastName}<br>
+Email: {$profileData.email}<br>
+<br><br>
+Użytkownik wziął udział w aukcjach:<br><br>
+<table>
+    <tr>
+        <th>Tytuł</th>
+        <th>Zdjęcie</th>
+        <th>Data</th>
+    </tr>
+{foreach $profileData.auctions as $i}
+    <tr>
+        <td>{$i.title}</td>
+        <td>{$i.photo_path}</td>
+        <td>{$i.finishedAt}</td>
+    </tr>
+{/foreach}
+</table>
+
+Użytkownik otrzymał następujące komentarze:<br><br>
+<table>
+    <tr>
+        <th>Komentarz</th>
+        <th>Ocena</th>
+        <th>Data</th>
+    </tr>
+    {foreach $profileData.comments as $i}
+    <tr>
+        <td>{$i.comment}</td>
+        {if $i.positive == 1}
+            <td>POZYTYWNY</td>
+        {else}
+            <td>NEGATYWNY</td>
+        {/if}
+        <td>{$i.createdAt}</td>
+    </tr>
+    {/foreach}
+</table>

@@ -15,6 +15,15 @@ class usersController extends controller
         parent::__construct($_view, $_action, $_params, '_serwis');
     }
 
+    public function viewUserAction($_pars)
+    {
+        $params=$this->params->getParams($_pars);
+        $userId=$params['id'];
+        $profileArray= (array) $this->getUserInfo($userId);
+        $this->view->assign('profileData', $profileArray);
+        $this->view->assign('id', $userId);
+    }
+
     public function loginAction()
     {
 
@@ -34,7 +43,7 @@ class usersController extends controller
 
     public function registerAction()
     {
-        if($_POST['login'])
+        if($_POST['loginr'])
         {
             $response=$this->registering();
             if($response == true)
@@ -66,14 +75,12 @@ class usersController extends controller
             $obj = json_decode($json);
             if($obj->{'login'} == $login && $hashCode == $obj->{'hashPassword'})
             {
-                unset($_POST['login']);
-                $this->view->assign("message", "YOur account has been created. You can log in now.");
+                $this->view->assign("message", "Your account has been created. You can log in now.");
                 $this->view->assign("inc_static", "users/loginAction.html");
                 $this->loginAction();
             }
             else
             {
-                unset($_POST['login']);
                 $this->view->assign("message", "A problem occoured with your confirmation link, please contact us for further instructions.");
                 $this->view->assign("inc_static", "users/loginAction.html");
                 $this->loginAction();
@@ -81,25 +88,40 @@ class usersController extends controller
         }
     }
 
+    private function getUserInfo($_id)
+    {
+        $file = 'http://localhost:8080/users/'.$_id;
+        $file_headers = @get_headers($file);
+        if($file_headers[0] != 'HTTP/1.1 404 Not Found') {
+            $json = file_get_contents($file);
+            $obj = json_decode($json);
+            return $obj;
+        }
+
+    }
+
     private function registering()
     {
         $json=array();
-        $json['login']=$_POST['login'];
-        $json['pass']=md5($_POST['pass']);
+        $json['firstName']=$_POST['fname'];
+        $json['lastName']=$_POST['lname'];
+        $json['permissions']=1;
+        $json['login']=$_POST['loginr'];
+        $json['hashPassword']=md5($_POST['pass']);
         $json['email']=$_POST['email'];
-        $json['fname']=$_POST['fname'];
-        $json['lname']=$_POST['lname'];
+        $json['confirmed']=0;
         $json['city']=$_POST['city'];
         $json['address']=$_POST['address'];
-        $json['zipc']=$_POST['zipc'];
+        $json['zipCode']=$_POST['zipc'];
         $json['phone']=$_POST['phone'];
+        $json['createdAt']=date('Y-m-d', time());
 
         $uri= 'http://localhost:8080/users/';
-
+        $sendJson=json_encode($json);
         $response = \Httpful\Request::post($uri)
             ->sendsJson()                               // tell it we're sending (Content-Type) JSON...
             //->authenticateWith('username', 'password')  // authenticate with basic auth...
-            ->body('{"json":"is awesome"}')             // attach a body/payload...
+            ->body($sendJson)             // attach a body/payload...
             ->send();
 
         if($response != 'HTTP/1.1 404 Not Found')
