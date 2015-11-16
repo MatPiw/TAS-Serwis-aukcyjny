@@ -1,11 +1,22 @@
-<p style="color:red;">{$message}</p>
-{if $smarty.session.logged != true}
-	<form method="POST" action="">
-		<input type="text" name="login"><br>
-		<input type="text" name="pass"><br>
-		<input type="submit" value="Zaloguj"><br>
-	</form>
-{else}
-	Witaj {$smarty.session.firstName}!
-    <a href="{$dirWww}serwis/users/logout/">Wyloguj</a>
-{/if}
+<div class="row">
+
+
+
+		<div class="col-md-9">
+
+				<p style="color:red;">{$message}</p>
+				{if $smarty.session.logged != true}
+					<form method="POST" action="">
+						<input type="text" name="login"><br>
+						<input type="text" name="pass"><br>
+						<input type="submit" value="Zaloguj"><br>
+					</form>
+				{else}
+					Witaj {$smarty.session.firstName}!
+						<a href="{$dirWww}serwis/users/logout/">Wyloguj</a>
+				{/if}
+
+
+		</div>
+
+</div>

@@ -1,19 +1,34 @@
-{if $smarty.session.logged != true}
-<form method="POST" action="">
-    <fieldset>
-        <legend>Registration</legend>
-        First name: <input type="text" name="fname"><br>
-        Last name: <input type="text" name="lname"><br>
-        Login: <input type="text" name="loginr"><br>
-        Password: <input type="text" name="pass"><br>
-        Email: <input type="text" name="email"><br>
-        City: <input type="text" name="city"><br>
-        Address: <input type="text" name="address"><br>
-        Zip code: <input type="text" name="zipc"><br>
-        Phone number: <input type="text" name="phone"><br>
-        <input type="submit" value="Zarejestruj"><br>
-    </fieldset>
-</form>
-{else}
-You're already logged in!
-{/if}
+<div class="row">
+
+
+
+    <div class="col-md-9">
+
+
+
+      {if $smarty.session.logged != true}
+            <form method="POST" action="">
+                <fieldset>
+                    <legend>Registration</legend>
+                    First name: <input type="text" name="fname"><br>
+                    Last name: <input type="text" name="lname"><br>
+                    Login: <input type="text" name="loginr"><br>
+                    Password: <input type="text" name="pass"><br>
+                    Email: <input type="text" name="email"><br>
+                    City: <input type="text" name="city"><br>
+                    Address: <input type="text" name="address"><br>
+                    Zip code: <input type="text" name="zipc"><br>
+                    Phone number: <input type="text" name="phone"><br>
+                    <input type="submit" value="Zarejestruj"><br>
+                </fieldset>
+            </form>
+            {else}
+            You're already logged in!
+            {/if}
+
+
+
+    </div>
+
+
+</div>
