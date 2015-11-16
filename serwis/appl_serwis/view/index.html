@@ -38,21 +38,25 @@
                     <a href="#">Contact</a>
                 </li>
                 <li>
-                    <a href="#">Logowanie</a>
+                    <a href="{$dirWww}serwis/users/login/">Logowanie</a>
                 </li>
                 <li>
-                    <a href="registr.html">Rejestracja</a>
+                    <a href="{$dirWww}serwis/users/register/">Rejestracja</a>
                 </li>
 
             </ul>
             <div id="login">
-
+                <p style="color:red;">{$message}</p>
+                {if $smarty.session.logged != true}
                 <form id="logowanie" action="{$dirWww}serwis/users/login/" method="post" align = "center">
                     Login: <input type="text" name="login" id="username">
-                    Has³‚o: <input type="password" name="pass" id="password">
+                    Has³o: <input type="password" name="pass" id="password">
                     <button id="submit">Login</button>
-
                 </form>
+                {else}
+                Witaj {$smarty.session.firstName}!
+                <a href="{$dirWww}serwis/users/logout/">Wyloguj</a>
+                {/if}
                 <script type="text/javascript" src="{$dirWww}appl_serwis/view/script/jquery-2.1.4.min.js"></script>
                 <script type="text/javascript" src="{$dirWww}appl_serwis/view/script/validlogin.js"></script>
 
@@ -69,7 +73,7 @@
 <!-- Page Content -->
 <div class="container">
 
-
+    {if $inc_static}{include file="{$inc_static}"}{/if}
 </div>
 <!-- /.container -->
 
