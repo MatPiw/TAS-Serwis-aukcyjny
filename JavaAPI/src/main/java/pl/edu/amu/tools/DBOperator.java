@@ -5,9 +5,14 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
+
+import pl.edu.amu.rest.dao.Offer;
 import pl.edu.amu.rest.dao.User;
 
-public class DBDownloader {
+public class DBOperator {
+
+
+//-------------users------------------//
 
     public void getAllUsers(Connection connection, List<User> userList) throws Exception {
         try {
@@ -72,4 +77,62 @@ public class DBDownloader {
         }
     }
 
+    //-------------------offers-------------------------//
+    public void getAllOffers(Connection connection, List<Offer> offers) throws Exception {
+        try {
+            // String uname = request.getParameter("uname");
+            PreparedStatement ps = connection
+                    .prepareStatement("SELECT * FROM offers");
+            // ps.setString(1,uname);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Offer offer = new Offer();
+                offer.setId(rs.getInt("ID"));
+                offer.setTitle(rs.getString("TITLE"));
+                offer.setDescription(rs.getString("DESCRIPTION"));
+                offer.setPicturePath(rs.getString("PICTURE_PATH"));
+                offer.setOwnerId(rs.getInt("OWNER_ID"));
+                offer.setBuyNowPrice(rs.getFloat("BUY_NOW_PRICE"));
+                offer.setActive(rs.getBoolean("ACTIVE"));
+                offer.setCreatedAt(rs.getDate("CREATED_AT"));
+                offer.setFinishedAt(rs.getDate("FINISHED_AT"));
+                offers.add(offer);
+            }
+            //return userList;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public void saveOffer(Connection connection, Offer offer) throws Exception {
+
+        //int id = offer.getId();
+        String title = offer.getTitle();
+        String description = offer.getDescription();
+        String picturePath = offer.getPicturePath();
+        int ownerId = offer.getOwnerId();
+        float buyNowPrice = offer.getBuyNowPrice();
+        Boolean active = offer.getActive();
+        Date createdAt = offer.getCreatedAt();
+        Date finishedAt = offer.getFinishedAt();
+
+        int result = 0;
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "INSERT INTO offers (TITLE, DESCRIPTION, PICTURE_PATH, OWNER_ID," +
+                            "BUY_NOW_PRICE, ACTIVE, CREATED_AT, FINISHED_AT)" +
+                            " VALUES('"
+                            + title + "','"
+                            + description + "','" + picturePath + "',"
+                            + ownerId + "," + buyNowPrice + ","
+                            + active + ",'" + createdAt + "','"
+                            + finishedAt+ "')");
+            //System.out.println(ps);
+            result = ps.executeUpdate();
+            System.out.println("Dodano oferte o tytule " + title + " do bazy danych.");
+        } catch (Exception e) {
+            System.out.println("Query Status: " + result);
+            throw e;
+        }
+    }
 }

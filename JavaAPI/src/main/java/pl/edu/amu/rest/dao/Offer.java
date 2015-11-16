@@ -5,6 +5,7 @@ import java.sql.Date;
 
 public class Offer {
     private int id;
+    private String title;
     private String description;
     private String picturePath;
     private int ownerId;
@@ -12,6 +13,14 @@ public class Offer {
     private Boolean active;
     private Date createdAt;
     private Date finishedAt;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public int getId() {return id;}
 
@@ -80,6 +89,7 @@ public class Offer {
     public String toString() {
         return "Offer{" +
                 "id='" +id + '\'' +
+                ", title='"+ title + "'" +
                 ", description='" + description + '\'' +
                 ", ownerId='" + ownerId + '\'' +
                 ", picturePath='" + picturePath + '\'' +

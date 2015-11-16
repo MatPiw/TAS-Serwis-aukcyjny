@@ -3,7 +3,7 @@ package pl.edu.amu.repository;
 
 import pl.edu.amu.rest.dao.Offer;
 import pl.edu.amu.tools.DBConnection;
-import pl.edu.amu.tools.DBDownloader;
+import pl.edu.amu.tools.DBOperator;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ public class OfferRepository {
 
 
     private DBConnection database;
-    private DBDownloader downloader;
+    private DBOperator operator;
     private Connection connection;
 
     public List<Offer> getOffers(){
@@ -25,8 +25,8 @@ public class OfferRepository {
         try {
             database= new DBConnection();
             connection = database.getConnection();
-            downloader= new DBDownloader();
-            //downloader.getAllOffers(connection, offers);
+            operator= new DBOperator();
+            operator.getAllOffers(connection, offers);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -36,8 +36,28 @@ public class OfferRepository {
     }
 
     public Offer save(Offer offer)  {
-        offers.add(offer);
-        return offer;
+
+        //tu jest problem, bo id przydziela baza danych a nie bezposrednio api. przez to jest problem z zapisywaniem ofert
+        Offer dbOffer = findById(offer.getId());
+        if (dbOffer != null) {
+            offer.setId(dbOffer.getId());
+            offer.setTitle(dbOffer.getTitle());
+            offer.setDescription(dbOffer.getDescription());
+            offer.setPicturePath(dbOffer.getPicturePath());
+            offer.setActive(dbOffer.getActive());
+            offer.setCreatedAt(dbOffer.getCreatedAt());
+            offer.setFinishedAt(dbOffer.getFinishedAt());
+        }
+        else {
+            try {
+                operator.saveOffer(connection, offer);
+                offers.add(offer);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return dbOffer;
     }
 
     public Offer findById(int id) {

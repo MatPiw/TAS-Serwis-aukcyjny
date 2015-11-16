@@ -2,7 +2,8 @@ package pl.edu.amu.repository;
 
 import pl.edu.amu.rest.dao.User;
 import pl.edu.amu.tools.DBConnection;
-import pl.edu.amu.tools.DBDownloader;
+import pl.edu.amu.tools.DBOperator;
+import pl.edu.amu.tools.DBOperator;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class UserRepository {
 
 
     private DBConnection database;
-    private DBDownloader downloader;
+    private DBOperator operator;
     private Connection connection;
 
     public List<User> getUsers(){
@@ -26,12 +27,12 @@ public class UserRepository {
         try {
             database= new DBConnection();
             connection = database.getConnection();
-            downloader= new DBDownloader();
-            downloader.getAllUsers(connection, users);
+            operator= new DBOperator();
+            operator.getAllUsers(connection, users);
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("coœ nie wysz³o");
+            System.out.println("cos nie wyszlo");
         }
         //users.add(new User("huecov", "h123"));
     }
@@ -52,11 +53,12 @@ public class UserRepository {
             dbUser.setConfirmed(user.getConfirmed());
         } else {
             try {
-                downloader.saveUser(connection, user);
+                operator.saveUser(connection, user);
+                users.add(user);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            users.add(user);
+
         }
         return user;
     }
