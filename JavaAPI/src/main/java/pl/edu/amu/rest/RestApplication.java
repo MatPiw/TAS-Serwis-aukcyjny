@@ -8,5 +8,6 @@ public class RestApplication extends ResourceConfig {
         //register(HelloResourceImpl.class);
         register(UserResource.class);
         register(OfferResource.class);
+        register(BidResource.class);
     }
 }

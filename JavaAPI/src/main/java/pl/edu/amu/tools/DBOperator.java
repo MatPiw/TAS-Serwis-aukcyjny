@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.edu.amu.rest.dao.Bid;
 import pl.edu.amu.rest.dao.Offer;
 import pl.edu.amu.rest.dao.User;
 
@@ -135,6 +136,7 @@ public class DBOperator {
     }
         return offers;
     }
+
     public void saveOffer(Connection connection, Offer offer) throws Exception {
 
         //int id = offer.getId();
@@ -166,4 +168,52 @@ public class DBOperator {
             throw e;
         }
     }
+
+    //------------------bids--------------------//
+    public void getAllBids(Connection connection, List<Bid> bids) throws Exception {
+        try {
+            // String uname = request.getParameter("uname");
+            PreparedStatement ps = connection
+                    .prepareStatement("SELECT * FROM bids");
+            // ps.setString(1,uname);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Bid bid = new Bid();
+                bid.setId(rs.getInt("ID"));
+                bid.setOfferId(rs.getInt("OFFER_ID"));
+                bid.setBidderId(rs.getInt("BIDDER_ID"));
+                bid.setPrice(rs.getFloat("PRICE"));
+                bid.setCreatedAt(rs.getDate("CREATED_AT"));
+
+            }
+            //return userList;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public void saveBid(Connection connection, Bid bid) throws Exception {
+
+        //int id = bid.getId();
+        int offerId = bid.getOfferId();
+        float price = bid.getPrice();
+        int bidderId = bid.getBidderId();
+        Date createdAt = bid.getCreatedAt();
+
+        int result = 0;
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "INSERT INTO bids (OFFER_ID, BIDDER_ID, PRICE, CREATED_AT)" +
+                            " VALUES("
+                            + offerId + "," + bidderId + ","
+                            + price +  ",'" + createdAt + "')");
+            //System.out.println(ps);
+            result = ps.executeUpdate();
+            System.out.println("Dodano oferte o wartosci " + price + " do aukcji o numerze "+ offerId +" do bazy danych.");
+        } catch (Exception e) {
+            System.out.println("Query Status: " + result);
+            throw e;
+        }
+    }
+
 }
