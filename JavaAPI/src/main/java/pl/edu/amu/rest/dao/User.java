@@ -2,9 +2,11 @@ package pl.edu.amu.rest.dao;
 
 
 import java.sql.Date;
+import java.util.List;
 
 public class User{
 
+    private int id;
     private String login;
     private String hashPassword;
     private String firstName;
@@ -17,6 +19,7 @@ public class User{
     private String zipCode;
     private Date createdAt;
     private Boolean confirmed;
+    private List<Offer> userOffers;
 
     public User() {
         //
@@ -42,6 +45,10 @@ public class User{
         java.util.Date utilDate = new java.util.Date();             //data w formacie util
         this.createdAt = new java.sql.Date(utilDate.getTime());     //pobranie aktualnej daty i konwersja na format sql
     }
+
+    public int getId() {return id;}
+
+    public void setId(int id) {this.id = id;}
 
     public String getFirstName() {
         return firstName;
@@ -135,6 +142,14 @@ public class User{
 
     public void setConfirmed(Boolean confirmed) { this.confirmed = confirmed; }
 
+    public List<Offer> getUserOffers() {
+        return userOffers;
+    }
+
+    public void setUserOffers(List<Offer> userOffers) {
+        this.userOffers = userOffers;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -160,6 +175,7 @@ public class User{
                 ", phone='" + phone + '\'' +
                 ", zipCode='" + zipCode + '\'' +
                 ", createdAt='" + createdAt + '\'' +
+                ", UserOffers='" + userOffers +"'" +
                 '}';
     }
 }

@@ -40,6 +40,7 @@ public class UserRepository {
     public User save(User user){
         User dbUser = findByLogin(user.getLogin());
         if (dbUser != null){
+            dbUser.setId(user.getId());
             dbUser.setFirstName(user.getFirstName());
             dbUser.setLastName(user.getLastName());
             dbUser.setEmail(user.getEmail());

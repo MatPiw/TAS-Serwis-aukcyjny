@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 
 import pl.edu.amu.rest.dao.Offer;
@@ -23,6 +24,7 @@ public class DBOperator {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 User user = new User();
+                user.setId(rs.getInt("ID"));
                 user.setLogin(rs.getString("LOGIN"));
                 user.setHashPassword(rs.getString("HASH_PASSWORD"));
                 //user.setId(rs.getString("ID"));
@@ -35,6 +37,7 @@ public class DBOperator {
                 user.setPhone(rs.getString("PHONE"));
                 user.setZipCode(rs.getString("ZIP_CODE"));
                 user.setCreatedAt(rs.getDate("CREATED_AT"));
+                user.setUserOffers(getUserOffers(connection, user));
                 userList.add(user);            }
             //return userList;
         } catch (Exception e) {
@@ -55,7 +58,6 @@ public class DBOperator {
         String hashPassword = user.getHashPassword();
         Date createdAt = user.getCreatedAt();
         Boolean confirmed = user.getConfirmed();
-
         int result = 0;
         try {
             PreparedStatement ps = connection.prepareStatement(
@@ -104,6 +106,35 @@ public class DBOperator {
         }
     }
 
+    public List<Offer> getUserOffers(Connection connection, User user) throws Exception {
+        List<Offer> offers = new ArrayList<>();
+
+        try {
+
+            int id = user.getId();
+            // String uname = request.getParameter("uname");
+            PreparedStatement ps = connection
+                    .prepareStatement("SELECT * FROM offers WHERE OWNER_ID = " + id);
+            // ps.setString(1,uname);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Offer offer = new Offer();
+                offer.setId(rs.getInt("ID"));
+                offer.setTitle(rs.getString("TITLE"));
+                offer.setDescription(rs.getString("DESCRIPTION"));
+                offer.setPicturePath(rs.getString("PICTURE_PATH"));
+                offer.setOwnerId(rs.getInt("OWNER_ID"));
+                offer.setBuyNowPrice(rs.getFloat("BUY_NOW_PRICE"));
+                offer.setActive(rs.getBoolean("ACTIVE"));
+                offer.setCreatedAt(rs.getDate("CREATED_AT"));
+                offer.setFinishedAt(rs.getDate("FINISHED_AT"));
+                offers.add(offer);
+            }
+    } catch (Exception e) {
+        throw e;
+    }
+        return offers;
+    }
     public void saveOffer(Connection connection, Offer offer) throws Exception {
 
         //int id = offer.getId();
