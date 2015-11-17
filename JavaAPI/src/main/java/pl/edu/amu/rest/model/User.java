@@ -20,6 +20,7 @@ public class User{
     private Date createdAt;
     private Boolean confirmed;
     private List<Offer> userOffers;
+    private List<Comment>userComments;
 
     public User() {
         //
@@ -150,6 +151,14 @@ public class User{
         this.userOffers = userOffers;
     }
 
+    public List<Comment> getUserComments() {
+        return userComments;
+    }
+
+    public void setUserComments(List<Comment> userComments) {
+        this.userComments = userComments;
+    }
+
     @Override
       public boolean equals(Object o) {
         if (this == o) return true;
@@ -176,6 +185,6 @@ public class User{
                 ", zipCode='" + zipCode + '\'' +
                 ", createdAt='" + createdAt + '\'' +
                 ", userOffers='" + userOffers +"'" +
-                '}';
+                ", userComments='" + userComments + '}';
     }
 }

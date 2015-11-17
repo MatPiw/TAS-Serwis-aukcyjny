@@ -42,6 +42,7 @@ public class DBOperator {
                 user.setZipCode(rs.getString("ZIP_CODE"));
                 user.setCreatedAt(rs.getDate("CREATED_AT"));
                 user.setUserOffers(getUserOffers(connection, user));
+                user.setUserComments(getUserComments(connection,user));
                 userList.add(user);            }
             return userList;
         } catch (Exception e) {
@@ -253,6 +254,34 @@ public class DBOperator {
             e.printStackTrace();
         }
         return Collections.emptyList();
+    }
+
+    public List<Comment> getUserComments(Connection connection, User user) {
+        List<Comment> comments = new ArrayList<>();
+
+        try {
+            int id = user.getId();
+            // String uname = request.getParameter("uname");
+            PreparedStatement ps = connection
+                    .prepareStatement("SELECT * FROM comments WHERE RECIEVER_ID = " + id);
+            // ps.setString(1,uname);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Comment comment = new Comment();
+                comment.setId(rs.getInt("ID"));
+                comment.setComment(rs.getString("COMMENT"));
+                comment.setPositive(rs.getBoolean("POSITIVE"));
+                comment.setGiverId(rs.getInt("GIVER_ID"));
+                comment.setRecieverId(rs.getInt("RECIEVER_ID"));
+                comment.setOfferId(rs.getInt("OFFER_ID"));
+                comment.setCreatedAt(rs.getDate("CREATED_AT"));
+                comments.add(comment);
+            }
+        } catch (Exception e) {
+            System.out.println("Blad w polaczeniu z baza danych.");
+            e.printStackTrace();
+        }
+        return comments;
     }
 
     public void saveComment(Connection connection, Comment comment) {
