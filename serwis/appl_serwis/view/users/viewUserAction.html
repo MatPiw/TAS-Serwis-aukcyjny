@@ -9,7 +9,7 @@ Nazwisko: {$profileData->lastName}<br>
 Email: {$profileData->email}<br>
 <br><br>
 Użytkownik wystawił:<br><br>
-<table border="1px solid" style="border: 1px solid">
+<table border="1px solid" style="border: 1px solid" width="100%">
     <tr>
         <th>Tytuł</th>
         <th>Zdjęcie</th>
@@ -26,16 +26,16 @@ Użytkownik wystawił:<br><br>
     <br><br>
 
 Użytkownik otrzymał następujące komentarze:<br><br>
-<table>
+<table border="1px solid" style="border: 1px solid" width="100%">
     <tr>
         <th>Komentarz</th>
         <th>Ocena</th>
         <th>Data</th>
     </tr>
-    {foreach $profileData->comments as $i}
+    {foreach $profileData->userComments as $i}
     <tr>
         <td>{$i->comment}</td>
-        {if $i->positive == 1}
+        {if $i->positive == true}
             <td>POZYTYWNY</td>
         {else}
             <td>NEGATYWNY</td>
