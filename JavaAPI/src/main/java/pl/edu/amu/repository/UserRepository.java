@@ -1,8 +1,7 @@
 package pl.edu.amu.repository;
 
-import pl.edu.amu.rest.dao.User;
+import pl.edu.amu.rest.model.User;
 import pl.edu.amu.tools.DBConnection;
-import pl.edu.amu.tools.DBOperator;
 import pl.edu.amu.tools.DBOperator;
 
 import java.sql.Connection;
@@ -12,23 +11,21 @@ import java.util.List;
 
 public class UserRepository {
 
-    private final List<User> users = new ArrayList<>();
-
-
     private DBConnection database;
     private DBOperator operator;
     private Connection connection;
 
     public List<User> getUsers(){
-        return users;
+        return operator.getAllUsers(connection);
     }
+
 
     public UserRepository() {
         try {
             database= new DBConnection();
             connection = database.getConnection();
             operator= new DBOperator();
-            operator.getAllUsers(connection, users);
+            //operator.getAllUsers(connection);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -55,7 +52,6 @@ public class UserRepository {
         } else {
             try {
                 operator.saveUser(connection, user);
-                users.add(user);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -65,6 +61,7 @@ public class UserRepository {
     }
     
     public User findByLogin(String login) {
+        List<User> users = getUsers();
         for(User user : users){
             if (login.equalsIgnoreCase(user.getLogin())){
                 return user;
@@ -76,7 +73,7 @@ public class UserRepository {
     public void remove(String login){
         User user = findByLogin(login);
         if (user != null){
-            users.remove(user);
+            //users.remove(user);
         }
     }
     

@@ -1,4 +1,4 @@
-package pl.edu.amu.rest.dao;
+package pl.edu.amu.rest.model;
 
 
 import java.sql.Date;

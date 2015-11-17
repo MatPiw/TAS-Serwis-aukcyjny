@@ -1,7 +1,7 @@
 package pl.edu.amu.repository;
 
 
-import pl.edu.amu.rest.dao.Offer;
+import pl.edu.amu.rest.model.Offer;
 import pl.edu.amu.tools.DBConnection;
 import pl.edu.amu.tools.DBOperator;
 
@@ -18,7 +18,7 @@ public class OfferRepository {
     private Connection connection;
 
     public List<Offer> getOffers(){
-        return offers;
+        return operator.getAllOffers(connection);
     }
 
     public OfferRepository() {
@@ -26,7 +26,7 @@ public class OfferRepository {
             database= new DBConnection();
             connection = database.getConnection();
             operator= new DBOperator();
-            operator.getAllOffers(connection, offers);
+            //operator.getAllOffers(connection, offers);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -51,7 +51,6 @@ public class OfferRepository {
         else {
             try {
                 operator.saveOffer(connection, offer);
-                offers.add(offer);
             } catch (Exception e) {
                 e.printStackTrace();
             }

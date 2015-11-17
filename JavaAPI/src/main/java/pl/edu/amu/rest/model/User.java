@@ -1,4 +1,4 @@
-package pl.edu.amu.rest.dao;
+package pl.edu.amu.rest.model;
 
 
 import java.sql.Date;
@@ -175,7 +175,7 @@ public class User{
                 ", phone='" + phone + '\'' +
                 ", zipCode='" + zipCode + '\'' +
                 ", createdAt='" + createdAt + '\'' +
-                ", UserOffers='" + userOffers +"'" +
+                ", userOffers='" + userOffers +"'" +
                 '}';
     }
 }

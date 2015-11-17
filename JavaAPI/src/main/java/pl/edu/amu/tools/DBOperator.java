@@ -5,19 +5,22 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import pl.edu.amu.rest.dao.Bid;
-import pl.edu.amu.rest.dao.Offer;
-import pl.edu.amu.rest.dao.User;
+import pl.edu.amu.rest.model.Bid;
+import pl.edu.amu.rest.model.Comment;
+import pl.edu.amu.rest.model.Offer;
+import pl.edu.amu.rest.model.User;
 
 public class DBOperator {
 
 
 //-------------users------------------//
 
-    public void getAllUsers(Connection connection, List<User> userList) throws Exception {
+    public List<User> getAllUsers(Connection connection){
         try {
+            List<User> userList = new ArrayList<>();
             // String uname = request.getParameter("uname");
             PreparedStatement ps = connection
                     .prepareStatement("SELECT * FROM users");
@@ -40,13 +43,14 @@ public class DBOperator {
                 user.setCreatedAt(rs.getDate("CREATED_AT"));
                 user.setUserOffers(getUserOffers(connection, user));
                 userList.add(user);            }
-            //return userList;
+            return userList;
         } catch (Exception e) {
-            throw e;
+            System.out.println("Problem z polaczeniem z Baza danych");
         }
+        return Collections.emptyList();
     }
 
-    public void saveUser(Connection connection, User user) throws Exception {
+    public void saveUser(Connection connection, User user) {
         String login = user.getLogin();
         String firstName = user.getFirstName();
         String lastName = user.getLastName();
@@ -76,13 +80,14 @@ public class DBOperator {
             System.out.println("Dodano uzytkownika " + login + " do bazy danych.");
         } catch (Exception e) {
             System.out.println("Query Status: " + result);
-            throw e;
+            e.printStackTrace();
         }
     }
 
     //-------------------offers-------------------------//
-    public void getAllOffers(Connection connection, List<Offer> offers) throws Exception {
+    public List<Offer> getAllOffers(Connection connection) {
         try {
+            List<Offer> offers = new ArrayList<>();
             // String uname = request.getParameter("uname");
             PreparedStatement ps = connection
                     .prepareStatement("SELECT * FROM offers");
@@ -101,13 +106,15 @@ public class DBOperator {
                 offer.setFinishedAt(rs.getDate("FINISHED_AT"));
                 offers.add(offer);
             }
-            //return userList;
+            return offers;
         } catch (Exception e) {
-            throw e;
+            e.printStackTrace();
+            System.out.println("Problem w polaczeniu z baza danych.");
         }
+        return Collections.emptyList();
     }
 
-    public List<Offer> getUserOffers(Connection connection, User user) throws Exception {
+    public List<Offer> getUserOffers(Connection connection, User user) {
         List<Offer> offers = new ArrayList<>();
 
         try {
@@ -132,12 +139,13 @@ public class DBOperator {
                 offers.add(offer);
             }
     } catch (Exception e) {
-        throw e;
+            System.out.println("Blad w polaczeniu z baza danych.");
+            e.printStackTrace();
     }
         return offers;
     }
 
-    public void saveOffer(Connection connection, Offer offer) throws Exception {
+    public void saveOffer(Connection connection, Offer offer) {
 
         //int id = offer.getId();
         String title = offer.getTitle();
@@ -165,13 +173,14 @@ public class DBOperator {
             System.out.println("Dodano oferte o tytule " + title + " do bazy danych.");
         } catch (Exception e) {
             System.out.println("Query Status: " + result);
-            throw e;
+            e.printStackTrace();
         }
     }
 
     //------------------bids--------------------//
-    public void getAllBids(Connection connection, List<Bid> bids) throws Exception {
+    public List<Bid> getAllBids(Connection connection) {
         try {
+            List<Bid> bids = new ArrayList<>();
             // String uname = request.getParameter("uname");
             PreparedStatement ps = connection
                     .prepareStatement("SELECT * FROM bids");
@@ -184,15 +193,16 @@ public class DBOperator {
                 bid.setBidderId(rs.getInt("BIDDER_ID"));
                 bid.setPrice(rs.getFloat("PRICE"));
                 bid.setCreatedAt(rs.getDate("CREATED_AT"));
-
+                bids.add(bid);
             }
-            //return userList;
+            return bids;
         } catch (Exception e) {
-            throw e;
+            System.out.println("Problem z polaczeniem z Baza danych.");
         }
+        return Collections.emptyList();
     }
 
-    public void saveBid(Connection connection, Bid bid) throws Exception {
+    public void saveBid(Connection connection, Bid bid) {
 
         //int id = bid.getId();
         int offerId = bid.getOfferId();
@@ -212,7 +222,63 @@ public class DBOperator {
             System.out.println("Dodano oferte o wartosci " + price + " do aukcji o numerze "+ offerId +" do bazy danych.");
         } catch (Exception e) {
             System.out.println("Query Status: " + result);
-            throw e;
+            e.printStackTrace();
+        }
+    }
+
+    //-------------comments-------------//
+    public List<Comment> getAllComments(Connection connection) {
+        try {
+            List<Comment> comments = new ArrayList<>();
+            // String uname = request.getParameter("uname");
+            PreparedStatement ps = connection
+                    .prepareStatement("SELECT * FROM comments");
+            // ps.setString(1,uname);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Comment comment = new Comment();
+                comment.setId(rs.getInt("ID"));
+                comment.setOfferId(rs.getInt("OFFER_ID"));
+                comment.setGiverId(rs.getInt("GIVER_ID"));
+                comment.setRecieverId(rs.getInt("RECIEVER_ID"));
+                comment.setComment(rs.getString("COMMENT"));
+                comment.setPositive(rs.getBoolean("POSITIVE"));
+                comment.setCreatedAt(rs.getDate("CREATED_AT"));
+                comments.add(comment);
+
+            }
+            return comments;
+        } catch (Exception e) {
+            System.out.println("Blad polaczenia z baza danych");
+            e.printStackTrace();
+        }
+        return Collections.emptyList();
+    }
+
+    public void saveComment(Connection connection, Comment comment) {
+
+        //int id = bid.getId();
+        int offerId = comment.getOfferId();
+        int giverId = comment.getOfferId();
+        int recieverId = comment.getOfferId();
+        String commentText = comment.getComment();
+        Boolean positive = comment.getPositive();
+        Date createdAt = comment.getCreatedAt();
+
+        int result = 0;
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "INSERT INTO comments (OFFER_ID, GIVER_ID, RECIEVER_ID, COMMENT, POSITIVE, CREATED_AT)" +
+                            " VALUES("
+                            + offerId + "," + giverId + ","
+                            + recieverId +  ",'" + commentText + "',"
+                            + positive + ",'" + createdAt + "')");
+            System.out.println(ps);
+            result = ps.executeUpdate();
+            System.out.println("Dodano nowy komentarz do bazy danych. ");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Query Status: " + result);
         }
     }
 

@@ -1,7 +1,7 @@
 package pl.edu.amu.rest;
 
 import pl.edu.amu.repository.OfferRepository;
-import pl.edu.amu.rest.dao.Offer;
+import pl.edu.amu.rest.model.Offer;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -18,16 +18,6 @@ public class OfferResource {
     //@Override
     @GET
     public List<Offer> getOffers(){
-    /*try {
-        DBConnection database= new DBConnection();
-        Connection connection = database.getConnection();
-        DBDownloader downloader= new DBDownloader();
-        downloader.getAllUsers(connection, users);
-
-    } catch (Exception e) {
-        e.printStackTrace();
-        System.out.println("coœ nie wysz³o");
-    }*/
         return offerRep.getOffers();
     }
 

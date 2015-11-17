@@ -4,7 +4,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Test;
 import pl.edu.amu.rest.UserResource;
-import pl.edu.amu.rest.dao.User;
+import pl.edu.amu.rest.model.User;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Application;

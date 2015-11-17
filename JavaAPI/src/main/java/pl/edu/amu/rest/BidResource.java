@@ -2,7 +2,7 @@ package pl.edu.amu.rest;
 
 
 import pl.edu.amu.repository.BidRepository;
-import pl.edu.amu.rest.dao.Bid;
+import pl.edu.amu.rest.model.Bid;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

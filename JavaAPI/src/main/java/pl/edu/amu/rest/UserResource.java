@@ -1,7 +1,7 @@
 package pl.edu.amu.rest;
 
 import pl.edu.amu.repository.UserRepository;
-import pl.edu.amu.rest.dao.User;
+import pl.edu.amu.rest.model.User;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -19,16 +19,6 @@ public class UserResource {
     //@Override
     @GET
     public List<User> getUsers(){
-        /*try {
-            DBConnection database= new DBConnection();
-            Connection connection = database.getConnection();
-            DBDownloader downloader= new DBDownloader();
-            downloader.getAllUsers(connection, users);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("coœ nie wysz³o");
-        }*/
         return userRep.getUsers();
     }
 
