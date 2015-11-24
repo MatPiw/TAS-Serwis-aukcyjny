@@ -30,6 +30,6 @@ Prosty serwis aukcyjny wykonany w architekturze 3-warstwowej. Strona ma umożliw
 - [ ] licytacja
 - [ ] kup teraz
 - [ ] dodawanie komentarzy
-- [ ] wyswietlanie profilu uzytkownika
+- [x] wyswietlanie profilu uzytkownika
 - [ ] usuwanie komentarzy (admin)
 - [ ] usuwanie ofert
