@@ -33,3 +33,5 @@ Prosty serwis aukcyjny wykonany w architekturze 3-warstwowej. Strona ma umożliw
 - [x] wyswietlanie profilu uzytkownika
 - [ ] usuwanie komentarzy (admin)
 - [ ] usuwanie ofert
+- [ ] listowanie ofert
+- [ ] wyswietlanie ofert
