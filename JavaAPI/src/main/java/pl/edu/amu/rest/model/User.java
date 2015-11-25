@@ -2,6 +2,7 @@ package pl.edu.amu.rest.model;
 
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 public class User{
@@ -17,7 +18,7 @@ public class User{
     private String address;
     private String phone;
     private String zipCode;
-    private Date createdAt;
+    private Timestamp createdAt;
     private Boolean confirmed;
     private List<Offer> userOffers;
     private List<Comment>userComments;
@@ -29,6 +30,7 @@ public class User{
     public User(String login, String passwd) {
         this.hashPassword = passwd;
         this.login = login;
+        this.setCreatedAt();
     }
 
     public User(String login, String passwd, String firstName, String lastName,
@@ -43,8 +45,7 @@ public class User{
         this.address = addr;
         this.phone = phone;
         this.zipCode = zipCode;
-        java.util.Date utilDate = new java.util.Date();             //data w formacie util
-        this.createdAt = new java.sql.Date(utilDate.getTime());     //pobranie aktualnej daty i konwersja na format sql
+        this.setCreatedAt();
     }
 
     public int getId() {return id;}
@@ -115,11 +116,16 @@ public class User{
         this.zipCode = zipCode;
     }
 
-    public Date getCreatedAt() {
+    public Timestamp getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt() {
+        java.util.Date utilDate = new java.util.Date();             //data w formacie util
+        this.createdAt = new java.sql.Timestamp(utilDate.getTime());     //pobranie aktualnej daty i konwersja na format sql}
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
 

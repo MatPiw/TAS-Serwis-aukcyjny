@@ -3,6 +3,7 @@ package pl.edu.amu.rest.model;
 
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Comment {
 
@@ -12,7 +13,7 @@ public class Comment {
     private int offerId;
     private String comment;
     private boolean positive;
-    private Date createdAt;
+    private Timestamp createdAt;
 
 
     public int getId(){return id;}
@@ -27,14 +28,22 @@ public class Comment {
     public void setComment(String comment){this.comment = comment;}
     public boolean getPositive(){return positive;}
     public void setPositive(boolean positive){ this.positive = positive;}
-    public Date getCreatedAt(){return createdAt;}
-    public void setCreatedAt(Date createdAt){this.createdAt = createdAt;}
+    public Timestamp getCreatedAt(){return createdAt;}
+
+    public void setCreatedAt() {
+        java.util.Date utilDate = new java.util.Date();             //data w formacie util
+        this.createdAt = new java.sql.Timestamp(utilDate.getTime());     //pobranie aktualnej daty i konwersja na format sql}
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
 
 
     public Comment(){
 
     }
-    public Comment(int id, int giverId, int offerId, int recieverId, String comment, boolean positive, Date createdAt){
+    public Comment(int id, int giverId, int offerId, int recieverId, String comment, boolean positive){
 
         this.setId(id);
         this.setGiverId(giverId);
@@ -42,8 +51,7 @@ public class Comment {
         this.setRecieverId(recieverId);
         this.setComment(comment);
         this.setPositive(positive);
-        this.setCreatedAt(createdAt);
-
+        this.setCreatedAt();
     }
 
 

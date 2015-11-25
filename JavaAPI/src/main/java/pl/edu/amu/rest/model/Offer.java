@@ -2,6 +2,7 @@ package pl.edu.amu.rest.model;
 
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Offer {
     private int id;
@@ -11,8 +12,8 @@ public class Offer {
     private int ownerId;
     private float buyNowPrice;
     private Boolean active;
-    private Date createdAt;
-    private Date finishedAt;
+    private Timestamp createdAt;
+    private Timestamp finishedAt;
 
     public String getTitle() {
         return title;
@@ -46,14 +47,27 @@ public class Offer {
 
     public void setActive(Boolean active) { this.active = active; }
 
-    public Date getCreatedAt() { return createdAt; }
+    public Timestamp getCreatedAt() { return createdAt; }
 
-    public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
+    public void setCreatedAt() {
+        java.util.Date utilDate = new java.util.Date();             //data w formacie util
+        this.createdAt = new java.sql.Timestamp(utilDate.getTime());     //pobranie aktualnej daty i konwersja na format sql}
+    }
 
-    public Date getFinishedAt() { return finishedAt; }
+    public Timestamp getFinishedAt() { return finishedAt; }
 
-    public void setFinishedAt(Date finishedAt) { this.finishedAt = finishedAt; }
+    public void setFinishedAt() {
+        java.util.Date utilDate = new java.util.Date();             //data w formacie util
+        this.finishedAt = new java.sql.Timestamp(utilDate.getTime()+(14*24*60*60*1000));     //pobranie aktualnej daty i konwersja na format sql plus 14 dni}
+    }
 
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setFinishedAt(Timestamp finishedAt) {
+        this.finishedAt = finishedAt;
+    }
     public Offer() {
         //
     }
@@ -62,6 +76,7 @@ public class Offer {
         this.setBuyNowPrice(buyNowPrice);
         this.setOwnerId(owner);
         this.setDescription(description);
+        this.setCreatedAt();
     }
 
     public Offer(String description, String picturePath, int ownerId, float buyNowPrice, Boolean active){
@@ -70,8 +85,7 @@ public class Offer {
         this.setPicturePath(picturePath);
         this.setBuyNowPrice(buyNowPrice);
         this.setActive(active);
-        java.util.Date utilDate = new java.util.Date();             //data w formacie util
-        this.createdAt = new java.sql.Date(utilDate.getTime());     //pobranie aktualnej daty i konwersja na format sql
+        this.setCreatedAt();
     }
 
     @Override

@@ -1,9 +1,6 @@
 package pl.edu.amu.tools;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -40,7 +37,7 @@ public class DBOperator {
                 user.setAddress(rs.getString("ADDRESS"));
                 user.setPhone(rs.getString("PHONE"));
                 user.setZipCode(rs.getString("ZIP_CODE"));
-                user.setCreatedAt(rs.getDate("CREATED_AT"));
+                user.setCreatedAt(rs.getTimestamp("CREATED_AT"));
                 user.setUserOffers(getUserOffers(connection, user));
                 user.setUserComments(getUserComments(connection,user));
                 userList.add(user);            }
@@ -62,7 +59,8 @@ public class DBOperator {
         String phone = user.getPhone();
         String zipCode = user.getZipCode();
         String hashPassword = user.getHashPassword();
-        Date createdAt = user.getCreatedAt();
+        user.setCreatedAt();
+        Timestamp createdAt = user.getCreatedAt();
         Boolean confirmed = user.getConfirmed();
         int result = 0;
         try {
@@ -103,8 +101,8 @@ public class DBOperator {
                 offer.setOwnerId(rs.getInt("OWNER_ID"));
                 offer.setBuyNowPrice(rs.getFloat("BUY_NOW_PRICE"));
                 offer.setActive(rs.getBoolean("ACTIVE"));
-                offer.setCreatedAt(rs.getDate("CREATED_AT"));
-                offer.setFinishedAt(rs.getDate("FINISHED_AT"));
+                offer.setCreatedAt(rs.getTimestamp("CREATED_AT"));
+                offer.setFinishedAt(rs.getTimestamp("FINISHED_AT"));
                 offers.add(offer);
             }
             return offers;
@@ -135,8 +133,8 @@ public class DBOperator {
                 offer.setOwnerId(rs.getInt("OWNER_ID"));
                 offer.setBuyNowPrice(rs.getFloat("BUY_NOW_PRICE"));
                 offer.setActive(rs.getBoolean("ACTIVE"));
-                offer.setCreatedAt(rs.getDate("CREATED_AT"));
-                offer.setFinishedAt(rs.getDate("FINISHED_AT"));
+                offer.setCreatedAt(rs.getTimestamp("CREATED_AT"));
+                offer.setFinishedAt(rs.getTimestamp("FINISHED_AT"));
                 offers.add(offer);
             }
     } catch (Exception e) {
@@ -155,8 +153,10 @@ public class DBOperator {
         int ownerId = offer.getOwnerId();
         float buyNowPrice = offer.getBuyNowPrice();
         Boolean active = offer.getActive();
-        Date createdAt = offer.getCreatedAt();
-        Date finishedAt = offer.getFinishedAt();
+        offer.setCreatedAt();
+        Timestamp createdAt = offer.getCreatedAt();
+        offer.setFinishedAt();
+        Timestamp finishedAt = offer.getFinishedAt();
 
         int result = 0;
         try {
@@ -193,7 +193,7 @@ public class DBOperator {
                 bid.setOfferId(rs.getInt("OFFER_ID"));
                 bid.setBidderId(rs.getInt("BIDDER_ID"));
                 bid.setPrice(rs.getFloat("PRICE"));
-                bid.setCreatedAt(rs.getDate("CREATED_AT"));
+                bid.setCreatedAt(rs.getTimestamp("CREATED_AT"));
                 bids.add(bid);
             }
             return bids;
@@ -209,7 +209,9 @@ public class DBOperator {
         int offerId = bid.getOfferId();
         float price = bid.getPrice();
         int bidderId = bid.getBidderId();
-        Date createdAt = bid.getCreatedAt();
+
+        bid.setCreatedAt();
+        Timestamp createdAt = bid.getCreatedAt();
 
         int result = 0;
         try {
@@ -244,7 +246,7 @@ public class DBOperator {
                 comment.setRecieverId(rs.getInt("RECIEVER_ID"));
                 comment.setComment(rs.getString("COMMENT"));
                 comment.setPositive(rs.getBoolean("POSITIVE"));
-                comment.setCreatedAt(rs.getDate("CREATED_AT"));
+                comment.setCreatedAt(rs.getTimestamp("CREATED_AT"));
                 comments.add(comment);
 
             }
@@ -274,7 +276,7 @@ public class DBOperator {
                 comment.setGiverId(rs.getInt("GIVER_ID"));
                 comment.setRecieverId(rs.getInt("RECIEVER_ID"));
                 comment.setOfferId(rs.getInt("OFFER_ID"));
-                comment.setCreatedAt(rs.getDate("CREATED_AT"));
+                comment.setCreatedAt(rs.getTimestamp("CREATED_AT"));
                 comments.add(comment);
             }
         } catch (Exception e) {
@@ -292,7 +294,8 @@ public class DBOperator {
         int recieverId = comment.getOfferId();
         String commentText = comment.getComment();
         Boolean positive = comment.getPositive();
-        Date createdAt = comment.getCreatedAt();
+        comment.setCreatedAt();
+        Timestamp createdAt = comment.getCreatedAt();
 
         int result = 0;
         try {

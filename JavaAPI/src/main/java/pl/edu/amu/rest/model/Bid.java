@@ -2,13 +2,14 @@ package pl.edu.amu.rest.model;
 
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Bid {
     private int id;
     private int offerId;
     private int bidderId;
     private float price;
-    private Date createdAt;
+    private Timestamp createdAt;
 
     public int getId() {return id;}
 
@@ -26,9 +27,16 @@ public class Bid {
 
     public void setPrice(float price) {this.price = price;}
 
-    public Date getCreatedAt() {return createdAt;}
+    public Timestamp getCreatedAt() {return createdAt;}
 
-    public void setCreatedAt(Date createdAt) {this.createdAt = createdAt;}
+    public void setCreatedAt() {
+        java.util.Date utilDate = new java.util.Date();             //data w formacie util
+        this.createdAt = new java.sql.Timestamp(utilDate.getTime());     //pobranie aktualnej daty i konwersja na format sql}
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
 
     public Bid() {
         //
@@ -38,6 +46,7 @@ public class Bid {
         this.offerId = offerId;
         this.bidderId = bidderId;
         this.price = price;
+        this.setCreatedAt();
     }
 
     @Override
