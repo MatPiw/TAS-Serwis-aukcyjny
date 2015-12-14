@@ -47,7 +47,6 @@ class usersController extends controller
             }
         }
 
-{$dirWww}serwis/users/viewUser/login:{$smarty.session.userLogin}/
     }
 
 
