@@ -2,7 +2,7 @@
 
 
 <div class="col-md-9">
-
+    {if $smarty.session.logged == true}
 
 Imię: {$profileData->firstName}<br>
 Nazwisko: {$profileData->lastName}<br>
@@ -24,7 +24,22 @@ Użytkownik wystawił:<br><br>
 {/foreach}
 </table><br>
     <br><br>
-
+    Użytkownik brał udział w:<br><br>
+    <table border="1px solid" style="border: 1px solid">
+        <tr>
+            <th>Tytuł</th>
+            <th>Zdjęcie</th>
+            <th>Data</th>
+        </tr>
+        {foreach $profileData->userOffers as $i}
+        <tr>
+            <td>{$i->title}</td>
+            <td><img width="100" src="{$i->picturePath}"></td>
+            <td>{$i->finishedAt}</td>
+        </tr>
+        {/foreach}
+    </table><br>
+    <br><br>
 Użytkownik otrzymał następujące komentarze:<br><br>
 <table border="1px solid" style="border: 1px solid" width="100%">
     <tr>
@@ -44,7 +59,9 @@ Użytkownik otrzymał następujące komentarze:<br><br>
     </tr>
     {/foreach}
 </table>
-
+{else}
+    Zaloguj się aby obejżeć stronę.
+    {/if}
 
 
 </div>

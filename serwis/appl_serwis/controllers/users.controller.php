@@ -174,16 +174,14 @@ class usersController extends controller
         $uri= 'http://localhost:8080/users/';
         $sendJson=json_encode($json);
         $response = \Httpful\Request::post($uri)
-            ->sendsJson()                               // tell it we're sending (Content-Type) JSON...
-            //->authenticateWith('username', 'password')  // authenticate with basic auth...
-            ->body($sendJson)             // attach a body/payload...
+            ->sendsJson()
+            ->body($sendJson)
             ->send();
 
         if($response != 'HTTP/1.1 404 Not Found')
         {
             $to = $_POST['email'];
             $subject = "Los Peneros Hermanos- Confirmation e-mail";
-
             $message = "
                         <html>
                         <head>
@@ -203,11 +201,9 @@ class usersController extends controller
                         </body>
                         </html>
                         ";
-
             $headers = "MIME-Version: 1.0" . "\r\n";
             $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
             $headers .= 'From: <noreply@lospeneroshermanos.com>' . "\r\n";
-
             mail($to,$subject,$message,$headers);
             return true;
         }
