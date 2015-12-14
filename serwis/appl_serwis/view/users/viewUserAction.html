@@ -6,7 +6,14 @@
 
 Imię: {$profileData->firstName}<br>
 Nazwisko: {$profileData->lastName}<br>
-Email: {$profileData->email}<br>
+Email: {$profileData->email}<br
+
+<br><br>
+
+{if $smarty.session.userLogin == $profileData->login}
+Edytuj swoje dane: <a href="{$dirWww}serwis/users/updateUser/login:{$smarty.session.userLogin}/"> >>Click!!<< </a>
+{/if}
+
 <br><br>
 Użytkownik wystawił:<br><br>
 <table border="1px solid" style="border: 1px solid" width="100%">

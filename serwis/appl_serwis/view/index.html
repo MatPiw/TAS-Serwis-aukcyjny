@@ -40,8 +40,15 @@
 
                 {if $smarty.session.logged == true}
                 <li>
+                    <a href="{$dirWww}serwis/users/updateUser/login:{$smarty.session.userLogin}/">Mój profil</a>
+                </li>
+                <li>
                     <a href="{$dirWww}serwis/users/viewUser/login:{$smarty.session.userLogin}/">Mój profil</a>
                 </li>
+
+
+
+
                 {else}
                 <li>
                     <a href="{$dirWww}serwis/users/login/">Logowanie</a>
