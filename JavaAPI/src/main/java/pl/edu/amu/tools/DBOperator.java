@@ -177,25 +177,11 @@ public class DBOperator {
     }
 
     public Offer getOffer(int id, Connection connection) {
-        try {
-            Offer offer = new Offer();
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM offers WHERE ID = ?");
-            ps.setInt(1,id);
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()) {
-                offer.setId(rs.getInt("ID"));
-                offer.setTitle(rs.getString("TITLE"));
-                offer.setDescription(rs.getString("DESCRIPTION"));
-                offer.setPicturePath(rs.getString("PICTURE_PATH"));
-                offer.setOwnerId(rs.getInt("OWNER_ID"));
-                offer.setBuyNowPrice(rs.getFloat("BUY_NOW_PRICE"));
-                offer.setActive(rs.getBoolean("ACTIVE"));
-                offer.setCreatedAt(rs.getTimestamp("CREATED_AT"));
-                offer.setFinishedAt(rs.getTimestamp("FINISHED_AT"));
+        List<Offer> offers = this.getAllOffers(connection);
+        for(Offer offer : offers){
+            if (id == offer.getId()){
+                return offer;
             }
-            return offer;
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return null;
     }
