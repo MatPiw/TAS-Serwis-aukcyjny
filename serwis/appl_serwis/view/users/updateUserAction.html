@@ -1,0 +1,40 @@
+<div class="row">
+
+
+
+		<div class="col-md-9">
+
+				<p style="color:red;">{$message}</p>
+
+        <form method="PUT" action="">
+            <fieldset>
+                <legend>Edit your information</data></legend>
+                First name: <input type="text" name="fname" value="{$profileData->firstName}"><br>
+                Last name: <input type="text" name="lname" value="{$profileData->lastName}"><br>
+
+                    /*
+
+                        $json['hashPassword']=md5($_POST['pass']);
+                        Musze przekonwertować hashpassword do tego pola, żeby je wyświetlić
+                        pw = "?";
+
+                        */
+                Password: <input type="text" name="pass" value="{$profileData->pw}"><br>
+
+
+
+                Email: <input type="text" name="email" value="{$profileData->email}"><br>
+                City: <input type="text" name="city" value="{$profileData->city}"><br>
+                Address: <input type="text" name="address" value="{$profileData->address}"><br>
+                Zip code: <input type="text" name="zipc" value="{$profileData->zipCode}"><br>
+                Phone number: <input type="text" name="phone" value="{$profileData->phone}"><br>
+                <input type="submit" value="Zmień"><br>
+            </fieldset>
+        </form>
+
+
+
+
+		</div>
+
+</div>

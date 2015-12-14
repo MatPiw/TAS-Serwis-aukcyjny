@@ -24,6 +24,34 @@ class usersController extends controller
         $this->view->assign('id', $userLogin);
     }
 
+    public function updateUserAction($_pars)
+    {
+        $params=$this->params->getParams($_pars);
+        $userLogin=$params['login'];
+        $profileObject= $this->getUserInfo($userLogin);
+        $this->view->assign('profileData', $profileObject);
+        $this->view->assign('id', $userLogin);
+
+        if($_PUT['loginu'])
+        {
+            $response=$this->updatingData();
+            if($response == true)
+            {
+                $this->view->assign("message", "Zaktualizowałeś dane");
+                $this->view->assign("inc_static", "users/viewUserAction.html");
+            }
+            else
+            {
+              $this->view->assign("message", "Wystąpił Błąd");
+              $this->view->assign("inc_static", "users/viewUserAction.html");
+            }
+        }
+
+
+    }
+
+
+
     public function loginAction()
     {
 
@@ -99,6 +127,33 @@ class usersController extends controller
         }
 
     }
+    private function updatingData()
+    {
+      if($_PUT['login']){
+        $json=array();
+        $json['firstName']=$_PUT['fname'];
+        $json['lastName']=$_PUT['lname'];
+        $json['hashPassword']=md5($_PUT['pass']);
+        $json['email']=$_PUT['email'];
+        $json['city']=$_PUT['city'];
+        $json['address']=$_PUT['address'];
+        $json['zipCode']=$_PUT['zipc'];
+        $json['phone']=$_PUT['phone'];
+
+        $uri= 'http://localhost:8080/users/';
+        $sendJson=json_encode($json);
+        $response = \Httpful\Request::put($uri)
+            ->sendsJson()                               // tell it we're sending (Content-Type) JSON...
+            //->authenticateWith('username', 'password')  // authenticate with basic auth...
+            ->body($sendJson)             // attach a body/payload...
+            ->send();
+
+
+      }
+
+    }
+
+
 
     private function registering()
     {
