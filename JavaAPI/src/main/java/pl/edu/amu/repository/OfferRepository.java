@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OfferRepository {
-    private final List<Offer> offers = new ArrayList<>();
+    //private final List<Offer> offers = new ArrayList<>();
 
 
     private DBConnection database;
@@ -38,7 +38,7 @@ public class OfferRepository {
     public Offer save(Offer offer)  {
 
         //tu jest problem, bo id przydziela baza danych a nie bezposrednio api. przez to jest problem z zapisywaniem ofert
-        Offer dbOffer = findById(offer.getId());
+        Offer dbOffer = null; /* = findById(offer.getId());
         if (dbOffer != null) {
             offer.setId(dbOffer.getId());
             offer.setTitle(dbOffer.getTitle());
@@ -48,23 +48,18 @@ public class OfferRepository {
             offer.setCreatedAt(dbOffer.getCreatedAt());
             offer.setFinishedAt(dbOffer.getFinishedAt());
         }
-        else {
+        else {*/
             try {
-                operator.saveOffer(connection, offer);
+                dbOffer = operator.saveOffer(connection, offer);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        //}
 
         return dbOffer;
     }
 
     public Offer findById(int id) {
-        for(Offer offer : offers){
-            if (id == offer.getId()){
-                return offer;
-            }
-        }
-        return null;
+        return operator.getOffer(id, connection);
     }
 }

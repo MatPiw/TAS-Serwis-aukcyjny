@@ -40,6 +40,32 @@ public class UserRepository {
     public User save(User user){
         User dbUser = operator.getUser(user.getLogin(), connection);
         if (dbUser != null){
+            //dbUser.setId(user.getId());
+            /*dbUser.setFirstName(user.getFirstName());
+            dbUser.setLastName(user.getLastName());
+            dbUser.setEmail(user.getEmail());
+            dbUser.setPermissions(user.getPermissions());
+            dbUser.setAddress(user.getAddress());
+            dbUser.setCity(user.getCity());
+            dbUser.setPhone(user.getPhone());
+            dbUser.setZipCode(user.getZipCode());
+            dbUser.setHashPassword(user.getHashPassword());
+            dbUser.setCreatedAt(user.getCreatedAt());
+            dbUser.setConfirmed(user.getConfirmed());*/
+        } else {
+            try {
+                user = operator.saveUser(connection, user);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+        return user;
+    }
+
+    public User update(User user) {
+        User dbUser = operator.getUser(user.getLogin(), connection);
+        if (dbUser != null) {
             dbUser.setId(user.getId());
             dbUser.setFirstName(user.getFirstName());
             dbUser.setLastName(user.getLastName());
@@ -52,18 +78,10 @@ public class UserRepository {
             dbUser.setHashPassword(user.getHashPassword());
             dbUser.setCreatedAt(user.getCreatedAt());
             dbUser.setConfirmed(user.getConfirmed());
-        } else {
-            try {
-                user = operator.saveUser(connection, user);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
+            dbUser = operator.updateUser(dbUser, connection);
         }
-        return user;
+        return dbUser;
     }
-    
-
     
     /*public void remove(String login){
         User user = operator.getUser());

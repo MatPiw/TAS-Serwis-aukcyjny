@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import pl.edu.amu.repository.UserRepository;
 import pl.edu.amu.rest.model.ErrorResponse;
 import pl.edu.amu.rest.model.User;
+import sun.awt.AWTAccessor;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -26,6 +27,7 @@ public class UserResource {
 
     //@Override
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     public List<User> getUsers(){
         LOG.info("/get/users");
         return userRep.getUsers();
@@ -33,6 +35,8 @@ public class UserResource {
 
 
     @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response saveUser(User user){
         if (userRep.findByLogin(user.getLogin()) == null){
             LOG.info("/post/users");
@@ -48,7 +52,6 @@ public class UserResource {
     @GET
     @Path("/{login}")
     @Produces(MediaType.APPLICATION_JSON)
-
     public User getUser(@PathParam("login") final String login){
         LOG.info("/get/users/{}", login);
         User user = userRep.findByLogin(login);
@@ -58,6 +61,25 @@ public class UserResource {
                     .build());
         }
         return user;
-   }
+    }
+
+    @PUT
+    @Path("/{login}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateUser(@PathParam("login") final String login, User user){
+        if (userRep.findByLogin(login) == null){
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(new ErrorResponse(Response.Status.NOT_FOUND, "User not found"))
+                    .build();
+
+        } else {
+            LOG.info("/put/users");
+            User temp =  userRep.update(user);
+            return Response.ok(temp).build();
+        }
+
+    }
+
 
 }

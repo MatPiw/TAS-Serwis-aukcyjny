@@ -59,39 +59,60 @@ public class DBOperator {
     }
 
     public User saveUser(Connection connection, User user) {
-        String login = user.getLogin();
-        String firstName = user.getFirstName();
-        String lastName = user.getLastName();
-        String email = user.getEmail();
-        Boolean permissions = user.getPermissions();
-        String address = user.getAddress();
-        String city = user.getCity();
-        String phone = user.getPhone();
-        String zipCode = user.getZipCode();
-        String hashPassword = user.getHashPassword();
-        user.setCreatedAt();
-        Timestamp createdAt = user.getCreatedAt();
-        Boolean confirmed = user.getConfirmed();
         int result = 0;
         try {
             PreparedStatement ps = connection.prepareStatement(
                     "INSERT INTO users(LOGIN, HASH_PASSWORD, PERMISSIONS, FIRST_NAME," +
                             "LAST_NAME, EMAIL, CITY, ADDRESS, PHONE, ZIP_CODE,CONFIRMED, CREATED_AT)" +
-                            " VALUES('"
-                            + login + "','" + hashPassword + "',"
-                            + permissions + ",'" + firstName + "','"
-                            + lastName + "','" + email + "','"
-                            + city + "','" + address + "','"
-                            + phone + "','" + zipCode + "',"
-                            + confirmed + ",'" + createdAt + "')");
-            //System.out.println(ps);
+                            " VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
+            ps.setString(1,user.getLogin());
+            ps.setString(2,user.getHashPassword());
+            ps.setBoolean(3,user.getPermissions());
+            ps.setString(4,user.getFirstName());
+            ps.setString(5,user.getLastName());
+            ps.setString(6,user.getEmail());
+            ps.setString(7,user.getCity());
+            ps.setString(8,user.getAddress());
+            ps.setString(9,user.getPhone());
+            ps.setString(10,user.getZipCode());
+            ps.setBoolean(11,user.getConfirmed());
+            ps.setTimestamp(12,user.getCreatedAt());
+
             result = ps.executeUpdate();
-            //System.out.println("Dodano uzytkownika " + login + " do bazy danych.");
+            System.out.println("Dodano uzytkownika " + user.getLogin() + " do bazy danych.");
         } catch (Exception e) {
             System.out.println("Query Status: " + result);
             e.printStackTrace();
         }
-        return this.getUser(login, connection);
+        return this.getUser(user.getLogin(), connection);
+    }
+
+    public User updateUser(User user, Connection connection) {
+        int result = 0;
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                "UPDATE users SET " +
+                "FIRST_NAME = ?, LAST_NAME=?, EMAIL = ?, CITY = ?," +
+                "ADDRESS = ?, PHONE = ?, ZIP_CODE = ?" +
+                "WHERE LOGIN = ?"
+                );
+            //ps.setString(1,user.getHashPassword());
+            ps.setString(1,user.getFirstName());
+            ps.setString(2,user.getLastName());
+            ps.setString(3,user.getEmail());
+            ps.setString(4,user.getCity());
+            ps.setString(5,user.getAddress());
+            ps.setString(6,user.getPhone());
+            ps.setString(7,user.getZipCode());
+            ps.setString(8,user.getLogin());
+
+            result = ps.executeUpdate();
+            //System.out.println("Dodano uzytkownika " + user.getLogin() + " do bazy danych.");
+        } catch (Exception e) {
+            System.out.println("Query Status: " + result);
+            e.printStackTrace();
+        }
+        return this.getUser(user.getLogin(), connection);
     }
 
     //-------------------offers-------------------------//
@@ -155,38 +176,58 @@ public class DBOperator {
         return offers;
     }
 
-    public void saveOffer(Connection connection, Offer offer) {
+    public Offer getOffer(int id, Connection connection) {
+        try {
+            Offer offer = new Offer();
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM offers WHERE ID = ?");
+            ps.setInt(1,id);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                offer.setId(rs.getInt("ID"));
+                offer.setTitle(rs.getString("TITLE"));
+                offer.setDescription(rs.getString("DESCRIPTION"));
+                offer.setPicturePath(rs.getString("PICTURE_PATH"));
+                offer.setOwnerId(rs.getInt("OWNER_ID"));
+                offer.setBuyNowPrice(rs.getFloat("BUY_NOW_PRICE"));
+                offer.setActive(rs.getBoolean("ACTIVE"));
+                offer.setCreatedAt(rs.getTimestamp("CREATED_AT"));
+                offer.setFinishedAt(rs.getTimestamp("FINISHED_AT"));
+            }
+            return offer;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-        //int id = offer.getId();
-        String title = offer.getTitle();
-        String description = offer.getDescription();
-        String picturePath = offer.getPicturePath();
-        int ownerId = offer.getOwnerId();
-        float buyNowPrice = offer.getBuyNowPrice();
-        Boolean active = offer.getActive();
+    public Offer saveOffer(Connection connection, Offer offer) {
+
         offer.setCreatedAt();
-        Timestamp createdAt = offer.getCreatedAt();
         offer.setFinishedAt();
-        Timestamp finishedAt = offer.getFinishedAt();
-
         int result = 0;
         try {
             PreparedStatement ps = connection.prepareStatement(
                     "INSERT INTO offers (TITLE, DESCRIPTION, PICTURE_PATH, OWNER_ID," +
                             "BUY_NOW_PRICE, ACTIVE, CREATED_AT, FINISHED_AT)" +
-                            " VALUES('"
-                            + title + "','"
-                            + description + "','" + picturePath + "',"
-                            + ownerId + "," + buyNowPrice + ","
-                            + active + ",'" + createdAt + "','"
-                            + finishedAt+ "')");
+                            " VALUES(?,?,?,?,?,?,?,?)");
+            ps.setString(1,offer.getTitle());
+            ps.setString(2,offer.getDescription());
+            ps.setString(3,offer.getPicturePath());
+            ps.setInt(4, offer.getOwnerId());
+            ps.setFloat(5, offer.getBuyNowPrice());
+            ps.setBoolean(6, offer.getActive());
+            ps.setTimestamp(7, offer.getCreatedAt());
+            ps.setTimestamp(8, offer.getFinishedAt());
             //System.out.println(ps);
             result = ps.executeUpdate();
-            System.out.println("Dodano oferte o tytule " + title + " do bazy danych.");
+            //offer.setId()
+            System.out.println("Dodano oferte o tytule " + offer.getTitle() + " do bazy danych.");
+
         } catch (Exception e) {
             System.out.println("Query Status: " + result);
             e.printStackTrace();
         }
+        return offer;
     }
 
     //------------------bids--------------------//
@@ -215,25 +256,20 @@ public class DBOperator {
     }
 
     public void saveBid(Connection connection, Bid bid) {
-
-        //int id = bid.getId();
-        int offerId = bid.getOfferId();
-        float price = bid.getPrice();
-        int bidderId = bid.getBidderId();
-
         bid.setCreatedAt();
-        Timestamp createdAt = bid.getCreatedAt();
-
         int result = 0;
         try {
             PreparedStatement ps = connection.prepareStatement(
                     "INSERT INTO bids (OFFER_ID, BIDDER_ID, PRICE, CREATED_AT)" +
-                            " VALUES("
-                            + offerId + "," + bidderId + ","
-                            + price +  ",'" + createdAt + "')");
+                            " VALUES(?,?,?,?)");
+            ps.setInt(1, bid.getOfferId());
+            ps.setInt(2, bid.getBidderId());
+            ps.setFloat(3, bid.getPrice());
+            ps.setTimestamp(4, bid.getCreatedAt());
+
             //System.out.println(ps);
             result = ps.executeUpdate();
-            System.out.println("Dodano oferte o wartosci " + price + " do aukcji o numerze "+ offerId +" do bazy danych.");
+            System.out.println("Dodano oferte o wartosci " + bid.getPrice() + " do aukcji o numerze "+ bid.getOfferId() +" do bazy danych.");
         } catch (Exception e) {
             System.out.println("Query Status: " + result);
             e.printStackTrace();
@@ -298,25 +334,20 @@ public class DBOperator {
     }
 
     public void saveComment(Connection connection, Comment comment) {
-
-        //int id = bid.getId();
-        int offerId = comment.getOfferId();
-        int giverId = comment.getOfferId();
-        int recieverId = comment.getOfferId();
-        String commentText = comment.getComment();
-        Boolean positive = comment.getPositive();
         comment.setCreatedAt();
-        Timestamp createdAt = comment.getCreatedAt();
-
         int result = 0;
         try {
             PreparedStatement ps = connection.prepareStatement(
                     "INSERT INTO comments (OFFER_ID, GIVER_ID, RECIEVER_ID, COMMENT, POSITIVE, CREATED_AT)" +
-                            " VALUES("
-                            + offerId + "," + giverId + ","
-                            + recieverId +  ",'" + commentText + "',"
-                            + positive + ",'" + createdAt + "')");
-            System.out.println(ps);
+                            " VALUES(?,?,?,?,?,?)");
+            ps.setInt(1,comment.getOfferId());
+            ps.setInt(2,comment.getgiverId());
+            ps.setInt(3,comment.getRecieverId());
+            ps.setString(4, comment.getComment());
+            ps.setBoolean(5, comment.getPositive());
+            ps.setTimestamp(6, comment.getCreatedAt());
+
+            //System.out.println(ps);
             result = ps.executeUpdate();
             System.out.println("Dodano nowy komentarz do bazy danych. ");
         } catch (Exception e) {
