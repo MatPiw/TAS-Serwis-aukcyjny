@@ -5,9 +5,7 @@ import pl.edu.amu.tools.DBConnection;
 import pl.edu.amu.tools.DBOperator;
 
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.List;
-
 
 public class UserRepository {
 
@@ -15,10 +13,15 @@ public class UserRepository {
     private DBOperator operator;
     private Connection connection;
 
+
     public List<User> getUsers(){
+
         return operator.getAllUsers(connection);
     }
 
+    public User findByLogin(String login) {
+        return operator.getUser(login, connection);
+    }
 
     public UserRepository() {
         try {
@@ -27,15 +30,15 @@ public class UserRepository {
             operator= new DBOperator();
             //operator.getAllUsers(connection);
 
+
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("cos nie wyszlo");
+            //e.printStackTrace();
         }
         //users.add(new User("huecov", "h123"));
     }
 
     public User save(User user){
-        User dbUser = findByLogin(user.getLogin());
+        User dbUser = operator.getUser(user.getLogin(), connection);
         if (dbUser != null){
             dbUser.setId(user.getId());
             dbUser.setFirstName(user.getFirstName());
@@ -51,7 +54,7 @@ public class UserRepository {
             dbUser.setConfirmed(user.getConfirmed());
         } else {
             try {
-                operator.saveUser(connection, user);
+                user = operator.saveUser(connection, user);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -60,21 +63,13 @@ public class UserRepository {
         return user;
     }
     
-    public User findByLogin(String login) {
-        List<User> users = getUsers();
-        for(User user : users){
-            if (login.equalsIgnoreCase(user.getLogin())){
-                return user;
-            }
-        }
-        return null;
-    }
+
     
-    public void remove(String login){
-        User user = findByLogin(login);
+    /*public void remove(String login){
+        User user = operator.getUser());
         if (user != null){
             //users.remove(user);
         }
-    }
+    }*/
     
 }

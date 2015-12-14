@@ -48,7 +48,17 @@ public class DBOperator {
         return Collections.emptyList();
     }
 
-    public void saveUser(Connection connection, User user) {
+    public User getUser(String login, Connection connection) {
+        List<User> users = this.getAllUsers(connection);
+        for(User user : users){
+            if (login.equalsIgnoreCase(user.getLogin())){
+                return user;
+            }
+        }
+        return null;
+    }
+
+    public User saveUser(Connection connection, User user) {
         String login = user.getLogin();
         String firstName = user.getFirstName();
         String lastName = user.getLastName();
@@ -76,11 +86,12 @@ public class DBOperator {
                             + confirmed + ",'" + createdAt + "')");
             //System.out.println(ps);
             result = ps.executeUpdate();
-            System.out.println("Dodano uzytkownika " + login + " do bazy danych.");
+            //System.out.println("Dodano uzytkownika " + login + " do bazy danych.");
         } catch (Exception e) {
             System.out.println("Query Status: " + result);
             e.printStackTrace();
         }
+        return this.getUser(login, connection);
     }
 
     //-------------------offers-------------------------//
