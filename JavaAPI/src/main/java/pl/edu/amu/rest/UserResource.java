@@ -6,13 +6,9 @@ import org.slf4j.LoggerFactory;
 import pl.edu.amu.repository.UserRepository;
 import pl.edu.amu.rest.model.ErrorResponse;
 import pl.edu.amu.rest.model.User;
-import sun.awt.AWTAccessor;
-
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-import java.net.URI;
 import java.util.List;
 
 @Path("/users")
