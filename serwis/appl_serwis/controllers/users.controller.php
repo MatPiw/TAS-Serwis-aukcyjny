@@ -32,7 +32,7 @@ class usersController extends controller
         $this->view->assign('profileData', $profileObject);
         $this->view->assign('id', $userLogin);
 
-        if($_PUT['loginu'])
+        if($_POST['loginu'])
         {
             $response=$this->updatingData();
             if($response == true)
@@ -46,7 +46,6 @@ class usersController extends controller
               $this->view->assign("inc_static", "users/viewUserAction.html");
             }
         }
-
 
     }
 
@@ -129,18 +128,19 @@ class usersController extends controller
     }
     private function updatingData()
     {
-      if($_PUT['login']){
+      if($_POST['loginu']){
         $json=array();
-        $json['firstName']=$_PUT['fname'];
-        $json['lastName']=$_PUT['lname'];
-        $json['hashPassword']=md5($_PUT['pass']);
-        $json['email']=$_PUT['email'];
-        $json['city']=$_PUT['city'];
-        $json['address']=$_PUT['address'];
-        $json['zipCode']=$_PUT['zipc'];
-        $json['phone']=$_PUT['phone'];
 
-        $uri= 'http://localhost:8080/users/';
+        $json['firstName']=$_POST['fname'];
+        $json['lastName']=$_POST['lname'];
+        $json['login']=$_POST['loginu'];
+        $json['email']=$_POST['email'];
+        $json['city']=$_POST['city'];
+        $json['address']=$_POST['address'];
+        $json['zipCode']=$_POST['zipc'];
+        $json['phone']=$_POST['phone'];
+
+        $uri= 'http://localhost:8080/users/'.$_POST['loginu'];
         $sendJson=json_encode($json);
         $response = \Httpful\Request::put($uri)
             ->sendsJson()                               // tell it we're sending (Content-Type) JSON...
