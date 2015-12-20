@@ -1,0 +1,116 @@
+<html>
+<head>
+
+    <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=utf8">
+    <!-- Bootstrap Core CSS -->
+    <link href="{$dirWww}appl_serwis/view/script/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{$dirWww}appl_serwis/view/script/shop-homepage.css" rel="stylesheet">
+</head>
+
+<body>
+<script type="text/javascript" src="{$dirWww}appl_serwis/view/script/validlogin.js"></script>
+<script type="text/javascript" src="{$dirWww}appl_serwis/view/script/jquery-2.1.4.min.js"></script>
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{$dirWww}serwis/">Homepage</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="#">About</a>
+                </li>
+                <li>
+                    <a href="#">Services</a>
+                </li>
+                <li>
+                    <a href="#">Contact</a>
+                </li>
+
+                {if $smarty.session.logged == true}
+                <li>
+                    <a href="{$dirWww}serwis/users/updateUser/login:{$smarty.session.userLogin}/">Mój profil</a>
+                </li>
+                <li>
+                    <a href="{$dirWww}serwis/users/viewUser/login:{$smarty.session.userLogin}/">Mój profil</a>
+                </li>
+
+
+
+
+                {else}
+                <li>
+                    <a href="{$dirWww}serwis/users/login/">Logowanie</a>
+                </li>
+                <li>
+                    <a href="{$dirWww}serwis/users/register/">Rejestracja</a>
+                </li>
+                {/if}
+
+
+            </ul>
+            <div id="login">
+
+                {if $smarty.session.logged != true}
+                    <form id="logowanie" action="{$dirWww}serwis/users/login/" method="post" align = "center">
+                    Login: <input type="text" name="login" id="username">
+                    Haslo: <input type="password" name="pass" id="password">
+                    <button id="submit">Login</button>
+                    </form>
+                {else}
+                    Witaj {$smarty.session.firstName}!
+                    <a href="{$dirWww}serwis/users/logout/">Wyloguj</a>
+                {/if}
+
+
+                <div id="ack"><p style="color:red;">{$message}</p></div>
+
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+<!-- Page Content -->
+<div class="container">
+
+    {if $inc_static}{include file="{$inc_static}"}{/if}
+</div>
+<!-- /.container -->
+
+<div class="container">
+
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+        <div class="row">
+            <div class="col-lg-12">
+                <p>Copyright &copy; Super Serwis Aukcyjny</p>
+            </div>
+        </div>
+    </footer>
+
+</div>
+<!-- /.container -->
+
+<!-- jQuery -->
+<script src="{$dirWww}appl_serwis/view/script/jquery.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="{$dirWww}appl_serwis/view/script/bootstrap.min.js"></script>
+
+</body>
+</html>

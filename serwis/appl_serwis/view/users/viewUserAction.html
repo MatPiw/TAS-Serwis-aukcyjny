@@ -1,0 +1,77 @@
+<div class="row">
+
+
+<div class="col-md-9">
+    {if $smarty.session.logged == true}
+
+Imię: {$profileData->firstName}<br>
+Nazwisko: {$profileData->lastName}<br>
+Email: {$profileData->email}<br
+
+<br><br>
+
+{if $smarty.session.userLogin == $profileData->login}
+Edytuj swoje dane: <a href="{$dirWww}serwis/users/updateUser/login:{$smarty.session.userLogin}/"> >>Click!!<< </a>
+{/if}
+
+<br><br>
+Użytkownik wystawił:<br><br>
+<table border="1px solid" style="border: 1px solid" width="100%">
+    <tr>
+        <th>Tytuł</th>
+        <th>Zdjęcie</th>
+        <th>Data</th>
+    </tr>
+{foreach $profileData->userOffers as $i}
+    <tr>
+        <td>{$i->title}</td>
+        <td><img width="100" src="{$i->picturePath}"></td>
+        <td>{$i->finishedAt}</td>
+    </tr>
+{/foreach}
+</table><br>
+    <br><br>
+    Użytkownik brał udział w:<br><br>
+    <table border="1px solid" style="border: 1px solid">
+        <tr>
+            <th>Tytuł</th>
+            <th>Zdjęcie</th>
+            <th>Data</th>
+        </tr>
+        {foreach $profileData->userOffers as $i}
+        <tr>
+            <td>{$i->title}</td>
+            <td><img width="100" src="{$i->picturePath}"></td>
+            <td>{$i->finishedAt}</td>
+        </tr>
+        {/foreach}
+    </table><br>
+    <br><br>
+Użytkownik otrzymał następujące komentarze:<br><br>
+<table border="1px solid" style="border: 1px solid" width="100%">
+    <tr>
+        <th>Komentarz</th>
+        <th>Ocena</th>
+        <th>Data</th>
+    </tr>
+    {foreach $profileData->userComments as $i}
+    <tr>
+        <td>{$i->comment}</td>
+        {if $i->positive == true}
+            <td>POZYTYWNY</td>
+        {else}
+            <td>NEGATYWNY</td>
+        {/if}
+        <td>{$i->createdAt}</td>
+    </tr>
+    {/foreach}
+</table>
+{else}
+    Zaloguj się aby obejżeć stronę.
+    {/if}
+
+
+</div>
+
+
+</div>

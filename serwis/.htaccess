@@ -1,0 +1,8 @@
+RewriteEngine on
+
+RewriteRule ^([a-z]+)/([A-Za-z0-9\-]+)/([A-Za-z0-9\-]+)/([A-Za-z0-9\+\-\;\:\Ł\Ś\Ą\Ż\Ź\Ń\Ó\Ć\Ę\ł\ś\ą\ż\ź\ń\ó\ć\ę]+)/$										$1.php?s=$2&s2=$3&s3=$4 [L]
+RewriteRule ^([a-z]+)/([A-Za-z0-9\-]+)/([A-Za-z0-9\-]+)/$										$1.php?s=$2&s2=$3 [L]
+RewriteRule ^([a-z]+)/([A-Za-z0-9\-]+)/$												        $1.php?s=$2&s2=$3 [L]
+RewriteRule ^serwis/$ serwis.php [L]
+
+RewriteRule ^$ serwis.php [L]

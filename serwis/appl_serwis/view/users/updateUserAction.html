@@ -1,0 +1,29 @@
+<div class="row">
+
+
+
+		<div class="col-md-9">
+
+				<p style="color:red;">{$message}</p>
+
+        <form method="POST" action="">
+            <fieldset>
+                <legend>Edit your information</data></legend>
+                First name: <input type="text" name="fname" value="{$profileData->firstName}"><br>
+                Last name: <input type="text" name="lname" value="{$profileData->lastName}"><br>
+								<input type="hidden" name="loginu" value="{$profileData->login}">
+                Email: <input type="text" name="email" value="{$profileData->email}"><br>
+                City: <input type="text" name="city" value="{$profileData->city}"><br>
+                Address: <input type="text" name="address" value="{$profileData->address}"><br>
+                Zip code: <input type="text" name="zipc" value="{$profileData->zipCode}"><br>
+                Phone number: <input type="text" name="phone" value="{$profileData->phone}"><br>
+                <input type="submit" value="Zmień"><br>
+            </fieldset>
+        </form>
+
+
+
+
+		</div>
+
+</div>
