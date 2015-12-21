@@ -15,6 +15,52 @@ class usersController extends controller
         parent::__construct($_view, $_action, $_params, '_serwis');
     }
 
+    public function addOfferAction($_pars){
+
+      $params=$this->params->getParams($_pars);
+      $userLogin=$params['login'];
+      $profileObject= $this->getUserInfo($userLogin);
+      $this->view->assign('profileData', $profileObject);
+      $this->view->assign('id', $userLogin);
+
+
+        if($_POST['id']){
+              $response=$this->newOffer();
+              if($response == true)
+              {
+                $this->view->assign("message", "Dodałeś aukcje.");
+              }
+              else
+              {
+                $this->view->assign("message", "Niepoprawne dane.");
+              }
+        }
+
+
+    }
+
+    private function newOffer()
+    {
+
+
+        $json=array();
+        $json['title']=$_POST['title'];
+        $json['description']=$_POST['description'];
+        $json['picturePath']=$_POST['picturePath'];
+        $json['ownerId']=$_POST['id'];
+        $json['buyNowPrice']=$_POST['buyNowPrice'];
+        $json['createdAt']=date('Y-m-d', time());
+
+
+        $uri= 'http://localhost:8080/offers/';
+        $sendJson=json_encode($json);
+        $response = \Httpful\Request::post($uri)
+            ->sendsJson()
+            ->body($sendJson)
+            ->send();
+    }
+
+
     public function viewUserAction($_pars)
     {
         $params=$this->params->getParams($_pars);
