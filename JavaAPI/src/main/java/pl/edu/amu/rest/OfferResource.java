@@ -45,7 +45,7 @@ public class OfferResource {
     @GET
     @Path("/{id}")
     public Offer getOffer(@PathParam("id") final int id){
-        LOG.info("/get/users/{}", id);
+        LOG.info("/get/offers/{}", id);
         Offer offer = offerRep.findById(id);
         if (offer == null) {
             throw new NotFoundException(Response.status(Response.Status.NOT_FOUND)

@@ -70,7 +70,7 @@ public class UserResource {
                     .build();
 
         } else {
-            LOG.info("/put/users");
+            LOG.info("/put/users/"+login);
             User temp =  userRep.update(user);
             return Response.ok(temp).build();
         }

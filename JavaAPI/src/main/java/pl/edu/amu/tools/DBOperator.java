@@ -153,7 +153,8 @@ public class DBOperator {
             int id = user.getId();
             // String uname = request.getParameter("uname");
             PreparedStatement ps = connection
-                    .prepareStatement("SELECT * FROM offers WHERE OWNER_ID = " + id);
+                    .prepareStatement("SELECT * FROM offers WHERE OWNER_ID = ?");
+            ps.setInt(1,id);
             // ps.setString(1,uname);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -194,16 +195,16 @@ public class DBOperator {
         try {
             PreparedStatement ps = connection.prepareStatement(
                     "INSERT INTO offers (TITLE, DESCRIPTION, PICTURE_PATH, OWNER_ID," +
-                            "BUY_NOW_PRICE, ACTIVE, CREATED_AT, FINISHED_AT)" +
-                            " VALUES(?,?,?,?,?,?,?,?)");
+                            "BUY_NOW_PRICE, CREATED_AT )" +
+                            " VALUES(?,?,?,?,?,?)");
             ps.setString(1,offer.getTitle());
             ps.setString(2,offer.getDescription());
             ps.setString(3,offer.getPicturePath());
             ps.setInt(4, offer.getOwnerId());
             ps.setFloat(5, offer.getBuyNowPrice());
-            ps.setBoolean(6, offer.getActive());
-            ps.setTimestamp(7, offer.getCreatedAt());
-            ps.setTimestamp(8, offer.getFinishedAt());
+            //ps.setBoolean(6, offer.getActive());
+            ps.setTimestamp(6, offer.getCreatedAt());
+            //ps.setTimestamp(8, offer.getFinishedAt());
             //System.out.println(ps);
             result = ps.executeUpdate();
             //offer.setId()
@@ -298,7 +299,8 @@ public class DBOperator {
             int id = user.getId();
             // String uname = request.getParameter("uname");
             PreparedStatement ps = connection
-                    .prepareStatement("SELECT * FROM comments WHERE RECIEVER_ID = " + id);
+                    .prepareStatement("SELECT * FROM comments WHERE RECIEVER_ID = ?");
+            ps.setInt(1,id);
             // ps.setString(1,uname);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
