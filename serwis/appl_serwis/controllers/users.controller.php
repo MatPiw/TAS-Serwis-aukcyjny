@@ -21,7 +21,6 @@ class usersController extends controller
       $userLogin=$params['login'];
       $profileObject= $this->getUserInfo($userLogin);
       $this->view->assign('profileData', $profileObject);
-      $this->view->assign('id', $userLogin);
 
 
         if($_POST['id']){
@@ -49,9 +48,8 @@ class usersController extends controller
         $json['title']=$_POST['title'];
         $json['description']=$_POST['description'];
         $json['picturePath']=$_POST['picturePath'];
-        $json['ownerId']=$_POST['id'];
+        $json['ownerId']=$_POST['logino'];
         $json['buyNowPrice']=$_POST['buyNowPrice'];
-        $json['createdAt']=date('Y-m-d', time());
 
 
         $uri= 'http://localhost:8080/offers/';
