@@ -21,10 +21,7 @@ class usersController extends controller
       $userLogin=$params['login'];
       $profileObject= $this->getUserInfo($userLogin);
       $this->view->assign('profileData', $profileObject);
-
-
-        if($_POST['id']){
-              $response=$this->newOffer();
+        $response=$this->newOffer();
               if($response == true)
               {
                   $this->view->assign("message", "Dodałeś aukcje.");
@@ -35,7 +32,6 @@ class usersController extends controller
                   $this->view->assign("message", "Niepoprawne dane.");
                   $this->view->assign("inc_static", "users/addOfferAction.html");
               }
-        }
 
 
     }
@@ -48,7 +44,7 @@ class usersController extends controller
         $json['title']=$_POST['title'];
         $json['description']=$_POST['description'];
         $json['picturePath']=$_POST['picturePath'];
-        $json['ownerId']=$_POST['logino'];
+        $json['ownerId']=$_POST['id'];
         $json['buyNowPrice']=$_POST['buyNowPrice'];
 
 
