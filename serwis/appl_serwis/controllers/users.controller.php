@@ -28,11 +28,13 @@ class usersController extends controller
               $response=$this->newOffer();
               if($response == true)
               {
-                $this->view->assign("message", "Dodałeś aukcje.");
+                  $this->view->assign("message", "Dodałeś aukcje.");
+                  $this->view->assign("inc_static", "users/viewUserAction.html");
               }
               else
               {
-                $this->view->assign("message", "Niepoprawne dane.");
+                  $this->view->assign("message", "Niepoprawne dane.");
+                  $this->view->assign("inc_static", "users/addOfferAction.html");
               }
         }
 
