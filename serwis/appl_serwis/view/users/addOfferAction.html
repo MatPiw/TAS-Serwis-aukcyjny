@@ -1,3 +1,19 @@
+<script type="text/javascript">
+    function validateForm()
+    {
+        var price=document.getElementById('price').value;
+        document.getElementById('price').value=price.replace(/,/g,'.');
+
+        if(document.getElementById('title').value != '' && document.getElementById('title').value != '' && document.getElementById('price').value != '' && isNaN(document.getElementById('price').value) === false )
+        {
+            document.getElementById("offer").submit();
+        }
+        else
+        {
+            alert('Wprowadzono złe dane');
+        }
+    }
+</script>
 <div class="row">
 
 
@@ -7,19 +23,18 @@
 				<p style="color:red;">{$message}</p>
 
 
-            <form method="POST" action="">
+            <form method="POST" action="" id="offer">
                 <fieldset>
                     <legend>Add offer</legend>
                     <input type="hidden" name="logino" value="{$profileData->id}">
-                    Title: <input type="text" name="title"><br>
-                    Description : <input type="text" name="description"><br>
-                    PicturePath : <input type="text" name="picturePath"><br>
-                    Buy now price : <input type="text" name="buyNowPrice"><br>
-                    <input type="submit" value="Dodaj Ofertę"><br>
+                    Title: <input id="title" type="text" name="title"><br>
+                    Description : <input id="desc" type="text" name="description"><br>
+                    PicturePath : <input id="pic" type="text" name="picturePath"><br>
+                    Buy now price : <input id="price" type="text" name="buyNowPrice"><br>
                 </fieldset>
             </form>
 
-
+            <button onClick="validateForm();">Dodaj ofertę</button>
 
     </div>
 
