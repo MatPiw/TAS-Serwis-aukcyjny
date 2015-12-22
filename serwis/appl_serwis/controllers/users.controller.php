@@ -15,25 +15,26 @@ class usersController extends controller
         parent::__construct($_view, $_action, $_params, '_serwis');
     }
 
-    public function addOfferAction($_pars){
+    public function addOfferAction(){
 
-      $params=$this->params->getParams($_pars);
-      $userLogin=$params['login'];
+
+      $userLogin=$_SESSION['userLogin'];
       $profileObject= $this->getUserInfo($userLogin);
       $this->view->assign('profileData', $profileObject);
 
-
         if($_POST['logino']){
               $response=$this->newOffer();
-              if($response == true)
+              if($response != 'HTTP/1.1 404 Not Found')
               {
                   $this->view->assign("message", "Dodałeś aukcje.");
                   $this->view->assign("inc_static", "users/viewUserAction.html");
+                  $this->viewUserAction('login:'.$_SESSION['userLogin']);
               }
               else
               {
                   $this->view->assign("message", "Niepoprawne dane.");
                   $this->view->assign("inc_static", "users/addOfferAction.html");
+                  $this->addOfferAction();
               }
         }
 
@@ -58,6 +59,8 @@ class usersController extends controller
             ->sendsJson()
             ->body($sendJson)
             ->send();
+        return $response;
+
     }
 
 
