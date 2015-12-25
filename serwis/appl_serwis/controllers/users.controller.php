@@ -88,11 +88,13 @@ class usersController extends controller
             {
                 $this->view->assign("message", "Zaktualizowałeś dane");
                 $this->view->assign("inc_static", "users/viewUserAction.html");
+                $this->viewUserAction('login:'.$_SESSION['userLogin']);
             }
             else
             {
               $this->view->assign("message", "Wystąpił Błąd");
               $this->view->assign("inc_static", "users/viewUserAction.html");
+                $this->viewUserAction('login:'.$_SESSION['userLogin']);
             }
         }
 

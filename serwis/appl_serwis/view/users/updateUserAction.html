@@ -1,4 +1,4 @@
-<script src="scripts/validateFields.js"></script>
+<script src="{$dirWww}appl_serwis/view/script/validateFields.js"></script>
 <div class="row">
 
 
@@ -10,18 +10,18 @@
         <form method="POST" action="" id="edit">
             <fieldset>
                 <legend>Edit your information</data></legend>
-                First name: <input type="text" name="fname" value="{$profileData->firstName}"><br>
-                Last name: <input type="text" name="lname" value="{$profileData->lastName}"><br>
+                First name: <input id="fname" type="text" name="fname" value="{$profileData->firstName}"><br>
+                Last name: <input id="lname" type="text" name="lname" value="{$profileData->lastName}"><br>
 								<input type="hidden" name="loginu" value="{$profileData->login}">
-                Email: <input type="text" name="email" value="{$profileData->email}"><br>
-                City: <input type="text" name="city" value="{$profileData->city}"><br>
-                Address: <input type="text" name="address" value="{$profileData->address}"><br>
-                Zip code: <input type="text" name="zipc" value="{$profileData->zipCode}"><br>
-                Phone number: <input type="text" name="phone" value="{$profileData->phone}"><br>
-                <input type="submit" value="Zmień"><br>
+                Email: <input id="email" type="text" name="email" value="{$profileData->email}"><br>
+                City: <input id="city" type="text" name="city" value="{$profileData->city}"><br>
+                Address: <input id="address" type="text" name="address" value="{$profileData->address}"><br>
+                Zip code: <input id="zipc" type="text" name="zipc" value="{$profileData->zipCode}"><br>
+                Phone number: <input id="phone" type="text" name="phone" value="{$profileData->phone}"><br>
+
             </fieldset>
         </form>
-
+            <button onClick="validateForm();">Zmień</button>
 
 
 
