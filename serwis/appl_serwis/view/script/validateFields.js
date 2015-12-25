@@ -13,7 +13,7 @@
             document.getElementById('address').value != '' &&
             document.getElementById('zipc').value != '' &&
             isNaN(document.getElementById('phone').value) === false &&
-            len != 12)
+            len != 9)
         {
             document.getElementById("edit").submit();
         }
