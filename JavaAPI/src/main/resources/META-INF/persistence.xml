@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence" version="1.0">
+
+  <persistence-unit name="MySQLConnectionUnit">
+    <description>My Persistence Unit</description>
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <class>pl.edu.amu.rest.entity.UserEntity</class>
+    <class>pl.edu.amu.rest.entity.OfferEntity</class>
+  </persistence-unit>
+
+</persistence>

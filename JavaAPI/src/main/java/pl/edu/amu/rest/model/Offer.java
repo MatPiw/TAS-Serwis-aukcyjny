@@ -1,19 +1,49 @@
 package pl.edu.amu.rest.model;
 
 
-import java.sql.Date;
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.sql.Timestamp;
 
 public class Offer {
-    private int id;
+
+
+    private Long id;
+    @NotBlank
+    @Pattern(message = "{Offer.wrong.title}",regexp = "[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]{1,20}[^0-9]{3,15}")
     private String title;
+    @NotBlank(message = "{Offer.empty.description}")
     private String description;
-    private String picturePath;
-    private int ownerId;
-    private float buyNowPrice;
+    @NotBlank(message = "{Offer.empty.picture_path}")
+    private String picture_path;
+    @NotNull(message = "{Offer.empty.owner_id}")
+    private Long owner_id;
+    @NotNull(message = "{Offer.empty.Prices}")
+    @Valid
+    private Prices prices;
+
     private Boolean active;
-    private Timestamp createdAt;
-    private Timestamp finishedAt;
+
+    private Timestamp created_at;
+
+    private Timestamp finished_at;
+
+    private Long buyer_id;
+    @Min(value = 1L,message = "{Offer.wrong.weight}")
+    private float weight;
+    @NotBlank
+    @Pattern(regexp = "[0-9]+x[0-9]+x[0-9]+", message = "{Offer.wrong.size}")
+    private String size;
+    @NotBlank(message = "{Offer.wrong.shipment}")
+    private String shipment;
+
+    @NotBlank
+    @Pattern(regexp = "[^0-9]+", message = "{Offer.wrong.category}")
+    private String category;
 
     public String getTitle() {
         return title;
@@ -23,69 +53,195 @@ public class Offer {
         this.title = title;
     }
 
-    public int getId() {return id;}
+    public String getDescription() {
+        return description;
+    }
 
-    public void setId(int id) {this.id = id;}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    public String getDescription() { return description; }
+    public String getPicture_path() {
+        return picture_path;
+    }
 
-    public void setDescription(String description) { this.description = description; }
+    public void setPicture_path(String picture_path) {
+        this.picture_path = picture_path;
+    }
 
-    public String getPicturePath() { return picturePath; }
+    public Long getOwner_id() {
+        return owner_id;
+    }
 
-    public void setPicturePath(String picturePath) { this.picturePath = picturePath; }
+    public void setOwner_id(Long owner_id) {
+        this.owner_id = owner_id;
+    }
 
-    public int getOwnerId() { return ownerId; }
+    /*public BigDecimal getBuy_now_price() {
+        return buy_now_price;
+    }
 
-    public void setOwnerId(int ownerId) { this.ownerId = ownerId; }
+    public void setBuy_now_price(BigDecimal buy_now_price) {
+        this.buy_now_price = buy_now_price;
+    }*/
 
-    public float getBuyNowPrice() { return buyNowPrice; }
+    public Boolean getActive() {
+        return active;
+    }
 
-    public void setBuyNowPrice(float buyNowPrice) { this.buyNowPrice = buyNowPrice; }
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 
-    public Boolean getActive() { return active; }
+    public Timestamp getCreated_at() {
+        return created_at;
+    }
 
-    public void setActive(Boolean active) { this.active = active; }
+    public void setCreated_at(Timestamp created_at) {
+        this.created_at = created_at;
+    }
 
-    public Timestamp getCreatedAt() { return createdAt; }
+    public Timestamp getFinished_at() {
+        return finished_at;
+    }
+
+    public void setFinished_at(Timestamp finished_at) {
+        this.finished_at = finished_at;
+    }
+
+    public Long getBuyer_id() {
+        return buyer_id;
+    }
+
+    public void setBuyer_id(Long buyer_id) {
+        this.buyer_id = buyer_id;
+    }
+
+   /* public BigDecimal getBest_price() {
+        return best_price;
+    }
+
+    public void setBest_price(BigDecimal best_price) {
+        this.best_price = best_price;
+    }
+
+    public BigDecimal getMinimal_price() {
+        return minimal_price;
+    }
+
+    public void setMinimal_price(BigDecimal minimal_price) {
+        this.minimal_price = minimal_price;
+    }*/
+
+    public Prices getPrices() {
+        return prices;
+    }
+
+    public void setPrices(Prices prices) {
+        this.prices = prices;
+    }
+
+    public float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(float weight) {
+        this.weight = weight;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public String getShipment() {
+        return shipment;
+    }
+
+    public void setShipment(String shipment) {
+        this.shipment = shipment;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     public void setCreatedAt() {
         java.util.Date utilDate = new java.util.Date();             //data w formacie util
-        this.createdAt = new java.sql.Timestamp(utilDate.getTime());     //pobranie aktualnej daty i konwersja na format sql}
+        this.created_at = new Timestamp(utilDate.getTime());     //pobranie aktualnej daty i konwersja na format sql}
     }
 
-    public Timestamp getFinishedAt() { return finishedAt; }
+    public Timestamp getFinishedAt() { return finished_at; }
 
     public void setFinishedAt() {
         java.util.Date utilDate = new java.util.Date();             //data w formacie util
-        this.finishedAt = new java.sql.Timestamp(utilDate.getTime()+(14*24*60*60*1000));     //pobranie aktualnej daty i konwersja na format sql plus 14 dni}
+        this.finished_at = new Timestamp(utilDate.getTime()+(14*24*60*60*1000));     //pobranie aktualnej daty i konwersja na format sql plus 14 dni}
     }
 
     public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
+        this.created_at = createdAt;
     }
 
     public void setFinishedAt(Timestamp finishedAt) {
-        this.finishedAt = finishedAt;
+        this.finished_at = finishedAt;
     }
     public Offer() {
         //
     }
 
-    public Offer(int owner, String description, float buyNowPrice){
-        this.setBuyNowPrice(buyNowPrice);
-        this.setOwnerId(owner);
-        this.setDescription(description);
-        this.setCreatedAt();
+    public Offer(Long id, String title, String description, String picture_path, Long owner_id, Prices prices, Boolean active, Timestamp created_at, Timestamp finished_at, Long buyer_id, float weight, String size, String shipment, String category) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.picture_path = picture_path;
+        this.owner_id = owner_id;
+        this.prices = prices;
+        this.active = active;
+        this.created_at = created_at;
+        this.finished_at = finished_at;
+        this.buyer_id = buyer_id;
+        this.weight = weight;
+        this.size = size;
+        this.shipment = shipment;
+        this.category = category;
     }
 
-    public Offer(String description, String picturePath, int ownerId, float buyNowPrice, Boolean active){
-        this.setDescription(description);
-        this.setOwnerId(ownerId);
-        this.setPicturePath(picturePath);
-        this.setBuyNowPrice(buyNowPrice);
-        this.setActive(active);
+    public Offer(String title, String picture_path, String description, Long owner_id, Prices prices, float weight, String size, String shipment, String category) {
+        this.title = title;
+        this.picture_path = picture_path;
+        this.description = description;
+        this.owner_id = owner_id;
+        this.active= true;
+        this.prices = prices;
+        this.buyer_id = null;
+        this.weight = weight;
+        this.size = size;
+        this.shipment = shipment;
+        this.category = category;
         this.setCreatedAt();
+        this.setFinishedAt();
+    }
+
+    public Offer(String title, String description, String picture_path, Long owner_id, Prices prices, Boolean active, Timestamp finished_at, Long buyer_id, float weight, String size, String shipment, String category) {
+        this.title = title;
+        this.description = description;
+        this.picture_path = picture_path;
+        this.owner_id = owner_id;
+        this.prices = prices;
+        this.active = active;
+        this.finished_at = finished_at;
+        this.buyer_id = buyer_id;
+        this.weight = weight;
+        this.size = size;
+        this.shipment = shipment;
+        this.category = category;
     }
 
     @Override
@@ -102,15 +258,24 @@ public class Offer {
     @Override
     public String toString() {
         return "Offer{" +
-                "id='" +id + '\'' +
-                ", title='"+ title + "'" +
+                "id=" + id +
+                ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", ownerId='" + ownerId + '\'' +
-                ", picturePath='" + picturePath + '\'' +
-                ", buyNowPrice='" + buyNowPrice + '\'' +
-                ", active='" + active + '\'' +
-                ", createdAt='" + createdAt + '\'' +
-                ", finishedAt='" + finishedAt + '\'' +
+                ", picture_path='" + picture_path + '\'' +
+                ", owner_id=" + owner_id +
+                ", prices=" + prices +
+                ", active=" + active +
+                ", created_at=" + created_at +
+                ", finished_at=" + finished_at +
+                ", buyer_id=" + buyer_id +
+                ", weight=" + weight +
+                ", size='" + size + '\'' +
+                ", shipment='" + shipment + '\'' +
+                ", category='" + category + '\'' +
                 '}';
+    }
+
+    public Long getId() {
+        return id;
     }
 }

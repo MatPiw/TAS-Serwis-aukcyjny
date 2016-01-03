@@ -1,9 +1,10 @@
 package pl.edu.amu;
 
 import org.glassfish.jersey.server.ResourceConfig;
+
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Test;
-import pl.edu.amu.rest.UserResource;
+import pl.edu.amu.rest.UsersResource;
 import pl.edu.amu.rest.model.User;
 
 import javax.ws.rs.client.Entity;
@@ -16,7 +17,7 @@ public class SimpleTest extends JerseyTest {
 
     @Override
     protected Application configure() {
-        return new ResourceConfig( UserResource.class);
+        return new ResourceConfig(UsersResource.class);
     }
  
     /*@Test

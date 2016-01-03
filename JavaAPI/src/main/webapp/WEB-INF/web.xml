@@ -5,6 +5,7 @@
     <module-name>helloworld-jersey</module-name>
     <servlet>
         <servlet-name>pl.edu.amu.rest.RestApplication</servlet-name>
+        <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>pl.edu.amu.rest.RestApplication</servlet-name>

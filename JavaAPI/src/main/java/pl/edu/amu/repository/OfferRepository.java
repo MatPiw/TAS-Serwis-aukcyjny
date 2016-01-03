@@ -30,7 +30,7 @@ public class OfferRepository {
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("coú nie wysz≥o");
+            System.out.println("co≈õ nie wysz≈Ço");
         }
         //users.add(new User("huecov", "h123"));
     }

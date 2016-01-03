@@ -27,7 +27,7 @@ public class BidResource {
 
     } catch (Exception e) {
         e.printStackTrace();
-        System.out.println("coœ nie wysz³o");
+
     }*/
         return bidRep.getBids();
     }
