@@ -11,13 +11,16 @@ import pl.edu.amu.rest.model.User;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Path("/users")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -25,6 +28,7 @@ import java.util.Collection;
 @Api(value = "/users", description = "Operations about users using mysql")
 public class UsersResource {
     private static final MysqlDB database = new MysqlDB();
+
     protected MysqlDB getDatabase() {
         return database;
     }
@@ -36,8 +40,19 @@ public class UsersResource {
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Get users collection", notes = "Get users collection", response = User.class, responseContainer = "LIST")
     //@Valid Wyłączony, bo w bazie jest za dużo nieprawidłowych danych
-    public Collection<User> list() {
-        return getDatabase().getUsers();
+    public Collection<User> getUsers() {
+
+        Collection<User> final_result=new ArrayList<User>();
+        Collection<User> result=getDatabase().getUsers();
+        System.out.println("HHEHEHEH");
+        for (User user: result){
+            user.setUserOffers((List)getDatabase().getOffersByOwner(user.getId()));
+            final_result.add(user);
+            //dodać jeszcze komentarze
+        }
+        return final_result;
+
+
     }
 
 
@@ -46,16 +61,16 @@ public class UsersResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Valid
-    public User getUser(@NotBlank(message = "{getUser.userId.empty}") @PathParam("userId") String userId) throws Exception {
+    public User getUser(@NotBlank(message = "{getUser.userId.empty}") @Pattern(regexp = "\\d+", message = "{userId.notDigit}") @PathParam("userId") String userId) throws Exception {
         User user = getDatabase().getUser(userId);
 
 
         if (user == null) {
 
-            throw new UserNotFoundException("User with this id doesn't exist",UsersResource.class);
+            throw new UserNotFoundException("User with this id doesn't exist", UsersResource.class);
             //throw new UserException("User not found", "Użytkownik nie został znaleziony", "http://docu.pl/errors/user-not-found");
         }
-
+        user.setUserOffers((List) getDatabase().getOffersByOwner(userId));
         return user;
     }
 
@@ -63,10 +78,9 @@ public class UsersResource {
     @ApiOperation(value = "Create user", notes = "Create user", response = User.class)
     public Response createUser(@NotNull(message = "{createUser.user.empty}") @Valid final User user) {
 
-        if (getDatabase().getUserbyLogin(user.getLogin())!=null){
+        if (getDatabase().getUserbyLogin(user.getLogin()) != null) {
             throw new UserConflictException("Error, users duplication! Insert new login");
-        }
-        else {
+        } else {
             User dbUser = new User(
                     user.getLogin(),
                     user.getHashPassword(),
@@ -83,7 +97,6 @@ public class UsersResource {
         }
 
 
-
     }
 
     @Path("/{userId}")
@@ -92,12 +105,10 @@ public class UsersResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @NotNull
-    public Response updateUser(@NotBlank(message = "{updateUser.userId.empty}") @PathParam("userId") String userId,@NotNull @Valid User user) {
-        if (getDatabase().getUser(userId)==null){
-            System.out.println("Nie znaleziono takiego użytkownika");
+    public Response updateUser(@NotBlank(message = "{updateUser.userId.empty}") @Pattern(regexp = "\\d+", message = "{userId.notDigit}") @PathParam("userId") String userId, @NotNull(message = "{updateUser.user.empty}") @Valid User user) {
+        if (getDatabase().getUser(userId) == null) {
             throw new UserNotFoundException("Sorry, but user with this id was not found, so he couldn't be updated", UsersResource.class);
-        }
-        else {
+        } else {
             User dbUser = new User(
                     user.getLogin(),
                     user.getHashPassword(),
@@ -113,13 +124,12 @@ public class UsersResource {
             );
 
             User updatedUser = getDatabase().updateUser(userId, dbUser);
-
+            updatedUser.setUserOffers((List) getDatabase().getOffersByOwner(userId));
+            //JESZCZE TUTAJ DODAć DO KOMENTARZY
             return Response.ok().entity(updatedUser).encoding("UTF-8").build();
         }
 
     }
-
-
 
 
     @Path("/{userId}")
@@ -127,12 +137,15 @@ public class UsersResource {
     @ApiOperation(value = "Delete user", notes = "Delete user from database", response = User.class)
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteUser(@NotBlank(message = "{deleteUser.userId.empty}") @PathParam("userId") String userId){
-        Boolean success= getDatabase().deleteUser(userId);
-        if (success)
-            return Response.status(Response.Status.NO_CONTENT).entity(null).encoding("UTF-8").type(MediaType.APPLICATION_JSON).build();
-        else
+    public Response deleteUser(@NotBlank(message = "{deleteUser.userId.empty}") @Pattern(regexp = "\\d+", message = "{userId.notDigit}") @PathParam("userId") String userId) {
+        Boolean success = getDatabase().deleteUser(userId);
+        if (!success)
             throw new NotFoundException("user not found");
+        else if (getDatabase().getOffersByOwner(userId).size() != 0) {
+            getDatabase().deleteOffersByOwnerId(userId);
+        }
+        return Response.status(Response.Status.NO_CONTENT).entity(null).encoding("UTF-8").type(MediaType.APPLICATION_JSON).build();
+
 
     }
 }

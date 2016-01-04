@@ -1,5 +1,10 @@
 package pl.edu.amu.rest.model;
 
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
+import javax.ws.rs.DefaultValue;
 import java.math.BigDecimal;
 
 /**
@@ -7,8 +12,11 @@ import java.math.BigDecimal;
  */
 public class Prices {
     private BigDecimal best_price;
+    @Min(value = 0, message = "{Offer.Prices.minimalValue.wrong}")
     private BigDecimal minimal_price;
     private BigDecimal buy_now_price;
+    @NotBlank
+    @Pattern(regexp = "[A-Z]{3,20}", message = "{Offer.Prices.currency.wrong}")
     private String currency;
 
     public BigDecimal getBest_price() {

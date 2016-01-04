@@ -67,7 +67,6 @@ public class UserEntity {
     */
 
 
-
     public String getFirstName() {
         return firstName;
     }
@@ -169,7 +168,6 @@ public class UserEntity {
     }
 
 
-
     //fields can be renamed
     //fields can be indexed for better performance
 
@@ -194,8 +192,8 @@ public class UserEntity {
         this.phone = phone;
         this.zipCode = zipCode;
         this.createdAt = createdAt;
-        this.permissions=false;
-        this.confirmed=false;
+        this.permissions = false;
+        this.confirmed = false;
     }
 
     public UserEntity(String login, String hashPassword, String firstName, String lastName, Boolean permissions, String email, String city, String address, String phone, String zipCode, Timestamp createdAt, Boolean confirmed, List<Offer> userOffers, List<Comment> userComments) {

@@ -1,5 +1,8 @@
 package pl.edu.amu.rest.exception;
 
+import pl.edu.amu.rest.CommentResource;
+import pl.edu.amu.rest.OfferResource;
+
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
@@ -10,6 +13,7 @@ import java.util.ResourceBundle;
  */
 public class OfferNotFoundException extends NotFoundException {
     private static String messageKey="notFoundOfferMessage";
+    String bundle=new String();
     ResourceBundle labels = ResourceBundle.getBundle("offermessage");
 
     @Override
@@ -22,10 +26,19 @@ public class OfferNotFoundException extends NotFoundException {
                 .type("application/json")
                 .encoding("UTF-8")
                 .build());
+        bundle="offermessage";
+        labels=ResourceBundle.getBundle(bundle);
     }
 
-    public OfferNotFoundException(String message) {
+    public OfferNotFoundException(String message, Class throwingClass) {
         super(message);
+        if (throwingClass==OfferResource.class){
+            bundle="offermessage";
+        }
+        else if(throwingClass== CommentResource.class){
+            bundle="commentmessage";
+        }
+        labels=ResourceBundle.getBundle(bundle);
 
     }
 }

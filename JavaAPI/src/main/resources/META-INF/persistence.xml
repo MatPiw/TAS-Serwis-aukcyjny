@@ -8,6 +8,7 @@
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <class>pl.edu.amu.rest.entity.UserEntity</class>
     <class>pl.edu.amu.rest.entity.OfferEntity</class>
+    <class>pl.edu.amu.rest.entity.CommentEntity</class>
   </persistence-unit>
 
 </persistence>

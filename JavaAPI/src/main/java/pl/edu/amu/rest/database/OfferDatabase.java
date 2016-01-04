@@ -16,14 +16,14 @@ public interface OfferDatabase {
 
     Boolean deleteOffer(final String offerId);
 
-
+    Boolean deleteOffersByOwnerId(String owner_id);
 
     Collection<Offer> getOffersByOwner(String uid);
 
-    Collection<Offer> getOffersByBuyer(String uid);
+    /*Collection<Offer> getOffersByBuyer(String uid);
 
     Collection<Offer> getOffersByCategory(String category);
-
+*/
     Collection<Offer> getOffersWithFilters(String owner_id, String buyer_id, String category);
 
 }

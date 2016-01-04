@@ -2,18 +2,24 @@ package pl.edu.amu.rest.entity;
 
 import javax.persistence.*;
 import javax.ws.rs.core.Link;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 /**
  * Created by Altenfrost on 2015-12-29.
  */
-@Table
+@Table(name = "bids")
+
 public class BidEntity {
 
-    private String title;
+    private Long id;
 
-    private String description;
+    private Long offer_id;
 
-    private Link picture_path;
+    private Long bidder_id;
 
+    private BigDecimal price_offered;
+
+    private Timestamp created_at;
 
 }

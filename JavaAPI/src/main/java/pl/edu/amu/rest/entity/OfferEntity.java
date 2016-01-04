@@ -5,6 +5,7 @@ import javax.ws.rs.core.Link;
 import java.math.BigDecimal;
 import java.sql.Time;
 import java.sql.Timestamp;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,8 +17,9 @@ import org.slf4j.LoggerFactory;
 @NamedQueries({
         @NamedQuery(name = "offers.findAll", query = "SELECT o FROM OfferEntity o"),
         @NamedQuery(name = "offers.findAllByOwner", query = "SELECT u FROM OfferEntity u WHERE u.owner_id=:owner"),
-        @NamedQuery(name = "offers.findAllByBuyer", query = "SELECT u FROM OfferEntity u WHERE u.buyer_id=:buyer"),
-        @NamedQuery(name = "offers.findAllByCategory", query = "SELECT u FROM OfferEntity u WHERE u.category=:category")
+        /*@NamedQuery(name = "offers.findAllByBuyer", query = "SELECT u FROM OfferEntity u WHERE u.buyer_id=:buyer"),
+        @NamedQuery(name = "offers.findAllByCategory", query = "SELECT u FROM OfferEntity u WHERE u.category=:category"),*/
+        @NamedQuery(name = "offers.deleteAllByOwnerId", query = "DELETE FROM OfferEntity u WHERE u.owner_id=:owner_id")
 })
 public class OfferEntity {
 
@@ -40,9 +42,9 @@ public class OfferEntity {
     @Column(name = "ACTIVE")
     private Boolean active;
     @Column(name = "CREATED_AT")
-    private Timestamp created_at;
+    private Timestamp createdAt;
     @Column(name = "FINISHED_AT")
-    private Timestamp finished_at;
+    private Timestamp finishedAt;
     @Column(name = "BUYER_ID")
     private Long buyer_id;
     @Column(name = "BEST_PRICE")
@@ -61,6 +63,7 @@ public class OfferEntity {
 
     @Column(name = "CATEGORY")
     private String category;
+
 
     public String getCurrency() {
         return currency;
@@ -130,20 +133,20 @@ public class OfferEntity {
         this.active = active;
     }
 
-    public Timestamp getCreated_at() {
-        return created_at;
+    public Timestamp getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(Timestamp created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public Timestamp getFinished_at() {
-        return finished_at;
+    public Timestamp getFinishedAt() {
+        return finishedAt;
     }
 
-    public void setFinished_at(Timestamp finished_at) {
-        this.finished_at = finished_at;
+    public void setFinishedAt(Timestamp finishedAt) {
+        this.finishedAt = finishedAt;
     }
 
     public Long getBuyer_id() {
@@ -203,27 +206,29 @@ public class OfferEntity {
         this.picture_path = picture_path;
         this.owner_id = owner_id;
         this.buy_now_price = buy_now_price;
-        this.created_at = created_at;
+        this.createdAt = created_at;
         this.minimal_price = minimal_price;
         this.weight = weight;
         this.size = size;
         this.shipment = shipment;
         this.category = category;
     }
+
     @PostLoad
     private void postLoad() {
         LOGGER.info("postLoad: {}", toString());
     }
-    public OfferEntity(String title, String description, String picture_path, Long owner_id, BigDecimal buy_now_price,String currency, Boolean active, Timestamp created_at, Timestamp finished_at, Long buyer_id, BigDecimal best_price, BigDecimal minimal_price, float weight, String size, String shipment, String category) {
+
+    public OfferEntity(String title, String description, String picture_path, Long owner_id, BigDecimal buy_now_price, String currency, Boolean active, Timestamp created_at, Timestamp finished_at, Long buyer_id, BigDecimal best_price, BigDecimal minimal_price, float weight, String size, String shipment, String category) {
         this.title = title;
         this.description = description;
         this.picture_path = picture_path;
         this.owner_id = owner_id;
         this.buy_now_price = buy_now_price;
-        this.currency=currency;
+        this.currency = currency;
         this.active = active;
-        this.created_at = created_at;
-        this.finished_at = finished_at;
+        this.createdAt = created_at;
+        this.finishedAt = finished_at;
         this.buyer_id = buyer_id;
         this.best_price = best_price;
         this.minimal_price = minimal_price;
@@ -233,15 +238,15 @@ public class OfferEntity {
         this.category = category;
     }
 
-    public OfferEntity(String title, String description, String picture_path, Long owner_id, BigDecimal buy_now_price,String currency, Timestamp created_at, Timestamp finished_at, float weight, String size, String shipment, String category) {
+    public OfferEntity(String title, String description, String picture_path, Long owner_id, BigDecimal buy_now_price, String currency, Timestamp created_at, Timestamp finished_at, float weight, String size, String shipment, String category) {
         this.title = title;
         this.description = description;
         this.picture_path = picture_path;
         this.owner_id = owner_id;
         this.buy_now_price = buy_now_price;
-        this.currency=currency;
-        this.created_at = created_at;
-        this.finished_at = finished_at;
+        this.currency = currency;
+        this.createdAt = created_at;
+        this.finishedAt = finished_at;
         this.weight = weight;
         this.size = size;
         this.shipment = shipment;
@@ -258,8 +263,8 @@ public class OfferEntity {
                 ", owner_id=" + owner_id +
                 ", buy_now_price=" + buy_now_price +
                 ", active=" + active +
-                ", created_at=" + created_at +
-                ", finished_at=" + finished_at +
+                ", createdAt=" + createdAt +
+                ", finishedAt=" + finishedAt +
                 ", buyer_id=" + buyer_id +
                 ", best_price=" + best_price +
                 ", minimal_price=" + minimal_price +
