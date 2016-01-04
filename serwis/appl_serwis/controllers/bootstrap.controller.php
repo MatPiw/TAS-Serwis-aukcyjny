@@ -38,6 +38,7 @@
                     $kont = new ${kontroler2load}($this->view, $_GET['action'], $_GET['params'], $this->activeLanguage);
                     $this->indexType = $kont->getIndexType();
                     $this->index = $kont->getIndex();
+
                 }
                 else
                 {
@@ -47,6 +48,37 @@
                 }
             }
 
+            if($_GET['controller'] == 'index')
+            {
+                $this->processAuctions();
+            }
+        }
+
+        private function processAuctions()
+        {
+            $file = 'http://localhost:8080/offers';
+            $file_headers = @get_headers($file);
+            if($file_headers[0] != 'HTTP/1.1 404 Not Found') {
+                $json = file_get_contents($file);
+                $obj = json_decode($json);
+
+                $sliderArray=array();
+                for($i=0; $i<3; $i++)
+                {
+                    array_push($sliderArray, $obj[$i]);
+                }
+
+                $nextArray=array();
+
+                for($i=3; $i<9; $i++)
+                {
+                    array_push($nextArray, $obj[$i]);
+                }
+                $this->view->assign("offers", $nextArray);
+                $this->view->assign("slider", $sliderArray);
+
+            }
+            $this->view->assign('inc_static', dirRoot.'appl_serwis/view/startAction.html');
         }
 
     }

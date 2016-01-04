@@ -1,0 +1,31 @@
+
+<style type="text/css">
+    /* Enhance the look of the textarea expanding animation */
+    .animated {
+        -webkit-transition: height 0.2s;
+        -moz-transition: height 0.2s;
+        transition: height 0.2s;
+    }
+    .stars {
+        margin: 20px 0;
+        font-size: 24px;
+        color: #d17581;
+    }
+</style>
+<div class="row">
+
+    <div class="col-md-9">
+        <div class="thumbnail2">
+            <img src="{$offer->picture_path}" alt="">
+            <div class="caption-full">
+                <h4 class="pull-right">Buy now price: {$offer->prices->buy_now_price} {$offer->prices->currency}</h4><br>
+                <h4 class="pull-right">Minimal price: {$offer->prices->minimal_price} {$offer->prices->currency}</h4>
+                <h4><a href="">{$offer->title}</a></h4>
+                <p>{$offer->description}</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
