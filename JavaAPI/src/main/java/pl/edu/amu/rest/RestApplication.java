@@ -1,5 +1,6 @@
 package pl.edu.amu.rest;
 
+import io.swagger.jaxrs.config.BeanConfig;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
@@ -40,6 +41,15 @@ public class RestApplication extends ResourceConfig {
         register(ConstraintViolationExceptionMapper.class);
         // Register Bean Validation (this is optional as BV is automatically registered when jersey-bean-validation is on the classpath but it's good to know it's happening).
         register(ValidationFeature.class);
+
+        packages("io.swagger.jaxrs.listing");
+        BeanConfig beanConfig = new BeanConfig();
+        beanConfig.setVersion("1.0.2");
+        beanConfig.setSchemes(new String[]{"http"});
+        beanConfig.setHost("localhost:8080");
+        beanConfig.setBasePath("");
+        beanConfig.setResourcePackage("pl.edu.amu.rest");
+        beanConfig.setScan(true);
 
         /*register(OfferResource.class);
         register(BidResource.class);

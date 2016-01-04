@@ -1,3 +1,4 @@
+/*
 package pl.edu.amu.repository;
 
 
@@ -38,7 +39,8 @@ public class OfferRepository {
     public Offer save(Offer offer)  {
 
         //tu jest problem, bo id przydziela baza danych a nie bezposrednio api. przez to jest problem z zapisywaniem ofert
-        Offer dbOffer = null; /* = findById(offer.getId());
+        Offer dbOffer = null; */
+/* = findById(offer.getId());
         if (dbOffer != null) {
             offer.setId(dbOffer.getId());
             offer.setTitle(dbOffer.getTitle());
@@ -48,7 +50,8 @@ public class OfferRepository {
             offer.setCreatedAt(dbOffer.getCreatedAt());
             offer.setFinishedAt(dbOffer.getFinishedAt());
         }
-        else {*/
+        else {*//*
+
             try {
                 dbOffer = operator.saveOffer(connection, offer);
             } catch (Exception e) {
@@ -63,3 +66,4 @@ public class OfferRepository {
         return operator.getOffer(id, connection);
     }
 }
+*/

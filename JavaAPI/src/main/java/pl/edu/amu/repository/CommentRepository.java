@@ -1,3 +1,4 @@
+/*
 package pl.edu.amu.repository;
 
 
@@ -36,18 +37,19 @@ public class CommentRepository {
     public Comment save(Comment comment)  {
 
         //tu jest problem, bo id przydziela baza danych a nie bezposrednio api. przez to jest problem z zapisywaniem ofert
-        Comment dbComment = findById(comment.getId());
+        //Comment dbComment = findById(comment.getId());
             try {
                 operator.saveComment(connection, comment);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         //}
-
-        return dbComment;
+        return null;        //potem wywalic
+        //return dbComment;
     }
 
-    public Comment findById(int id) {
+    */
+/*public Comment findById(int id) {
         List<Comment> comments = getComments();
         for(Comment comment : comments){
             if (id == comment.getId()){
@@ -55,5 +57,7 @@ public class CommentRepository {
             }
         }
         return null;
-    }
+    }*//*
+
 }
+*/

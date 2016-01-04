@@ -1,7 +1,7 @@
 package pl.edu.amu.rest;
 
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.hibernate.validator.constraints.NotBlank;
 import pl.edu.amu.rest.database.MysqlDB;
 import pl.edu.amu.rest.exception.UserConflictException;
@@ -22,15 +22,26 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+
 @Path("/users")
+@Api(value = "/users", description = "Operations about users using mysql")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@Api(value = "/users", description = "Operations about users using mysql")
+
 public class UsersResource {
     private static final MysqlDB database = new MysqlDB();
 
     protected MysqlDB getDatabase() {
         return database;
+    }
+
+    private boolean isNumeric(String str)
+    {
+        for (char c : str.toCharArray())
+        {
+            if (!Character.isDigit(c)) return false;
+        }
+        return true;
     }
 
     @Context
@@ -56,13 +67,19 @@ public class UsersResource {
     }
 
 
+
     @Path("/{userId}")
     @ApiOperation(value = "Get user by id", notes = "[note]Get user by id", response = User.class)
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Valid
-    public User getUser(@NotBlank(message = "{getUser.userId.empty}") @Pattern(regexp = "\\d+", message = "{userId.notDigit}") @PathParam("userId") String userId) throws Exception {
-        User user = getDatabase().getUser(userId);
+    //@Valid
+    public User getUser(@NotBlank(message = "{getUser.userId.empty}") @Pattern(regexp = "(\\d|[a-zA-Z0-9ęóąśłżźćńĘÓĄŚŁŻŹĆŃ])+", message = "{userId.notDigitOrLogin}") @PathParam("userId") String userUniqueIdentificator) throws Exception {
+        User user;
+        if (isNumeric(userUniqueIdentificator)) {
+            user = getDatabase().getUser(userUniqueIdentificator);
+        } else {
+            user = getDatabase().getUserbyLogin(userUniqueIdentificator);
+        }
 
 
         if (user == null) {
@@ -70,7 +87,7 @@ public class UsersResource {
             throw new UserNotFoundException("User with this id doesn't exist", UsersResource.class);
             //throw new UserException("User not found", "Użytkownik nie został znaleziony", "http://docu.pl/errors/user-not-found");
         }
-        user.setUserOffers((List) getDatabase().getOffersByOwner(userId));
+        user.setUserOffers((List) getDatabase().getOffersByOwner(user.getId()));
         return user;
     }
 

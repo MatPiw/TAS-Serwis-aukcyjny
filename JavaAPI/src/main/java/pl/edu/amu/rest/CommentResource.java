@@ -4,7 +4,6 @@ import com.sun.el.parser.BooleanNode;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.hibernate.validator.constraints.NotBlank;
-import pl.edu.amu.repository.CommentRepository;
 import pl.edu.amu.rest.database.MysqlDB;
 import pl.edu.amu.rest.exception.CommentConflictException;
 import pl.edu.amu.rest.exception.CommentNotFoundException;

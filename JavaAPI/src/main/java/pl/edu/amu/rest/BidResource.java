@@ -1,3 +1,4 @@
+/*
 package pl.edu.amu.rest;
 
 
@@ -19,7 +20,8 @@ public class BidResource {
     //@Override
     @GET
     public List<Bid> getBids(){
-    /*try {
+    */
+/*try {
         DBConnection database= new DBConnection();
         Connection connection = database.getConnection();
         DBDownloader downloader= new DBDownloader();
@@ -28,7 +30,8 @@ public class BidResource {
     } catch (Exception e) {
         e.printStackTrace();
 
-    }*/
+    }*//*
+
         return bidRep.getBids();
     }
 
@@ -49,3 +52,4 @@ public class BidResource {
     }
 
 }
+*/

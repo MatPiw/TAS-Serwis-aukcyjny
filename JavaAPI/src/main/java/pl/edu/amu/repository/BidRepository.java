@@ -1,3 +1,4 @@
+/*
 package pl.edu.amu.repository;
 
 
@@ -62,3 +63,4 @@ public class BidRepository {
         }
     }
 }
+*/
