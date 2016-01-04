@@ -20,6 +20,7 @@ public class InternalServerErrorMapper implements ExceptionMapper<Exception> {
     }
 
     private ErrorInfo createEntity(Exception exception) {
+        exception.printStackTrace();
         return new ErrorInfo(exception.getMessage(), exception.getLocalizedMessage(),exception.hashCode());
     }
 }

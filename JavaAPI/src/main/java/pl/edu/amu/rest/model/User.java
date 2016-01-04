@@ -13,35 +13,35 @@ import java.util.List;
 
 public class User{
 
-    private Long id;
-    @NotBlank
-    @Pattern(message = "{User.wrong.login}",regexp = "[a-zA-Z0-9ęóąśłżźćńĘÓĄŚŁŻŹĆŃ]{3,35}")
+    private String id;
+    @NotBlank(message = "{User.login.empty}")
+    @Pattern(message = "{User.login.wrong}",regexp = "[a-zA-Z0-9ęóąśłżźćńĘÓĄŚŁŻŹĆŃ]{3,35}")
     private String login;
-    @NotBlank(message = "{User.wrong.hashPassword}")
+    @NotBlank(message = "{User.hashPassword.wrong}")
     private String hashPassword;
-    @NotBlank
-    @Pattern(message = "{User.wrong.firstName}",regexp = "[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]{3,15}")
+    @NotBlank(message = "{User.firstName.empty}")
+    @Pattern(message = "{User.firstName.wrong}",regexp = "[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]{3,15}")
     private String firstName;
-    @NotBlank
-    @Pattern(message = "{User.wrong.lastName}",regexp = "[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]{3,30}")
+    @NotBlank(message = "{User.lastName.empty}")
+    @Pattern(message = "{User.lastName.wrong}",regexp = "[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]{3,30}")
     private String lastName;
 
     private Boolean permissions;
 
-    @NotBlank
-    @Pattern(regexp = "\\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}\\b", message = "{User.wrong.email}")
+    @NotBlank(message = "{User.email.empty}")
+    @Pattern(regexp = "\\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}\\b", message = "{User.email.wrong}")
     private String email;
-    @NotBlank
-    @Pattern(message = "{User.wrong.city}",regexp = "^[a-zA-ZóąśłżźćńĘĄÓĄŚŁŻŹĆŃ]{1,30}(?:[\\s-][a-zA-Z]{1,30})*$")
+    @NotBlank(message = "{User.city.empty}")
+    @Pattern(message = "{User.city.wrong}",regexp = "^[a-zA-ZóąśłżźćńĘĄÓĄŚŁŻŹĆŃ]{1,30}(?:[\\s-][a-zA-Z]{1,30})*$")
     private String city;
-    @NotBlank
-    @Pattern(message = "{User.wrong.address}",regexp = "[a-zA-ZęóąśłżźćńĘĄÓĄŚŁŻŹĆŃ]{1,20}(\\\\.)?[a-zA-ZóąśłżźćńĘĄÓĄŚŁŻŹĆŃ]{1,15} \\d+")
+    @NotBlank(message = "{User.address.empty}")
+    @Pattern(message = "{User.address.wrong}",regexp = "[a-zA-ZęóąśłżźćńĘĄÓĄŚŁŻŹĆŃ]{1,20}(\\\\.)?[a-zA-ZóąśłżźćńĘĄÓĄŚŁŻŹĆŃ]{1,15} \\d+")
     private String address;
-    @NotBlank
-    @Pattern(message = "{User.wrong.phone}",regexp = "^[0-9]{9,9}$")
+    @NotBlank(message = "{User.phone.empty}")
+    @Pattern(message = "{User.phone.wrong}",regexp = "^[0-9]{9,9}$")
     private String phone;
-    @NotBlank
-    @Pattern(message = "{User.wrong.zipCode}",regexp = "[0-9][0-9]\\-[0-9][0-9][0-9]")
+    @NotBlank(message = "{User.zipCode.empty}")
+    @Pattern(message = "{User.zipCode.wrong}",regexp = "[0-9][0-9]\\-[0-9][0-9][0-9]")
     private String zipCode;
     //@NotBlank(message = "{User.wrong.createdAt}")
     private Timestamp createdAt;
@@ -53,7 +53,7 @@ public class User{
         //
     }
 
-    public User(Long id, String login, String hashPassword, String firstName, String lastName, Boolean permissions, String email, String city, String address, String phone, String zipCode, Timestamp createdAt, Boolean confirmed, List<Offer> userOffers, List<Comment> userComments) {
+    public User(String id, String login, String hashPassword, String firstName, String lastName, Boolean permissions, String email, String city, String address, String phone, String zipCode, Timestamp createdAt, Boolean confirmed, List<Offer> userOffers, List<Comment> userComments) {
         this.id = id;
         this.login = login;
         this.hashPassword = hashPassword;
@@ -70,7 +70,7 @@ public class User{
         this.userOffers = userOffers;
         this.userComments = userComments;
     }
-    public User(Long id, String login, String hashPassword, String firstName, String lastName, Boolean permissions, String email, String city, String address, String phone, String zipCode, Timestamp createdAt, Boolean confirmed) {
+    public User(String id, String login, String hashPassword, String firstName, String lastName, Boolean permissions, String email, String city, String address, String phone, String zipCode, Timestamp createdAt, Boolean confirmed) {
         this.id = id;
         this.login = login;
         this.hashPassword = hashPassword;
@@ -124,7 +124,7 @@ public class User{
         this.confirmed = confirmed;
     }
 
-    public Long getId() {return id;}
+    public String getId() {return id;}
 
 
     //@ApiModelProperty(value = "User first name", required = true)

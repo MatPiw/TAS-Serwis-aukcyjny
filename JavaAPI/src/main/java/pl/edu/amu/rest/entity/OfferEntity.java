@@ -42,9 +42,9 @@ public class OfferEntity {
     @Column(name = "ACTIVE")
     private Boolean active;
     @Column(name = "CREATED_AT")
-    private Timestamp created_at;
+    private Timestamp createdAt;
     @Column(name = "FINISHED_AT")
-    private Timestamp finished_at;
+    private Timestamp finishedAt;
     @Column(name = "BUYER_ID")
     private Long buyer_id;
     @Column(name = "BEST_PRICE")
@@ -63,6 +63,7 @@ public class OfferEntity {
 
     @Column(name = "CATEGORY")
     private String category;
+
 
     public String getCurrency() {
         return currency;
@@ -132,20 +133,20 @@ public class OfferEntity {
         this.active = active;
     }
 
-    public Timestamp getCreated_at() {
-        return created_at;
+    public Timestamp getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(Timestamp created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public Timestamp getFinished_at() {
-        return finished_at;
+    public Timestamp getFinishedAt() {
+        return finishedAt;
     }
 
-    public void setFinished_at(Timestamp finished_at) {
-        this.finished_at = finished_at;
+    public void setFinishedAt(Timestamp finishedAt) {
+        this.finishedAt = finishedAt;
     }
 
     public Long getBuyer_id() {
@@ -205,7 +206,7 @@ public class OfferEntity {
         this.picture_path = picture_path;
         this.owner_id = owner_id;
         this.buy_now_price = buy_now_price;
-        this.created_at = created_at;
+        this.createdAt = created_at;
         this.minimal_price = minimal_price;
         this.weight = weight;
         this.size = size;
@@ -226,8 +227,8 @@ public class OfferEntity {
         this.buy_now_price = buy_now_price;
         this.currency = currency;
         this.active = active;
-        this.created_at = created_at;
-        this.finished_at = finished_at;
+        this.createdAt = created_at;
+        this.finishedAt = finished_at;
         this.buyer_id = buyer_id;
         this.best_price = best_price;
         this.minimal_price = minimal_price;
@@ -244,8 +245,8 @@ public class OfferEntity {
         this.owner_id = owner_id;
         this.buy_now_price = buy_now_price;
         this.currency = currency;
-        this.created_at = created_at;
-        this.finished_at = finished_at;
+        this.createdAt = created_at;
+        this.finishedAt = finished_at;
         this.weight = weight;
         this.size = size;
         this.shipment = shipment;
@@ -262,8 +263,8 @@ public class OfferEntity {
                 ", owner_id=" + owner_id +
                 ", buy_now_price=" + buy_now_price +
                 ", active=" + active +
-                ", created_at=" + created_at +
-                ", finished_at=" + finished_at +
+                ", createdAt=" + createdAt +
+                ", finishedAt=" + finishedAt +
                 ", buyer_id=" + buyer_id +
                 ", best_price=" + best_price +
                 ", minimal_price=" + minimal_price +

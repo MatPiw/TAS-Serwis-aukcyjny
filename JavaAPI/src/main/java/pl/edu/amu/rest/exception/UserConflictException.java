@@ -19,7 +19,9 @@ public class UserConflictException extends ClientErrorException {
 
     public UserConflictException() {
         super(Response.status(Response.Status.CONFLICT)
-                .type("application/json").build());
+                .encoding("UTF-8")
+                .type("application/json")
+                .build());
     }
 
     public UserConflictException(String message) {

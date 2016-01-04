@@ -30,8 +30,8 @@ public @interface Offer {
         @Override
         public boolean isValid(pl.edu.amu.rest.model.Offer offer, ConstraintValidatorContext constraintValidatorContext) {
 
-            Long owner_id=offer.getOwner_id();
-            Long buyer_id=offer.getBuyer_id();
+            Long owner_id=Long.valueOf(offer.getOwner_id());
+            Long buyer_id=(offer.getBuyer_id()==null)?null:Long.valueOf(offer.getBuyer_id());
 
 
             BigDecimal minimal_price=offer.getPrices().getMinimal_price();

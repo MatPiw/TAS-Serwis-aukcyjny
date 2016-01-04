@@ -8,41 +8,42 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.sql.Timestamp;
+import java.util.Date;
 
 public class Offer {
 
 
-    private Long id;
-    @NotBlank
-    @Pattern(message = "{Offer.wrong.title}",regexp = "[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]{1,20}[^0-9]{3,15}")
+    private String id;
+    @NotBlank(message = "{Offer.title.empty}")
+    @Pattern(message = "{Offer.title.wrong}",regexp = "[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]{1,20}[^0-9]{3,15}")
     private String title;
-    @NotBlank(message = "{Offer.empty.description}")
+    @NotBlank(message = "{Offer.description.empty}")
     private String description;
-    @NotBlank(message = "{Offer.empty.picture_path}")
+    @NotBlank(message = "{Offer.picture_path.empty}")
     private String picture_path;
-    @NotNull(message = "{Offer.empty.owner_id}")
-    private Long owner_id;
-    @NotNull(message = "{Offer.empty.Prices}")
+    @NotNull(message = "{Offer.owner_id.empty}")
+    private String owner_id;
+    @NotNull(message = "{Offer.Prices.empty}")
     @Valid
     private Prices prices;
 
     private Boolean active;
 
-    private Timestamp created_at;
+    private Timestamp createdAt;
 
-    private Timestamp finished_at;
+    private Timestamp finishedAt;
 
-    private Long buyer_id;
-    @Min(value = 1L,message = "{Offer.wrong.weight}")
+    private String buyer_id;
+    @Min(value = 1L,message = "{Offer.weight.wrong}")
     private float weight;
-    @NotBlank
-    @Pattern(regexp = "[0-9]+x[0-9]+x[0-9]+", message = "{Offer.wrong.size}")
+    @NotBlank(message = "{Offer.size.empty}")
+    @Pattern(regexp = "[0-9]+x[0-9]+x[0-9]+", message = "{Offer.size.wrong}")
     private String size;
-    @NotBlank(message = "{Offer.wrong.shipment}")
+    @NotBlank(message = "{Offer.shipment.empty}")
     private String shipment;
 
-    @NotBlank
-    @Pattern(regexp = "[^0-9]+", message = "{Offer.wrong.category}")
+    @NotBlank(message = "{Offer.category.empty}")
+    @Pattern(regexp = "[^0-9]+", message = "{Offer.category.wrong}")
     private String category;
 
     public String getTitle() {
@@ -69,11 +70,11 @@ public class Offer {
         this.picture_path = picture_path;
     }
 
-    public Long getOwner_id() {
+    public String getOwner_id() {
         return owner_id;
     }
 
-    public void setOwner_id(Long owner_id) {
+    public void setOwner_id(String owner_id) {
         this.owner_id = owner_id;
     }
 
@@ -93,27 +94,15 @@ public class Offer {
         this.active = active;
     }
 
-    public Timestamp getCreated_at() {
-        return created_at;
+    public Timestamp getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(Timestamp created_at) {
-        this.created_at = created_at;
-    }
-
-    public Timestamp getFinished_at() {
-        return finished_at;
-    }
-
-    public void setFinished_at(Timestamp finished_at) {
-        this.finished_at = finished_at;
-    }
-
-    public Long getBuyer_id() {
+    public String getBuyer_id() {
         return buyer_id;
     }
 
-    public void setBuyer_id(Long buyer_id) {
+    public void setBuyer_id(String buyer_id) {
         this.buyer_id = buyer_id;
     }
 
@@ -174,29 +163,29 @@ public class Offer {
     }
 
     public void setCreatedAt() {
-        java.util.Date utilDate = new java.util.Date();             //data w formacie util
-        this.created_at = new Timestamp(utilDate.getTime());     //pobranie aktualnej daty i konwersja na format sql}
+        Date utilDate = new Date();             //data w formacie util
+        this.createdAt = new Timestamp(utilDate.getTime());     //pobranie aktualnej daty i konwersja na format sql}
     }
 
-    public Timestamp getFinishedAt() { return finished_at; }
+    public Timestamp getFinishedAt() { return finishedAt; }
 
     public void setFinishedAt() {
-        java.util.Date utilDate = new java.util.Date();             //data w formacie util
-        this.finished_at = new Timestamp(utilDate.getTime()+(14*24*60*60*1000));     //pobranie aktualnej daty i konwersja na format sql plus 14 dni}
+        Date utilDate = new Date();             //data w formacie util
+        this.finishedAt = new Timestamp(utilDate.getTime()+(14*24*60*60*1000));     //pobranie aktualnej daty i konwersja na format sql plus 14 dni}
     }
 
     public void setCreatedAt(Timestamp createdAt) {
-        this.created_at = createdAt;
+        this.createdAt = createdAt;
     }
 
     public void setFinishedAt(Timestamp finishedAt) {
-        this.finished_at = finishedAt;
+        this.finishedAt = finishedAt;
     }
     public Offer() {
         //
     }
 
-    public Offer(Long id, String title, String description, String picture_path, Long owner_id, Prices prices, Boolean active, Timestamp created_at, Timestamp finished_at, Long buyer_id, float weight, String size, String shipment, String category) {
+    public Offer(String id, String title, String description, String picture_path, String owner_id, Prices prices, Boolean active, Timestamp created_at, Timestamp finished_at, String buyer_id, float weight, String size, String shipment, String category) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -204,8 +193,8 @@ public class Offer {
         this.owner_id = owner_id;
         this.prices = prices;
         this.active = active;
-        this.created_at = created_at;
-        this.finished_at = finished_at;
+        this.createdAt = created_at;
+        this.finishedAt = finished_at;
         this.buyer_id = buyer_id;
         this.weight = weight;
         this.size = size;
@@ -213,7 +202,7 @@ public class Offer {
         this.category = category;
     }
 
-    public Offer(String title, String picture_path, String description, Long owner_id, Prices prices, float weight, String size, String shipment, String category) {
+    public Offer(String title, String picture_path, String description, String owner_id, Prices prices, float weight, String size, String shipment, String category) {
         this.title = title;
         this.picture_path = picture_path;
         this.description = description;
@@ -229,14 +218,14 @@ public class Offer {
         this.setFinishedAt();
     }
 
-    public Offer(String title, String description, String picture_path, Long owner_id, Prices prices, Boolean active, Timestamp finished_at, Long buyer_id, float weight, String size, String shipment, String category) {
+    public Offer(String title, String description, String picture_path, String owner_id, Prices prices, Boolean active, Timestamp finished_at, String buyer_id, float weight, String size, String shipment, String category) {
         this.title = title;
         this.description = description;
         this.picture_path = picture_path;
         this.owner_id = owner_id;
         this.prices = prices;
         this.active = active;
-        this.finished_at = finished_at;
+        this.finishedAt = finished_at;
         this.buyer_id = buyer_id;
         this.weight = weight;
         this.size = size;
@@ -265,8 +254,8 @@ public class Offer {
                 ", owner_id=" + owner_id +
                 ", prices=" + prices +
                 ", active=" + active +
-                ", created_at=" + created_at +
-                ", finished_at=" + finished_at +
+                ", createdAt=" + createdAt +
+                ", finishedAt=" + finishedAt +
                 ", buyer_id=" + buyer_id +
                 ", weight=" + weight +
                 ", size='" + size + '\'' +
@@ -275,7 +264,7 @@ public class Offer {
                 '}';
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 }

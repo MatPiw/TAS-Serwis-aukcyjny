@@ -18,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -39,8 +40,19 @@ public class UsersResource {
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Get users collection", notes = "Get users collection", response = User.class, responseContainer = "LIST")
     //@Valid Wyłączony, bo w bazie jest za dużo nieprawidłowych danych
-    public Collection<User> list() {
-        return getDatabase().getUsers();
+    public Collection<User> getUsers() {
+
+        Collection<User> final_result=new ArrayList<User>();
+        Collection<User> result=getDatabase().getUsers();
+        System.out.println("HHEHEHEH");
+        for (User user: result){
+            user.setUserOffers((List)getDatabase().getOffersByOwner(user.getId()));
+            final_result.add(user);
+            //dodać jeszcze komentarze
+        }
+        return final_result;
+
+
     }
 
 
@@ -93,9 +105,8 @@ public class UsersResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @NotNull
-    public Response updateUser(@NotBlank(message = "{updateUser.userId.empty}") @Pattern(regexp = "\\d+", message = "{userId.notDigit}") @PathParam("userId") String userId, @NotNull @Valid User user) {
+    public Response updateUser(@NotBlank(message = "{updateUser.userId.empty}") @Pattern(regexp = "\\d+", message = "{userId.notDigit}") @PathParam("userId") String userId, @NotNull(message = "{updateUser.user.empty}") @Valid User user) {
         if (getDatabase().getUser(userId) == null) {
-            System.out.println("Nie znaleziono takiego użytkownika");
             throw new UserNotFoundException("Sorry, but user with this id was not found, so he couldn't be updated", UsersResource.class);
         } else {
             User dbUser = new User(
@@ -114,6 +125,7 @@ public class UsersResource {
 
             User updatedUser = getDatabase().updateUser(userId, dbUser);
             updatedUser.setUserOffers((List) getDatabase().getOffersByOwner(userId));
+            //JESZCZE TUTAJ DODAć DO KOMENTARZY
             return Response.ok().entity(updatedUser).encoding("UTF-8").build();
         }
 
