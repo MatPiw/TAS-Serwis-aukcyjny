@@ -15,8 +15,8 @@ class usersController extends controller
         parent::__construct($_view, $_action, $_params, '_serwis');
     }
 
-    public function addOfferAction(){
-
+    public function addOfferAction()
+    {
 
       $userLogin=$_SESSION['userLogin'];
       $profileObject= $this->getUserInfo($userLogin);
@@ -41,9 +41,24 @@ class usersController extends controller
 
     }
 
+    public function viewOfferAction($_pars)
+    {
+        $params=$this->params->getParams($_pars);
+        $offerId=$params['id'];
+        $file = 'http://localhost:8080/offers/'.$offerId;
+        $file_headers = @get_headers($file);
+        if($file_headers[0] != 'HTTP/1.1 404 Not Found') {
+            $json = file_get_contents($file);
+            $obj = json_decode($json);
+
+            $this->view->assign("offer", $obj);
+
+        }
+
+    }
+
     private function newOffer()
     {
-
 
         $json=array();
         $json['title']=$_POST['title'];
@@ -51,7 +66,6 @@ class usersController extends controller
         $json['picturePath']=$_POST['picturePath'];
         $json['ownerId']=$_POST['logino'];
         $json['buyNowPrice']=$_POST['buyNowPrice'];
-
 
         $uri= 'http://localhost:8080/offers/';
         $sendJson=json_encode($json);
