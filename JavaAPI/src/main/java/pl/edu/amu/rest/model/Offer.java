@@ -1,29 +1,20 @@
 package pl.edu.amu.rest.model;
 
 
-import org.hibernate.validator.constraints.NotBlank;
-
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.sql.Timestamp;
 
 public class Offer {
 
-
     private Long id;
-    @NotBlank
-    @Pattern(message = "{Offer.wrong.title}",regexp = "[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]{1,20}[^0-9]{3,15}")
+
     private String title;
-    @NotBlank(message = "{Offer.empty.description}")
+
     private String description;
-    @NotBlank(message = "{Offer.empty.picture_path}")
+
     private String picture_path;
-    @NotNull(message = "{Offer.empty.owner_id}")
+
     private Long owner_id;
-    @NotNull(message = "{Offer.empty.Prices}")
-    @Valid
+
     private Prices prices;
 
     private Boolean active;
@@ -33,16 +24,14 @@ public class Offer {
     private Timestamp finished_at;
 
     private Long buyer_id;
-    @Min(value = 1L,message = "{Offer.wrong.weight}")
+
     private float weight;
-    @NotBlank
-    @Pattern(regexp = "[0-9]+x[0-9]+x[0-9]+", message = "{Offer.wrong.size}")
+
     private String size;
-    @NotBlank(message = "{Offer.wrong.shipment}")
+
     private String shipment;
 
-    @NotBlank
-    @Pattern(regexp = "[^0-9]+", message = "{Offer.wrong.category}")
+
     private String category;
 
     public String getTitle() {

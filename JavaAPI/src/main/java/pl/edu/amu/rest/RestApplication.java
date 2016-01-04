@@ -8,7 +8,7 @@ import pl.edu.amu.rest.exception.OfferNotFoundException;
 import pl.edu.amu.rest.exception.mapper.*;
 
 public class RestApplication extends ResourceConfig {
-    public RestApplication() {
+    public RestApplication () {
         //register(HelloResourceImpl.class);
         property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true);
         property(ServerProperties.BV_DISABLE_VALIDATE_ON_EXECUTABLE_OVERRIDE_CHECK, true);
@@ -17,12 +17,11 @@ public class RestApplication extends ResourceConfig {
         register(OfferResource.class);
         register(NotFoundExceptionMapper.class);
         register(NotFoundOfferUpdateExceptionMapper.class);
-        register(SellersOffersNotFoundExceptionMapper.class);
         register(UserConflictExceptionMapper.class);
         register(JspMvcFeature.class);
-        // Register your custom ExceptionMapper.
+                // Register your custom ExceptionMapper.
         register(ConstraintViolationExceptionMapper.class);
-        // Register Bean Validation (this is optional as BV is automatically registered when jersey-bean-validation is on the classpath but it's good to know it's happening).
+                // Register Bean Validation (this is optional as BV is automatically registered when jersey-bean-validation is on the classpath but it's good to know it's happening).
         register(ValidationFeature.class);
 
         /*register(OfferResource.class);

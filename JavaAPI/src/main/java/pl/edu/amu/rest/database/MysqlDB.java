@@ -1,7 +1,6 @@
 package pl.edu.amu.rest.database;
 
 import com.google.common.collect.Lists;
-import org.omg.CORBA.SystemException;
 import pl.edu.amu.rest.entity.OfferEntity;
 import pl.edu.amu.rest.entity.UserEntity;
 import pl.edu.amu.rest.model.Prices;
@@ -10,7 +9,6 @@ import pl.edu.amu.rest.model.User;
 
 import javax.naming.OperationNotSupportedException;
 import javax.persistence.*;
-import javax.ws.rs.NotSupportedException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -253,7 +251,7 @@ public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase {
             offerEntity.setCategory(offer.getCategory());
 
 
-            executeInDatabase(offerEntity, operationType.INSERT);
+            executeInDatabase(offerEntity,operationType.INSERT);
 
             return (Offer) buildResponse(offerEntity);
         }
@@ -265,7 +263,7 @@ public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase {
     public Offer saveOffer(Offer offer) {
         OfferEntity offerEntity = (OfferEntity) buildEntity(offer);
 
-        executeInDatabase(offerEntity, operationType.INSERT);
+        executeInDatabase(offerEntity,operationType.INSERT);
 
         return new Offer(offerEntity.getId(), offerEntity.getTitle(), offerEntity.getDescription(), offerEntity.getPicture_path(), offerEntity.getOwner_id(), new Prices(offerEntity.getBest_price(), offerEntity.getMinimal_price(), offerEntity.getBuy_now_price(), offerEntity.getCurrency()), offerEntity.getActive(), offerEntity.getCreated_at(), offerEntity.getFinished_at(), offerEntity.getBuyer_id(), offerEntity.getWeight(), offerEntity.getSize(), offerEntity.getShipment(), offerEntity.getCategory());
 
@@ -277,49 +275,12 @@ public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase {
 
             OfferEntity offerEntity = getEntityManager().find(OfferEntity.class, getId(offerId));
             //dodać jeszcze usuwanie komentarzy do niej i stawek do niej
-            executeInDatabase(offerEntity, operationType.DELETE);
+            executeInDatabase(offerEntity,operationType.DELETE);
         } catch (IllegalArgumentException e) {
             return false;
         }
         return true;
 
-    }
-
-    @Override
-    public Boolean deleteOffersByOwnerId(String owner_id) {
-        try {
-            Query query = getEntityManager().createNamedQuery("offers.findAllByOwner");
-            query.setParameter("owner", getId(owner_id));
-            List<OfferEntity> resultList = query.getResultList();
-            if (resultList.size() >= 1) {
-                for (OfferEntity offerEntity : resultList) {
-                    executeInDatabase(offerEntity, operationType.DELETE);
-                }
-            }
-            return true;
-        } catch (IllegalArgumentException | NotSupportedException | SystemException | SecurityException | IllegalStateException | RollbackException e) {
-            return false;
-        }
-        //LUB
-
-        /*Query query = getEntityManager().createNamedQuery("offers.deleteAllByOwnerId");
-        query.setParameter("owner_id", getId(owner_id));
-        try {
-            getEntityManager().getTransaction().begin();
-            query.executeUpdate();
-
-
-            getEntityManager().getTransaction().commit();
-        } catch (IllegalArgumentException | NotSupportedException | SystemException | SecurityException | IllegalStateException | RollbackException e) {
-            return false;
-
-
-        } finally {
-            if (getEntityManager().getTransaction().isActive()) {
-                getEntityManager().getTransaction().rollback();
-            }
-        }
-        return true;*/
     }
 
 
@@ -343,7 +304,7 @@ public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase {
 
     }
 
-    /*@Override
+    @Override
     public Collection<Offer> getOffersByBuyer(String uid) {
         Query query = getEntityManager().createNamedQuery("offers.findAllByBuyer");
         query.setParameter("buyer", getId(uid));
@@ -381,7 +342,7 @@ public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase {
 
         return list;
 
-    }*/
+    }
 
     @Override
     public Collection<Offer> getOffersWithFilters(String owner_id, String buyer_id, String category) {

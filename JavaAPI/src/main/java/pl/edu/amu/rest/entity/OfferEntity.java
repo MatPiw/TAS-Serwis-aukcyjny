@@ -5,7 +5,6 @@ import javax.ws.rs.core.Link;
 import java.math.BigDecimal;
 import java.sql.Time;
 import java.sql.Timestamp;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,9 +16,8 @@ import org.slf4j.LoggerFactory;
 @NamedQueries({
         @NamedQuery(name = "offers.findAll", query = "SELECT o FROM OfferEntity o"),
         @NamedQuery(name = "offers.findAllByOwner", query = "SELECT u FROM OfferEntity u WHERE u.owner_id=:owner"),
-        /*@NamedQuery(name = "offers.findAllByBuyer", query = "SELECT u FROM OfferEntity u WHERE u.buyer_id=:buyer"),
-        @NamedQuery(name = "offers.findAllByCategory", query = "SELECT u FROM OfferEntity u WHERE u.category=:category"),*/
-        @NamedQuery(name = "offers.deleteAllByOwnerId", query = "DELETE FROM OfferEntity u WHERE u.owner_id=:owner_id")
+        @NamedQuery(name = "offers.findAllByBuyer", query = "SELECT u FROM OfferEntity u WHERE u.buyer_id=:buyer"),
+        @NamedQuery(name = "offers.findAllByCategory", query = "SELECT u FROM OfferEntity u WHERE u.category=:category")
 })
 public class OfferEntity {
 
@@ -212,19 +210,17 @@ public class OfferEntity {
         this.shipment = shipment;
         this.category = category;
     }
-
     @PostLoad
     private void postLoad() {
         LOGGER.info("postLoad: {}", toString());
     }
-
-    public OfferEntity(String title, String description, String picture_path, Long owner_id, BigDecimal buy_now_price, String currency, Boolean active, Timestamp created_at, Timestamp finished_at, Long buyer_id, BigDecimal best_price, BigDecimal minimal_price, float weight, String size, String shipment, String category) {
+    public OfferEntity(String title, String description, String picture_path, Long owner_id, BigDecimal buy_now_price,String currency, Boolean active, Timestamp created_at, Timestamp finished_at, Long buyer_id, BigDecimal best_price, BigDecimal minimal_price, float weight, String size, String shipment, String category) {
         this.title = title;
         this.description = description;
         this.picture_path = picture_path;
         this.owner_id = owner_id;
         this.buy_now_price = buy_now_price;
-        this.currency = currency;
+        this.currency=currency;
         this.active = active;
         this.created_at = created_at;
         this.finished_at = finished_at;
@@ -237,13 +233,13 @@ public class OfferEntity {
         this.category = category;
     }
 
-    public OfferEntity(String title, String description, String picture_path, Long owner_id, BigDecimal buy_now_price, String currency, Timestamp created_at, Timestamp finished_at, float weight, String size, String shipment, String category) {
+    public OfferEntity(String title, String description, String picture_path, Long owner_id, BigDecimal buy_now_price,String currency, Timestamp created_at, Timestamp finished_at, float weight, String size, String shipment, String category) {
         this.title = title;
         this.description = description;
         this.picture_path = picture_path;
         this.owner_id = owner_id;
         this.buy_now_price = buy_now_price;
-        this.currency = currency;
+        this.currency=currency;
         this.created_at = created_at;
         this.finished_at = finished_at;
         this.weight = weight;
