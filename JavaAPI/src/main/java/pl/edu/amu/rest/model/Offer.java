@@ -202,6 +202,7 @@ public class Offer {
         this.category = category;
     }
 
+
     public Offer(String title, String picture_path, String description, String owner_id, Prices prices, float weight, String size, String shipment, String category) {
         this.title = title;
         this.picture_path = picture_path;

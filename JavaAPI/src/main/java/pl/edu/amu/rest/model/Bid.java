@@ -1,31 +1,55 @@
 package pl.edu.amu.rest.model;
 
 
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 
 public class Bid {
-    private int id;
-    private int offerId;
-    private int bidderId;
-    private float price;
+    private String id;
+    @NotBlank(message = "{Bid.offerId.empty}")
+    @Pattern(regexp = "\\d+", message = "{Bid.offerId.wrong}")
+    private String offerId;
+    @NotBlank(message = "{Bid.bidderId.empty}")
+    @Pattern(regexp = "\\d+", message = "{Bid.bidderId.wrong}")
+    private String bidderId;
+    @NotNull(message = "{Bid.price.empty}")
+    @DecimalMin(value = "0.0",message = "{Bid.price.toolow}")
+    private BigDecimal price;
     private Timestamp createdAt;
 
-    public int getId() {return id;}
+    public String getId() {
+        return id;
+    }
 
-    public void setId(int id) {this.id = id;}
+    public String getOfferId() {
+        return offerId;
+    }
 
-    public int getOfferId() {return offerId;}
+    public void setOfferId(String offerId) {
+        this.offerId = offerId;
+    }
 
-    public void setOfferId(int offerId) {this.offerId = offerId;}
+    public String getBidderId() {
+        return bidderId;
+    }
 
-    public int getBidderId() {return bidderId;}
+    public void setBidderId(String bidderId) {
+        this.bidderId = bidderId;
+    }
 
-    public void setBidderId(int bidderId) { this.bidderId = bidderId; }
+    public BigDecimal getPrice() {
+        return price;
+    }
 
-    public float getPrice() {return price;}
-
-    public void setPrice(float price) {this.price = price;}
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
 
     public Timestamp getCreatedAt() {return createdAt;}
 
@@ -42,7 +66,15 @@ public class Bid {
         //
     }
 
-    public Bid (int offerId, int bidderId, float price) {
+    public Bid(String id, String offerId, String bidderId, BigDecimal price, Timestamp createdAt) {
+        this.id = id;
+        this.offerId = offerId;
+        this.bidderId = bidderId;
+        this.price = price;
+        this.createdAt = createdAt;
+    }
+
+    public Bid(String offerId, String bidderId, BigDecimal price) {
         this.offerId = offerId;
         this.bidderId = bidderId;
         this.price = price;
@@ -66,8 +98,8 @@ public class Bid {
                 "id='" + id + '\'' +
                 ", offerId='" + offerId + '\'' +
                 ", bidderId='" + bidderId + '\'' +
-                ", price='" + price + '\'' +
-                ", createdAt='" + createdAt + '\'' +
+                ", price=" + price +
+                ", createdAt=" + createdAt +
                 '}';
     }
 }

@@ -10,6 +10,8 @@ import java.util.Collection;
 public interface CommentDatabase {
     Comment getComment(String commentId);
 
+    Collection<Comment> getCommentsByUser(String userId);
+
     Collection<Comment> getCommentsWithFilters(String giverId, String receiverId, String offerId);
 
     Comment updateComment(String commentId, Comment comment);

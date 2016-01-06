@@ -1,4 +1,3 @@
-/*
 package pl.edu.amu.tools;
 
 import java.sql.*;
@@ -345,4 +344,4 @@ public class DBOperator {
         }
     }
 
-}*/
+}

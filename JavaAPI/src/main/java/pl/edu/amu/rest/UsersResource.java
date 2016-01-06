@@ -7,6 +7,7 @@ import pl.edu.amu.rest.database.MysqlDB;
 import pl.edu.amu.rest.exception.UserConflictException;
 import pl.edu.amu.rest.exception.UserNotFoundException;
 import pl.edu.amu.rest.model.User;
+import pl.edu.amu.rest.model.error.ErrorInfo;
 
 
 import javax.validation.Valid;
@@ -22,19 +23,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-
 @Path("/users")
-@Api(value = "/users", description = "Operations about users using mysql")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-
+@Api(value = "/users", description = "Operations about users using mysql")
 public class UsersResource {
     private static final MysqlDB database = new MysqlDB();
 
     protected MysqlDB getDatabase() {
         return database;
     }
-
     private boolean isNumeric(String str)
     {
         for (char c : str.toCharArray())
@@ -43,7 +41,6 @@ public class UsersResource {
         }
         return true;
     }
-
     @Context
     private UriInfo uriInfo;
 
@@ -55,24 +52,22 @@ public class UsersResource {
 
         Collection<User> final_result=new ArrayList<User>();
         Collection<User> result=getDatabase().getUsers();
-        System.out.println("HHEHEHEH");
         for (User user: result){
             user.setUserOffers((List)getDatabase().getOffersByOwner(user.getId()));
+            user.setUserComments((List)getDatabase().getCommentsByUser(user.getId()));
+
             final_result.add(user);
-            //dodać jeszcze komentarze
+
         }
         return final_result;
 
 
     }
-
-
-
     @Path("/{userId}")
     @ApiOperation(value = "Get user by id", notes = "[note]Get user by id", response = User.class)
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    //@Valid
+    @Valid
     public User getUser(@NotBlank(message = "{getUser.userId.empty}") @Pattern(regexp = "(\\d|[a-zA-Z0-9ęóąśłżźćńĘÓĄŚŁŻŹĆŃ])+", message = "{userId.notDigitOrLogin}") @PathParam("userId") String userUniqueIdentificator) throws Exception {
         User user;
         if (isNumeric(userUniqueIdentificator)) {
@@ -90,10 +85,30 @@ public class UsersResource {
         user.setUserOffers((List) getDatabase().getOffersByOwner(user.getId()));
         return user;
     }
+    /*@Path("/{userId}")
+    @ApiOperation(value = "Get user by id", notes = "[note]Get user by id", response = User.class)
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Valid
+    // w argumentach było jeszcze
+    public User getUser(@NotBlank(message = "{getUser.userId.empty}") @Pattern(regexp = "\\d+", message = "{userId.notDigit}") @PathParam("userId") String userId) throws Exception {
 
+
+        User user = getDatabase().getUser(userId);
+
+
+        if (user == null) {
+
+            throw new UserNotFoundException("User with this id doesn't exist", UsersResource.class);
+            //throw new UserException("User not found", "Użytkownik nie został znaleziony", "http://docu.pl/errors/user-not-found");
+        }
+        user.setUserOffers((List) getDatabase().getOffersByOwner(userId));
+        return user;
+    }
+*/
     @POST
     @ApiOperation(value = "Create user", notes = "Create user", response = User.class)
-    public Response createUser(@NotNull(message = "{createUser.user.empty}") @Valid final User user) {
+    public Response createUser(@NotNull(message = "{createUser.user.empty}") @Valid final User user) throws Exception {
 
         if (getDatabase().getUserbyLogin(user.getLogin()) != null) {
             throw new UserConflictException("Error, users duplication! Insert new login");
@@ -122,7 +137,7 @@ public class UsersResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @NotNull
-    public Response updateUser(@NotBlank(message = "{updateUser.userId.empty}") @Pattern(regexp = "\\d+", message = "{userId.notDigit}") @PathParam("userId") String userId, @NotNull(message = "{updateUser.user.empty}") @Valid User user) {
+    public Response updateUser(@NotBlank(message = "{updateUser.userId.empty}") @Pattern(regexp = "\\d+", message = "{userId.notDigit}") @PathParam("userId") String userId, @NotNull(message = "{updateUser.user.empty}") @Valid User user) throws Exception{
         if (getDatabase().getUser(userId) == null) {
             throw new UserNotFoundException("Sorry, but user with this id was not found, so he couldn't be updated", UsersResource.class);
         } else {
@@ -141,8 +156,12 @@ public class UsersResource {
             );
 
             User updatedUser = getDatabase().updateUser(userId, dbUser);
+            if (updatedUser==null){
+                throw  new InternalServerErrorException(Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorInfo("User Update failed", "Nie udało się zaktualizować danych tego użytkownika", 1021)).encoding("UTF-8").type(MediaType.APPLICATION_JSON).build());
+            }
             updatedUser.setUserOffers((List) getDatabase().getOffersByOwner(userId));
-            //JESZCZE TUTAJ DODAć DO KOMENTARZY
+            updatedUser.setUserComments((List)getDatabase().getCommentsByUser(userId));
+
             return Response.ok().entity(updatedUser).encoding("UTF-8").build();
         }
 
@@ -154,12 +173,18 @@ public class UsersResource {
     @ApiOperation(value = "Delete user", notes = "Delete user from database", response = User.class)
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteUser(@NotBlank(message = "{deleteUser.userId.empty}") @Pattern(regexp = "\\d+", message = "{userId.notDigit}") @PathParam("userId") String userId) {
+    public Response deleteUser(@NotBlank(message = "{deleteUser.userId.empty}") @Pattern(regexp = "\\d+", message = "{userId.notDigit}") @PathParam("userId") String userId) throws Exception {
         Boolean success = getDatabase().deleteUser(userId);
         if (!success)
             throw new NotFoundException("user not found");
         else if (getDatabase().getOffersByOwner(userId).size() != 0) {
-            getDatabase().deleteOffersByOwnerId(userId);
+            if (!getDatabase().deleteOffersByOwnerId(userId)){
+                throw  new InternalServerErrorException(Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorInfo("Delete user operation failed", "Nie udało się usunąć tego użytkownika", 1024)).encoding("UTF-8").type(MediaType.APPLICATION_JSON).build());
+
+            } else {
+                getDatabase().deleteCommentsFromUser(userId);
+                getDatabase().deleteBidFromUser(userId);
+            }
         }
         return Response.status(Response.Status.NO_CONTENT).entity(null).encoding("UTF-8").type(MediaType.APPLICATION_JSON).build();
 

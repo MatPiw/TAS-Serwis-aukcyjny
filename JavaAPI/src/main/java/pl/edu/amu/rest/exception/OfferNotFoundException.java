@@ -1,5 +1,6 @@
 package pl.edu.amu.rest.exception;
 
+import pl.edu.amu.rest.BidResource;
 import pl.edu.amu.rest.CommentResource;
 import pl.edu.amu.rest.OfferResource;
 
@@ -12,8 +13,8 @@ import java.util.ResourceBundle;
  * Created by Altenfrost on 2016-01-02.
  */
 public class OfferNotFoundException extends NotFoundException {
-    private static String messageKey="notFoundOfferMessage";
-    String bundle=new String();
+    private static String messageKey = "notFoundOfferMessage";
+    String bundle = new String();
     ResourceBundle labels = ResourceBundle.getBundle("offermessage");
 
     @Override
@@ -26,19 +27,20 @@ public class OfferNotFoundException extends NotFoundException {
                 .type("application/json")
                 .encoding("UTF-8")
                 .build());
-        bundle="offermessage";
-        labels=ResourceBundle.getBundle(bundle);
+        bundle = "offermessage";
+        labels = ResourceBundle.getBundle(bundle);
     }
 
     public OfferNotFoundException(String message, Class throwingClass) {
         super(message);
-        if (throwingClass==OfferResource.class){
-            bundle="offermessage";
+        if (throwingClass == OfferResource.class) {
+            bundle = "offermessage";
+        } else if (throwingClass == CommentResource.class) {
+            bundle = "commentmessage";
+        } else if (throwingClass == BidResource.class) {
+            bundle = "bidmessage";
         }
-        else if(throwingClass== CommentResource.class){
-            bundle="commentmessage";
-        }
-        labels=ResourceBundle.getBundle(bundle);
+        labels = ResourceBundle.getBundle(bundle);
 
     }
 }

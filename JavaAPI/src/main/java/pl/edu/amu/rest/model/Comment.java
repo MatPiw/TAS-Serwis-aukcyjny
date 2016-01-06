@@ -1,45 +1,61 @@
 package pl.edu.amu.rest.model;
 
 
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.sql.Date;
 import java.sql.Timestamp;
 
 public class Comment {
 
     private String id;
-    private Long giverId;
-    private Long recieverId;
-    private Long offerId;
+    @NotBlank(message = "{Comment.giverId.empty}")
+    @Pattern(regexp = "\\d+", message = "{Comment.giverId.wrong}")
+    private String giverId;
+    @NotBlank(message = "{Comment.recieverId.empty}")
+    @Pattern(regexp = "\\d+", message = "{Comment.recieverId.wrong}")
+    private String recieverId;
+    @NotBlank(message = "{Comment.offerId.empty}")
+    @Pattern(regexp = "\\d+", message = "{Comment.offerId.wrong}")
+    private String offerId;
+    @NotBlank(message = "{Comment.commentText.wrong}")
     private String commentText;
-    private boolean positive;
+    @NotNull(message = "{Comment.positive.empty}")
+    private Boolean positive;
     private Timestamp createdAt;
 
     public String getId() {
         return id;
     }
 
-    public Long getGiverId() {
+    public String getGiverId() {
         return giverId;
     }
 
-    public void setGiverId(Long giverId) {
+    public void setGiverId(String giverId) {
         this.giverId = giverId;
     }
 
-    public Long getRecieverId() {
+    public String getRecieverId() {
         return recieverId;
     }
 
-    public void setRecieverId(Long recieverId) {
+    public void setRecieverId(String recieverId) {
         this.recieverId = recieverId;
     }
 
-    public Long getOfferId() {
+    public String getOfferId() {
         return offerId;
     }
 
-    public void setOfferId(Long offerId) {
+    public void setOfferId(String offerId) {
         this.offerId = offerId;
+    }
+
+    public Boolean getPositive() {
+        return positive;
     }
 
     public String getCommentText() {
@@ -50,11 +66,11 @@ public class Comment {
         this.commentText = commentText;
     }
 
-    public boolean isPositive() {
+    public Boolean isPositive() {
         return positive;
     }
 
-    public void setPositive(boolean positive) {
+    public void setPositive(Boolean positive) {
         this.positive = positive;
     }
 
@@ -77,7 +93,7 @@ public class Comment {
     }
 
 
-    public Comment(String id, Long giverId, Long recieverId, Long offerId, String commentText, boolean positive, Timestamp createdAt) {
+    public Comment(String id, String giverId, String recieverId, String offerId, String commentText, Boolean positive, Timestamp createdAt) {
         this.id = id;
         this.giverId = giverId;
         this.recieverId = recieverId;
@@ -87,13 +103,18 @@ public class Comment {
         this.createdAt = createdAt;
     }
 
-    public Comment(Long giverId, Long recieverId, Long offerId, String commentText, boolean positive) {
+    public Comment(String giverId, String recieverId, String offerId, String commentText, Boolean positive) {
         this.giverId = giverId;
         this.recieverId = recieverId;
         this.offerId = offerId;
         this.commentText = commentText;
         this.positive = positive;
-        this.setCreatedAt();
+        this.setCreatedAt();;
+    }
+
+    public Comment(String commentText, boolean positive) {
+        this.commentText = commentText;
+        this.positive = positive;
     }
 
     @Override

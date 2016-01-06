@@ -9,6 +9,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
+import pl.edu.amu.rest.exception.BidNotFoundException;
 import pl.edu.amu.rest.exception.OfferNotFoundException;
 import pl.edu.amu.rest.exception.mapper.*;
 
@@ -32,10 +33,14 @@ public class RestApplication extends ResourceConfig {
         register(InternalServerErrorMapper.class);
         register(UsersResource.class);
         register(OfferResource.class);
+        register(CommentResource.class);
+        register(BidResource.class);
+        register(BidConflictExceptionMapper.class);
         register(NotFoundExceptionMapper.class);
         register(NotFoundOfferUpdateExceptionMapper.class);
         register(SellersOffersNotFoundExceptionMapper.class);
         register(UserConflictExceptionMapper.class);
+        register(CommentConflictExceptionMapper.class);
         register(JspMvcFeature.class);
         // Register your custom ExceptionMapper.
         register(ConstraintViolationExceptionMapper.class);
@@ -43,6 +48,7 @@ public class RestApplication extends ResourceConfig {
         register(ValidationFeature.class);
 
         packages("io.swagger.jaxrs.listing");
+
         BeanConfig beanConfig = new BeanConfig();
         beanConfig.setVersion("1.0.2");
         beanConfig.setSchemes(new String[]{"http"});

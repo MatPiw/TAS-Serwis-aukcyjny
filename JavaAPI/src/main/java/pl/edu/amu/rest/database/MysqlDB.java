@@ -2,11 +2,14 @@ package pl.edu.amu.rest.database;
 
 import com.google.common.collect.Lists;
 import org.omg.CORBA.SystemException;
+import pl.edu.amu.rest.constraint.*;
 import pl.edu.amu.rest.entity.BidEntity;
 import pl.edu.amu.rest.entity.CommentEntity;
 import pl.edu.amu.rest.entity.OfferEntity;
 import pl.edu.amu.rest.entity.UserEntity;
 import pl.edu.amu.rest.model.*;
+import pl.edu.amu.rest.model.Comment;
+import pl.edu.amu.rest.model.Offer;
 import scala.util.parsing.combinator.testing.Str;
 
 import javax.naming.OperationNotSupportedException;
@@ -18,10 +21,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase, CommentDatabase {
+public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase, CommentDatabase, BidDatabase {
 
     private static final String USER_NAME = "14622709_tasy";
     private static final String PASSWORD = "TASY!2015";
+
 
     private enum operationType {INSERT, DELETE}
 
@@ -80,31 +84,29 @@ public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase, Comm
         return true;
 
     }
-    private void deleteItemList(List<Object> entitiesToDelete, Class entityClass){
-        if (entitiesToDelete.size()>0){
-            if (entityClass==UserEntity.class){
-                List<UserEntity> temp=(List<UserEntity>)(List<?>) entitiesToDelete;
-                for (UserEntity userEntity:temp){
-                    executeInDatabase(userEntity,operationType.DELETE);
+
+    private void deleteItemList(List<Object> entitiesToDelete, Class entityClass) {
+        if (entitiesToDelete.size() > 0) {
+            if (entityClass == UserEntity.class) {
+                List<UserEntity> temp = (List<UserEntity>) (List<?>) entitiesToDelete;
+                for (UserEntity userEntity : temp) {
+                    executeInDatabase(userEntity, operationType.DELETE);
                 }
 
-            }
-            else if (entityClass==OfferEntity.class){
-                List<OfferEntity> temp=(List<OfferEntity>)(List<?>) entitiesToDelete;
-                for (OfferEntity offerEntity:temp){
-                    executeInDatabase(offerEntity,operationType.DELETE);
+            } else if (entityClass == OfferEntity.class) {
+                List<OfferEntity> temp = (List<OfferEntity>) (List<?>) entitiesToDelete;
+                for (OfferEntity offerEntity : temp) {
+                    executeInDatabase(offerEntity, operationType.DELETE);
                 }
-            }
-            else if (entityClass==CommentEntity.class){
-                List<CommentEntity> temp=(List<CommentEntity>)(List<?>) entitiesToDelete;
-                for (CommentEntity commentEntity:temp){
-                    executeInDatabase(commentEntity,operationType.DELETE);
+            } else if (entityClass == CommentEntity.class) {
+                List<CommentEntity> temp = (List<CommentEntity>) (List<?>) entitiesToDelete;
+                for (CommentEntity commentEntity : temp) {
+                    executeInDatabase(commentEntity, operationType.DELETE);
                 }
-            }
-            else if (entityClass==BidEntity.class){
-                List<BidEntity> temp=(List<BidEntity>)(List<?>) entitiesToDelete;
-                for (BidEntity bidEntity:temp){
-                    executeInDatabase(bidEntity,operationType.DELETE);
+            } else if (entityClass == BidEntity.class) {
+                List<BidEntity> temp = (List<BidEntity>) (List<?>) entitiesToDelete;
+                for (BidEntity bidEntity : temp) {
+                    executeInDatabase(bidEntity, operationType.DELETE);
                 }
             }
         }
@@ -164,7 +166,7 @@ public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase, Comm
             if (executeInDatabase(userEntity, operationType.INSERT))
                 return (User) buildResponse(userEntity);
             else
-                return (User) buildResponse(new UserEntity());
+                return null;
         }
 
         return null;
@@ -238,14 +240,15 @@ public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase, Comm
             return new User(Long.toString(userEntity.getId()), userEntity.getLogin(), userEntity.getHashPassword(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getPermissions(), userEntity.getEmail(), userEntity.getCity(), userEntity.getAddress(), userEntity.getPhone(), userEntity.getZipCode(), userEntity.getCreatedAt(), userEntity.getConfirmed());
         } else if (entity instanceof OfferEntity) {
             OfferEntity offerEntity = (OfferEntity) entity;
-            String buyerId=(offerEntity.getBuyer_id()==null)?null:Long.toString(offerEntity.getBuyer_id());
+            String buyerId = (offerEntity.getBuyer_id() == null) ? null : Long.toString(offerEntity.getBuyer_id());
             return new Offer(Long.toString(offerEntity.getId()), offerEntity.getTitle(), offerEntity.getDescription(), offerEntity.getPicture_path(), Long.toString(offerEntity.getOwner_id()), new Prices(offerEntity.getBest_price(), offerEntity.getMinimal_price(), offerEntity.getBuy_now_price(), offerEntity.getCurrency()), offerEntity.getActive(), offerEntity.getCreatedAt(), offerEntity.getFinishedAt(), buyerId, offerEntity.getWeight(), offerEntity.getSize(), offerEntity.getShipment(), offerEntity.getCategory());
         } else if (entity instanceof CommentEntity) {
             CommentEntity commentEntity = (CommentEntity) entity;
-            return new Comment(Long.toString(commentEntity.getId()), commentEntity.getGiverId(), commentEntity.getGiverId(), commentEntity.getOfferId(), commentEntity.getCommentText(), commentEntity.getPositive(), commentEntity.getCreatedAt());
-        } /*else if (entity instanceof BidEntity) {
-
-        }*/ else
+            return new Comment(Long.toString(commentEntity.getId()), Long.toString(commentEntity.getGiverId()), Long.toString(commentEntity.getReceiverId()), Long.toString(commentEntity.getOfferId()), commentEntity.getCommentText(), commentEntity.getPositive(), commentEntity.getCreatedAt());
+        } else if (entity instanceof BidEntity) {
+            BidEntity bidEntity = (BidEntity) entity;
+            return new Bid(Long.toString(bidEntity.getId()), Long.toString(bidEntity.getOfferId()), Long.toString(bidEntity.getBidderId()), bidEntity.getPriceOffered(), bidEntity.getCreatedAt());
+        } else
             return null;//pozniej usunąć
 
     }
@@ -257,14 +260,15 @@ public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase, Comm
             return new UserEntity(user.getLogin(), user.getHashPassword(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getCity(), user.getAddress(), user.getPhone(), user.getZipCode(), user.getCreatedAt());
         } else if (model instanceof Offer) {
             Offer offer = (Offer) model;
-            Long buyerId=(offer.getBuyer_id()!=null)? Long.valueOf(offer.getBuyer_id()):null;
-            return new OfferEntity(offer.getTitle(), offer.getDescription(), offer.getPicture_path(), Long.valueOf(offer.getOwner_id()), offer.getPrices().getBuy_now_price(), offer.getPrices().getCurrency(), offer.getActive(), offer.getCreatedAt(), offer.getFinishedAt(),buyerId , offer.getPrices().getBest_price(), offer.getPrices().getMinimal_price(), offer.getWeight(), offer.getSize(), offer.getShipment(), offer.getCategory());
+            Long buyerId = (offer.getBuyer_id() != null) ? Long.valueOf(offer.getBuyer_id()) : null;
+            return new OfferEntity(offer.getTitle(), offer.getDescription(), offer.getPicture_path(), Long.valueOf(offer.getOwner_id()), offer.getPrices().getBuy_now_price(), offer.getPrices().getCurrency(), offer.getActive(), offer.getCreatedAt(), offer.getFinishedAt(), buyerId, offer.getPrices().getBest_price(), offer.getPrices().getMinimal_price(), offer.getWeight(), offer.getSize(), offer.getShipment(), offer.getCategory());
         } else if (model instanceof Comment) {
             Comment comment = (Comment) model;
-            return new CommentEntity(comment.getRecieverId(), comment.getOfferId(), comment.getCommentText(), comment.isPositive(), comment.getCreatedAt());
-        } /*else if (model instanceof Bid) {
-
-        }*/ else
+            return new CommentEntity(Long.valueOf(comment.getGiverId()), Long.valueOf(comment.getRecieverId()), Long.valueOf(comment.getOfferId()), comment.getCommentText(), comment.isPositive(), comment.getCreatedAt());
+        } else if (model instanceof Bid) {
+            Bid bid = (Bid) model;
+            return new BidEntity(Long.valueOf(bid.getOfferId()), Long.valueOf(bid.getBidderId()), bid.getPrice(), bid.getCreatedAt());
+        } else
             return null;//pozniej usunąć
     }
 
@@ -289,7 +293,7 @@ public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase, Comm
         OfferEntity offerEntity = getEntityManager()
                 .find(OfferEntity.class, id);
         if (offerEntity != null) {
-            Long buyerId=(offer.getBuyer_id()==null)?null:Long.valueOf(offer.getBuyer_id());
+            Long buyerId = (offer.getBuyer_id() == null) ? null : Long.valueOf(offer.getBuyer_id());
 
             offerEntity.setTitle(offer.getTitle());
             offerEntity.setDescription(offer.getDescription());
@@ -318,11 +322,14 @@ public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase, Comm
     public Offer saveOffer(Offer offer) {
         OfferEntity offerEntity = (OfferEntity) buildEntity(offer);
 
-        executeInDatabase(offerEntity, operationType.INSERT);
+        if (executeInDatabase(offerEntity, operationType.INSERT)) {
+            String buyerId = (offerEntity.getBuyer_id() == null) ? null : Long.toString(offerEntity.getBuyer_id());
 
-        String buyerId=(offerEntity.getBuyer_id()==null)?null:Long.toString(offerEntity.getBuyer_id());
+            return new Offer(Long.toString(offerEntity.getId()), offerEntity.getTitle(), offerEntity.getDescription(), offerEntity.getPicture_path(), Long.toString(offerEntity.getOwner_id()), new Prices(offerEntity.getBest_price(), offerEntity.getMinimal_price(), offerEntity.getBuy_now_price(), offerEntity.getCurrency()), offerEntity.getActive(), offerEntity.getCreatedAt(), offerEntity.getFinishedAt(), buyerId, offerEntity.getWeight(), offerEntity.getSize(), offerEntity.getShipment(), offerEntity.getCategory());
+        } else {
+            return null;
+        }
 
-        return new Offer(Long.toString(offerEntity.getId()), offerEntity.getTitle(), offerEntity.getDescription(), offerEntity.getPicture_path(), Long.toString(offerEntity.getOwner_id()), new Prices(offerEntity.getBest_price(), offerEntity.getMinimal_price(), offerEntity.getBuy_now_price(), offerEntity.getCurrency()), offerEntity.getActive(), offerEntity.getCreatedAt(), offerEntity.getFinishedAt(), buyerId, offerEntity.getWeight(), offerEntity.getSize(), offerEntity.getShipment(), offerEntity.getCategory());
 
     }
 
@@ -345,7 +352,7 @@ public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase, Comm
         try {
             Query query = getEntityManager().createNamedQuery("offers.findAllByOwner");
             query.setParameter("owner", getId(owner_id));
-            deleteItemList(query.getResultList(),OfferEntity.class);
+            deleteItemList(query.getResultList(), OfferEntity.class);
             return true;
         } catch (IllegalArgumentException | NotSupportedException | SystemException | SecurityException | IllegalStateException | RollbackException e) {
             return false;
@@ -499,6 +506,28 @@ public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase, Comm
     }
 
     @Override
+    public Collection<Comment> getCommentsByUser(String userId) {
+        Long id = getId(userId);
+
+        Query query = getEntityManager().createNamedQuery("comments.findAllByUser");
+        query.setParameter("userId", id);
+
+        List<CommentEntity> resultList = query.getResultList();
+        List<Comment> list = Collections.emptyList();
+
+        if (resultList != null && !resultList.isEmpty()) {
+            list = Lists.newArrayListWithCapacity(resultList.size());
+
+            for (CommentEntity comment : resultList) {
+                list.add((Comment) buildResponse(comment));
+            }
+        }
+
+        return list;
+    }
+
+
+    @Override
     public Collection<Comment> getCommentsWithFilters(String giverId, String receiverId, String offerId) {
 
         Query query;
@@ -556,9 +585,6 @@ public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase, Comm
         CommentEntity commentEntity = getEntityManager()
                 .find(CommentEntity.class, id);
         if (commentEntity != null) {
-            commentEntity.setGiverId(comment.getGiverId());
-            commentEntity.setReceiverId(comment.getRecieverId());
-            commentEntity.setOfferId(comment.getOfferId());
             commentEntity.setCommentText(comment.getCommentText());
             commentEntity.setPositive(comment.isPositive());
             if (executeInDatabase(commentEntity, operationType.INSERT))
@@ -576,7 +602,7 @@ public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase, Comm
     public Comment saveComment(Comment comment) {
         CommentEntity commentEntity = (CommentEntity) buildEntity(comment);
         if (executeInDatabase(commentEntity, operationType.INSERT))
-            return new Comment(Long.toString(commentEntity.getId()), commentEntity.getGiverId(), commentEntity.getReceiverId(), commentEntity.getOfferId(), commentEntity.getCommentText(), commentEntity.getPositive(), commentEntity.getCreatedAt());
+            return new Comment(Long.toString(commentEntity.getId()), Long.toString(commentEntity.getGiverId()), Long.toString(commentEntity.getReceiverId()), Long.toString(commentEntity.getOfferId()), commentEntity.getCommentText(), commentEntity.getPositive(), commentEntity.getCreatedAt());
         else
             return null;
     }
@@ -602,7 +628,7 @@ public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase, Comm
             if (offerEntity != null) {*/
             Query query = getEntityManager().createNamedQuery("comments.findAllByAuction");
             query.setParameter("offerId", id);
-            deleteItemList(query.getResultList(),CommentEntity.class);
+            deleteItemList(query.getResultList(), CommentEntity.class);
 
             /*}*/
         } catch (IllegalArgumentException | NotSupportedException | SystemException | SecurityException | IllegalStateException | RollbackException e) {
@@ -628,19 +654,239 @@ public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase, Comm
     @Override
     public Boolean deleteCommentsFromUser(String userId) {// usuwamy usera i checmey usunąć wszystkie komentarze do jego aukcji jak i jego wystawione komentarze
         try {
-            Long id=getId(userId);
+            Long id = getId(userId);
 
-            Query query=getEntityManager().createNamedQuery("comments.findAllByUser");
-            query.setParameter("userId",id);
+            Query query = getEntityManager().createNamedQuery("comments.findAllByUser");
+            query.setParameter("userId", id);
 
-            deleteItemList(query.getResultList(),CommentEntity.class);
-        }catch (IllegalArgumentException | NotSupportedException | SystemException | SecurityException | IllegalStateException | RollbackException e) {
+            deleteItemList(query.getResultList(), CommentEntity.class);
+        } catch (IllegalArgumentException | NotSupportedException | SystemException | SecurityException | IllegalStateException | RollbackException e) {
             return false;
         }
         return true;
 
 
     }
+//--------------------------------------------------------------BIDS
+
+    @Override
+    public Bid getBid(String bidId) {
+        Long id = getId(bidId);
+
+        BidEntity bidEntity = getEntityManager().find(BidEntity.class, id);
+
+        if (bidEntity != null) {
+            return (Bid) buildResponse(bidEntity);
+        }
+        return null;
+    }
+
+    @Override
+    public Collection<Bid> getBidWithFilters(String bidderId, String offerId) {
+        Query query;
+        if (bidderId != null || offerId != null) {
+            String constraints = new String();
+            String bidderIdFilter = (bidderId == null) ? "" : " b.bidderId=" + bidderId;
+            constraints += bidderIdFilter;
+
+            String offerIdFilter = (offerId == null) ? "" : " b.offerId=" + offerId;
+
+            constraints += offerIdFilter;
+
+            if (constraints.length() > 2) {
+                constraints = "WHERE" + constraints;
+                int i = constraints.indexOf("b.");
+
+                //WTF
+                String temp = constraints.substring(i + 1);
+                constraints = constraints.substring(0, i + 1);
+                temp = temp.replaceAll("b\\.", "AND b\\.");
+
+                constraints = constraints + temp;
+            }
+            query = getEntityManager().createQuery("SELECT b FROM BidEntity b " + constraints);
+        } else {
+            query = getEntityManager().createNamedQuery("bids.findAll");
+        }
+        List<BidEntity> resultList = query.getResultList();
+
+        List<Bid> list = Collections.emptyList();
+        if (resultList != null && !resultList.isEmpty()) {
+            list = Lists.newArrayListWithCapacity(resultList.size());
+
+            for (BidEntity bid : resultList) {
+                list.add((Bid) buildResponse(bid));
+            }
+        }
+
+        return list;
+    }
 
 
+    @Override
+    public Bid saveBid(Bid bid) {
+        BidEntity bidEntity = (BidEntity) buildEntity(bid);
+
+        if (executeInDatabase(bidEntity, operationType.INSERT))
+            return new Bid(Long.toString(bidEntity.getId()), Long.toString(bidEntity.getOfferId()), Long.toString(bidEntity.getBidderId()), bidEntity.getPriceOffered(), bidEntity.getCreatedAt());
+        else
+            return null;
+    }
+
+    @Override
+    public Bid updateBid(String bidId, Bid bid) {
+        Long id = getId(bidId);
+
+        BidEntity bidEntity = getEntityManager().find(BidEntity.class, id);
+
+        if (bidEntity != null) {
+            bidEntity.setPriceOffered(bid.getPrice());
+
+            if (executeInDatabase(bidEntity, operationType.INSERT))
+                return (Bid) buildResponse(bidEntity);
+            else
+                return null;
+
+        }
+        return null;
+    }
+
+    @Override
+    public Boolean deleteBid(String bidId) {
+        Long id = getId(bidId);
+        try {
+            BidEntity bidEntity = getEntityManager()
+                    .find(BidEntity.class, id);
+            executeInDatabase(bidEntity, operationType.DELETE);
+        } catch (IllegalArgumentException | NotSupportedException | SystemException | SecurityException | IllegalStateException | RollbackException e) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public Boolean deleteBidFromAuction(String offerId) {
+        try {
+            Query query = getEntityManager().createNamedQuery("bids.findAllByAuction");
+            query.setParameter("offerId", getId(offerId));
+            deleteItemList(query.getResultList(), BidEntity.class);
+            return true;
+        } catch (IllegalArgumentException | NotSupportedException | SystemException | SecurityException | IllegalStateException | RollbackException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public Boolean deleteBidFromUser(String userId) {
+        try {
+            Query query = getEntityManager().createNamedQuery("bids.findAllByUser");
+            query.setParameter("bidderId", getId(userId));
+            deleteItemList(query.getResultList(), BidEntity.class);
+            return true;
+        } catch (IllegalArgumentException | NotSupportedException | SystemException | SecurityException | IllegalStateException | RollbackException e) {
+            return false;
+        }
+    }
+
+    /*@Override
+    public User getUser(String sid) {
+        Long id = getId(sid);
+
+        UserEntity userEntity = getEntityManager()
+                .find(UserEntity.class, id);
+        if (userEntity != null) {
+            return (User) buildResponse(userEntity);
+        }
+
+        return null;
+    }
+
+    @Override
+    public User getUserbyLogin(String login) {
+
+        Query query = getEntityManager().createNamedQuery("users.findByLogin");
+        query.setParameter("login", login);
+        UserEntity userEntity;
+        try {
+            userEntity = (UserEntity) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+
+        return (User) buildResponse(userEntity);
+    }
+
+    @Override
+    public User updateUser(String sid, User user) {
+        Long id = getId(sid);
+
+        UserEntity userEntity = getEntityManager()
+                .find(UserEntity.class, id);
+
+        if (userEntity != null) {
+
+            userEntity.setFirstName(user.getFirstName());
+            userEntity.setLastName(user.getLastName());
+            userEntity.setLogin(user.getLogin());
+            userEntity.setHashPassword(user.getHashPassword());
+            userEntity.setEmail(user.getEmail());
+            userEntity.setCity(user.getCity());
+            userEntity.setAddress(user.getAddress());
+            userEntity.setPhone(user.getPhone());
+            userEntity.setZipCode(user.getZipCode());
+            userEntity.setPermissions(user.getPermissions());
+            userEntity.setConfirmed(user.getConfirmed());
+
+
+            if (executeInDatabase(userEntity, operationType.INSERT))
+                return (User) buildResponse(userEntity);
+            else
+                return null;
+        }
+
+        return null;
+    }
+
+    @Override
+    public User saveUser(final User user) {
+        UserEntity userEntity = (UserEntity) buildEntity(user);
+
+        if (executeInDatabase(userEntity, operationType.INSERT))
+            return new User(Long.toString(userEntity.getId()), userEntity.getLogin(), userEntity.getHashPassword(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getPermissions(), userEntity.getEmail(), userEntity.getCity(), userEntity.getAddress(), userEntity.getPhone(), userEntity.getZipCode(), userEntity.getCreatedAt(), userEntity.getConfirmed());
+        else
+            return null;
+    }
+
+
+    @Override
+    public Collection<User> getUsers() {
+        Query query = getEntityManager().createNamedQuery("users.findAll");
+        List<UserEntity> resultList = query.getResultList();
+
+        List<User> list = Collections.emptyList();
+
+        if (resultList != null && !resultList.isEmpty()) {
+            list = Lists.newArrayListWithCapacity(resultList.size());
+
+            for (UserEntity user : resultList) {
+                list.add((User) buildResponse(user));
+            }
+        }
+
+        return list;
+    }
+
+    @Override
+    public Boolean deleteUser(final String uid) {
+        Long id = getId(uid);
+        try {
+            UserEntity userEntity = getEntityManager()
+                    .find(UserEntity.class, id);
+            executeInDatabase(userEntity, operationType.DELETE);
+        } catch (IllegalArgumentException e) {
+            return false;
+
+        }
+        return true;
+    }*/
 }

@@ -14,10 +14,10 @@ import java.sql.Timestamp;
 @NamedQueries({
         @NamedQuery(name = "comments.findAll", query = "SELECT c FROM CommentEntity c"),
         @NamedQuery(name = "comments.findAllByAuction", query = "SELECT c FROM CommentEntity c WHERE c.offerId=:offerId"),
-        @NamedQuery(name = "comments.findAllByUser", query = "SELECT c FROM CommentEntity c WHERE c.giverId=:userId OR c.receiverId=:userId"),
+        @NamedQuery(name = "comments.findAllByUser", query = "SELECT c FROM CommentEntity c WHERE c.giverId=:userId OR c.receiverId=:userId")
         /*@NamedQuery(name = "offers.findAllByBuyer", query = "SELECT u FROM OfferEntity u WHERE u.buyer_id=:buyer"),
         @NamedQuery(name = "comments.findAllByUser", query = "SELECT c FROM OfferEntity u WHERE u.category=:category"),*/
-        @NamedQuery(name = "comments.deleteAllByOwnerId", query = "DELETE FROM OfferEntity u WHERE u.owner_id=:owner_id")
+
 })
 public class CommentEntity {
 
@@ -104,11 +104,25 @@ public class CommentEntity {
     public CommentEntity() {
     }
 
-    public CommentEntity(Long receiverId, Long offerId, String commentText, Boolean positive, Timestamp createdAt) {
+    public CommentEntity(Long giverId, Long receiverId, Long offerId, String commentText, Boolean positive, Timestamp createdAt) {
+        this.giverId = giverId;
         this.receiverId = receiverId;
         this.offerId = offerId;
         this.commentText = commentText;
         this.positive = positive;
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "CommentEntity{" +
+                "id=" + id +
+                ", giverId=" + giverId +
+                ", receiverId=" + receiverId +
+                ", offerId=" + offerId +
+                ", commentText='" + commentText + '\'' +
+                ", positive=" + positive +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }

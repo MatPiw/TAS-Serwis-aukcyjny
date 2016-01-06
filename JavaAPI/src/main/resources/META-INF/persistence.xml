@@ -9,6 +9,7 @@
     <class>pl.edu.amu.rest.entity.UserEntity</class>
     <class>pl.edu.amu.rest.entity.OfferEntity</class>
     <class>pl.edu.amu.rest.entity.CommentEntity</class>
+    <class>pl.edu.amu.rest.entity.BidEntity</class>
   </persistence-unit>
 
 </persistence>

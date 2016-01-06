@@ -57,7 +57,7 @@ public class OfferResource {
     @Produces(MediaType.APPLICATION_JSON)
     @pl.edu.amu.rest.constraint.Offer
     @Valid
-    public Offer getOffer(@NotBlank(message = "{getOffer.offerId.empty}") @Pattern(regexp = "\\d+", message = "{offerId.notDigit}") @PathParam("offerId") String offerId) {
+    public Offer getOffer(@NotBlank(message = "{getOffer.offerId.empty}") @Pattern(regexp = "\\d+", message = "{offerId.notDigit}") @PathParam("offerId") String offerId) throws Exception{
         Offer offer = getDatabase().getOffer(offerId);
 
         if (offer == null)
@@ -72,11 +72,9 @@ public class OfferResource {
     @Produces(MediaType.APPLICATION_JSON)
     @GET
     //@Valid Wyłączone, bo są nieprawidłowe dane w bazie
-    public Collection<Offer> getOffers(@QueryParam("owner_id")  Long owner_id, @QueryParam("buyer_id") Long buyer_id, @QueryParam("category") String category) {
-        System.out.println("elo");
+    public Collection<Offer> getOffers(@QueryParam("owner_id")  Long owner_id, @QueryParam("buyer_id") Long buyer_id, @QueryParam("category") String category) throws Exception {
         String owner_idString = (owner_id == null) ? null : Long.toString(owner_id);
         String buyer_idString = (buyer_id == null) ? null : Long.toString(buyer_id);
-        System.out.println("elo2");
         Collection<Offer> result = getDatabase().getOffersWithFilters(owner_idString, buyer_idString, category);
         if (result.size() != 0) {
 
@@ -90,7 +88,7 @@ public class OfferResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Create offer", notes = "Create offer", response = Offer.class)
-    public Response createOffer(@NotNull(message = "{create.offer.empty}") @pl.edu.amu.rest.constraint.Offer @Valid final Offer offer) {
+    public Response createOffer(@NotNull(message = "{create.offer.empty}") @pl.edu.amu.rest.constraint.Offer @Valid final Offer offer) throws Exception {
 
         if (getDatabase().getUser(offer.getOwner_id().toString()) != null) {
 
@@ -123,7 +121,7 @@ public class OfferResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @NotNull
-    public Response updateUser(@NotBlank(message = "{updateOffer.offerId.empty}") @Pattern(regexp = "\\d+", message = "{offerId.notDigit}") @PathParam("offerId") String offerId, @NotNull(message = "{update.offer.empty}") @pl.edu.amu.rest.constraint.Offer @Valid Offer offer) {
+    public Response updateOffer(@NotBlank(message = "{updateOffer.offerId.empty}") @Pattern(regexp = "\\d+", message = "{offerId.notDigit}") @PathParam("offerId") String offerId, @NotNull(message = "{update.offer.empty}") @pl.edu.amu.rest.constraint.Offer @Valid Offer offer) throws Exception {
         Boolean notFoundOfferId = (getDatabase().getOffer(offerId) == null) ? true : false;
         Boolean notFoundOwnerId = (offer.getOwner_id() == null || getDatabase().getUser(offer.getOwner_id().toString()) == null) ? true : false;
         if (!notFoundOfferId && !notFoundOwnerId) {
@@ -151,7 +149,7 @@ public class OfferResource {
             errors.put("notFoundOfferId", notFoundOfferId);
             errors.put("notFoundOwnerId", notFoundOwnerId);
 
-            throw new OffersUpdateNotFoundException("There is problem with owner's id and/or offer_id", errors);
+            throw new OffersUpdateNotFoundException("There is problem with finding owner's id and/or offer_id", errors);
         }
     }
 
@@ -160,10 +158,17 @@ public class OfferResource {
     @ApiOperation(value = "Delete offer", notes = "Delete offer")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteOffer(@NotBlank(message = "{deleteOffer.offerId.empty}") @Pattern(regexp = "\\d+", message = "{offerId.notDigit}") @PathParam("offerId") String offerId) {
+    public Response deleteOffer(@NotBlank(message = "{deleteOffer.offerId.empty}") @Pattern(regexp = "\\d+", message = "{offerId.notDigit}") @PathParam("offerId") String offerId)throws Exception {
         Boolean success = getDatabase().deleteOffer(offerId);
+
+
+
         if (success)
-            return Response.status(Response.Status.NO_CONTENT).entity(null).encoding("UTF-8").type(MediaType.APPLICATION_JSON).build();
+            if (getDatabase().deleteBidFromAuction(offerId))
+                return Response.status(Response.Status.NO_CONTENT).entity(null).encoding("UTF-8").type(MediaType.APPLICATION_JSON).build();
+            else
+                throw  new InternalServerErrorException(Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorInfo("Deleting bids from deleted auction failed", "Nie udało się usunąć wszystkich stawek powiązanych z usuwaną ofertami", 1019)).encoding("UTF-8").type(MediaType.APPLICATION_JSON).build());
+
         else
             throw new NotFoundException("offer not found");
     }
@@ -172,17 +177,24 @@ public class OfferResource {
     @ApiOperation(value = "Delete offer", notes = "Delete offer")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteOffersByOwnerId(@NotBlank(message = "{deleteOwnersOffers.offerId.empty}") @Pattern(regexp = "\\d+", message = "{offerId.notDigit}") @QueryParam("owner_id") Long owner_id) {
+    public Response deleteOffersByOwnerId(@NotBlank(message = "{deleteOwnersOffers.offerId.empty}") @Pattern(regexp = "\\d+", message = "{offerId.notDigit}") @QueryParam("owner_id") Long owner_id)throws Exception {
         if (getDatabase().getUser(Long.toString(owner_id)) == null) {
             throw new UserNotFoundException("That owner doesn't exists, so he couldn't be deleted", OfferResource.class);
         } else if (getDatabase().getOffersByOwner(Long.toString(owner_id)).size() == 0) {
-            throw new SellersOffersNotFoundException("Sorry, but this user doesn't have anyy offers");
+            throw new SellersOffersNotFoundException("Sorry, but this user doesn't have any offers");
         } else {
-            Boolean success = getDatabase().deleteOffersByOwnerId(Long.toString(owner_id));
-            if (success)
+            Boolean deleteOffersSuccess = getDatabase().deleteOffersByOwnerId(Long.toString(owner_id));
+            Collection<Offer> offerList=getDatabase().getOffersByOwner(Long.toString(owner_id));
+            for (Offer offer:offerList){
+                if (!getDatabase().deleteBidFromAuction(offer.getId())){
+                    throw  new InternalServerErrorException(Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorInfo("Deleting bids from deleted auctions failed", "Nie udało się usunąć wszystkich stawek powiązanych ze wszystkimi usuwanym ofertami", 1019)).encoding("UTF-8").type(MediaType.APPLICATION_JSON).build());
+                }
+            }
+            if (deleteOffersSuccess)
                 return Response.status(Response.Status.NO_CONTENT).entity(null).encoding("UTF-8").type(MediaType.APPLICATION_JSON).build();
             else
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorInfo("Delete operation failed", "Nie udało się usunąć wszystkich ofert powiązanych z tym użytkownikiem", 1023)).encoding("UTF-8").type(MediaType.APPLICATION_JSON).build();
+                throw  new InternalServerErrorException(Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorInfo("Delete offer operation failed", "Nie udało się usunąć wszystkich ofert powiązanych z tym użytkownikiem", 1023)).encoding("UTF-8").type(MediaType.APPLICATION_JSON).build());
+                //return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorInfo("Delete operation failed", "Nie udało się usunąć wszystkich ofert powiązanych z tym użytkownikiem", 1023)).encoding("UTF-8").type(MediaType.APPLICATION_JSON).build();
         }
     }
 

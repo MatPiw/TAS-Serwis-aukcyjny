@@ -15,7 +15,7 @@ public class User{
 
     private String id;
     @NotBlank(message = "{User.login.empty}")
-    @Pattern(message = "{User.login.wrong}",regexp = "[a-zA-Z0-9ęóąśłżźćńĘÓĄŚŁŻŹĆŃ]{3,35}")
+    @Pattern(message = "{User.login.wrong}",regexp = "[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]{2,15}[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]{1,20}")
     private String login;
     @NotBlank(message = "{User.hashPassword.wrong}")
     private String hashPassword;
