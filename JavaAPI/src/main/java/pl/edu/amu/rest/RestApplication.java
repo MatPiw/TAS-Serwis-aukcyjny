@@ -56,6 +56,8 @@ public class RestApplication extends ResourceConfig {
         beanConfig.setBasePath("");
         beanConfig.setResourcePackage("pl.edu.amu.rest");
         beanConfig.setScan(true);
+        beanConfig.setTitle("Auction Service");
+        beanConfig.setDescription("Rest API to handle simple auction service.");
 
         /*register(OfferResource.class);
         register(BidResource.class);

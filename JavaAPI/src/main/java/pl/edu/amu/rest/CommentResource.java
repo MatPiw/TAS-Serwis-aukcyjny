@@ -1,19 +1,14 @@
 package pl.edu.amu.rest;
 
-import com.sun.el.parser.BooleanNode;
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.hibernate.validator.constraints.NotBlank;
-import pl.edu.amu.repository.CommentRepository;
 import pl.edu.amu.rest.database.MysqlDB;
 import pl.edu.amu.rest.exception.CommentConflictException;
 import pl.edu.amu.rest.exception.CommentNotFoundException;
 import pl.edu.amu.rest.exception.OfferNotFoundException;
 import pl.edu.amu.rest.exception.UserNotFoundException;
 import pl.edu.amu.rest.model.Comment;
-import pl.edu.amu.rest.model.User;
 import pl.edu.amu.rest.model.error.ErrorInfo;
-import scala.util.parsing.combinator.testing.Str;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -26,12 +21,11 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Path("/comments")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@Api(value = "/comments", description = "Operations about comments using mysql")
+@Api(value = "/Comments", description = "Operations on comments using MySQL database.")
 public class CommentResource {
 
     private static final MysqlDB database = new MysqlDB();
@@ -45,10 +39,18 @@ public class CommentResource {
 
     @Path("/{commentId}")
     @GET
-    @ApiOperation(value = "Get comment by id", notes = "[note]Get comment by id", response = Comment.class)
+    @ApiOperation(value = "Get comment by id.", notes = "Get comment by id.", response = Comment.class)
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Operation successful.", response = Comment.class),
+            @ApiResponse(code = 404, message = "Comment not found.", response = ErrorInfo.class),
+            @ApiResponse(code  =500, message = "Internal server error.", response = ErrorInfo.class)})
 
-    public Comment getComment(@NotBlank(message = "{getComment.commentId.empty}") @Pattern(regexp = "\\d+", message = "{commentId.notDigit}") @PathParam("commentId")  String commentId) throws Exception {
+
+    public Comment getComment(
+            @NotBlank(message = "{getComment.commentId.empty}")
+            @Pattern(regexp = "\\d+", message = "{commentId.notDigit}")
+            @ApiParam(value = "Comment id from database.", required = true) @PathParam("commentId")  String commentId) throws Exception {
         Comment comment = getDatabase().getComment(commentId);
 
         if (comment == null) {
@@ -59,9 +61,16 @@ public class CommentResource {
     }
 
     @GET
-    @ApiOperation(value = "Get comments collection with filter", notes = "[note]Get comment by id", response = Comment.class)
+    @ApiOperation(value = "Get comments collection with filter", notes = "Get all comments.", response = Comment.class)
     @Produces(MediaType.APPLICATION_JSON)
-    public Collection<Comment> getCommentsWithFilters(@QueryParam("giver_id") Long giverId, @QueryParam("receiver_id") Long receiverId, @QueryParam("offer_id") Long offerId) throws Exception {
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Operation successful.", response = Comment.class, responseContainer = "LIST"),
+            @ApiResponse(code = 500, message = "Internal server error.", response = ErrorInfo.class)})
+    public Collection<Comment> getCommentsWithFilters(
+            @ApiParam(value = "Id of user which posted the comment.", required = false) @QueryParam("giver_id") Long giverId,
+            @ApiParam(value = "Id of user which got the comment.", required = false) @QueryParam("receiver_id") Long receiverId,
+            @ApiParam(value = "Id of offer which the comment refers to.", required = false) @QueryParam("offer_id") Long offerId)
+            throws Exception {
         String giverIdString = (giverId!=null)?Long.toString(giverId):null;
         String receiverIdString = (receiverId!=null)?Long.toString(receiverId):null;
         String offerIdString = (offerId!=null)?Long.toString(offerId):null;
@@ -75,8 +84,20 @@ public class CommentResource {
     }
 
     @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Create new comment", notes = "[note]Create new comment", response = Comment.class)
-    public Response createComment(@NotNull(message = "{createComment.comment.empty}") @pl.edu.amu.rest.constraint.Comment @Valid Comment comment) throws Exception{
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Comment created.", response = Comment.class),
+            @ApiResponse(code = 400, message = "Bad request.", response =ErrorInfo.class, responseContainer = "LIST"),
+            @ApiResponse(code = 409, message =  "Conflict.", response = ErrorInfo.class),
+            @ApiResponse(code  =500, message = "Internal server error.", response = ErrorInfo.class)})
+    public Response createComment(
+            @NotNull(message = "{createComment.comment.empty}")
+            @pl.edu.amu.rest.constraint.Comment
+            @ApiParam(value = "Comment object to insert into database.", required = true)
+            @Valid Comment comment)
+            throws Exception{
         Boolean isGiverIdExist = (getDatabase().getUser(comment.getGiverId()) != null) ? true : false;
         Boolean isReceiverId = (getDatabase().getUser(comment.getRecieverId()) != null) ? true : false;
         Boolean isOfferId = (getDatabase().getOffer(comment.getOfferId()) != null) ? true : false;
@@ -110,10 +131,18 @@ public class CommentResource {
 
     @Path("/{commentId}")
     @DELETE
-    @ApiOperation(value = "Delete comment", notes = "Delete comment")
+    @ApiOperation(value = "Delete comment.", notes = "Delete existing comment.")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteComment(@NotBlank(message = "{deleteComment.commentId.empty}") @Pattern(regexp = "\\d+", message = "{comment.notDigit}") @PathParam("commentId") String commentId) throws Exception {
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Comment deleted."),
+            @ApiResponse(code = 404, message =  "Comment not found.", response = ErrorInfo.class),
+            @ApiResponse(code  =500, message = "Internal server error.", response = ErrorInfo.class)})
+
+    public Response deleteComment(
+            @NotBlank(message = "{deleteComment.commentId.empty}")
+            @Pattern(regexp = "\\d+", message = "{comment.notDigit}")
+            @ApiParam(value = "Comment id from database to delete.", required = true) @PathParam("commentId") String commentId) throws Exception {
         Boolean success = getDatabase().deleteComment(commentId);
         if (!success)
             throw new CommentNotFoundException("Comment with this id was not found in database");
@@ -124,7 +153,9 @@ public class CommentResource {
 
     @DELETE
     @ApiOperation(value = "Delete comments using filters", notes = "Delete comments using filters")
-    public Response deleteCommentsWithFilters(@QueryParam(value = "userId") Long userId, @QueryParam(value = "offerId") Long offerId) throws Exception {
+    public Response deleteCommentsWithFilters(
+            @ApiParam(value = "Comments of user with id.", required = true) @QueryParam(value = "userId") Long userId,
+            @QueryParam(value = "Comments to offer with id.") Long offerId) throws Exception {
         String userIdString = (userId != null) ? Long.toString(userId) : null;
         String offerIdString = (offerId != null) ? Long.toString(offerId) : null;
 
@@ -168,10 +199,22 @@ public class CommentResource {
 
     @Path("/{commentId}")
     @PUT
-    @ApiOperation(value = "Update comment", notes = "Update comment")
+    @ApiOperation(value = "Update comment.", notes = "Update existing comment.")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateComment(@NotBlank(message = "{updateComment.commentId.empty}") @PathParam("commentId") String commentId, @NotNull(message = "{updateComment.comment.empty}") @pl.edu.amu.rest.constraint.Comment Comment comment) throws Exception {
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Comment updated.", response = Comment.class),
+            @ApiResponse(code = 400, message = "Bad request.", response = ErrorInfo.class, responseContainer = "LIST"),
+            @ApiResponse(code = 404, message = "Comment not found.", response = ErrorInfo.class),
+            @ApiResponse(code = 409, message =  "Conflict.", response = ErrorInfo.class),
+            @ApiResponse(code  =500, message = "Internal server error.", response = ErrorInfo.class)})
+    public Response updateComment(
+            @NotBlank(message = "{updateComment.commentId.empty}")
+            @ApiParam(value = "Comment id from database.", required = true) @PathParam("commentId") String commentId,
+            @NotNull(message = "{updateComment.comment.empty}")
+            @ApiParam(value = "Updated Comment object.", required = true)
+            @pl.edu.amu.rest.constraint.Comment Comment comment)
+            throws Exception {
         if (getDatabase().getComment(commentId) != null) {
             Comment dbComment = new Comment(
                     comment.getCommentText(),
