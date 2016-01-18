@@ -84,11 +84,12 @@ public class OfferResource {
     public Collection<Offer> getOffers(
             @ApiParam(value = "All offers of user with id.", required = false) @QueryParam("owner_id") Long owner_id,
             @ApiParam(value = "All offers which won user with id.", required = false) @QueryParam("buyer_id") Long buyer_id,
-            @ApiParam(value = "All offers from category.", required = false) @QueryParam("category") String category)
+            @ApiParam(value = "All offers from category.", required = false) @QueryParam("category") String category,
+    @ApiParam(value = "Search offers by keyword.", required = false) @QueryParam("keyword") String keyword)
             throws Exception {
         String owner_idString = (owner_id == null) ? null : Long.toString(owner_id);
         String buyer_idString = (buyer_id == null) ? null : Long.toString(buyer_id);
-        Collection<Offer> result = getDatabase().getOffersWithFilters(owner_idString, buyer_idString, category);
+        Collection<Offer> result = getDatabase().getOffersWithFilters(owner_idString, buyer_idString, category, keyword);
         if (result.size() != 0) {
 
             return result;

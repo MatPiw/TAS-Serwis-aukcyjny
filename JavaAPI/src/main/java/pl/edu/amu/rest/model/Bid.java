@@ -1,6 +1,8 @@
 package pl.edu.amu.rest.model;
 
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.DecimalMin;
@@ -10,16 +12,20 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 
+@ApiModel(description = "Bid model.")
 public class Bid {
     private String id;
     @NotBlank(message = "{Bid.offerId.empty}")
     @Pattern(regexp = "\\d+", message = "{Bid.offerId.wrong}")
+    @ApiModelProperty(required = true)
     private String offerId;
     @NotBlank(message = "{Bid.bidderId.empty}")
     @Pattern(regexp = "\\d+", message = "{Bid.bidderId.wrong}")
+    @ApiModelProperty(required = true)
     private String bidderId;
     @NotNull(message = "{Bid.price.empty}")
     @DecimalMin(value = "0.0",message = "{Bid.price.toolow}")
+    @ApiModelProperty(required = true)
     private BigDecimal price;
     private Timestamp createdAt;
 

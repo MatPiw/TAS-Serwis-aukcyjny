@@ -1,6 +1,8 @@
 package pl.edu.amu.rest.model;
 
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.Valid;
@@ -10,21 +12,27 @@ import javax.validation.constraints.Pattern;
 import java.sql.Timestamp;
 import java.util.Date;
 
+@ApiModel(description = "Offer model.")
 public class Offer {
 
 
     private String id;
     @NotBlank(message = "{Offer.title.empty}")
-    @Pattern(message = "{Offer.title.wrong}",regexp = "[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]{1,20}[^0-9]{3,15}")
+    @Pattern(message = "{Offer.title.wrong}",regexp = "[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]{1,30}[^0-9]{3,20}")
+    @ApiModelProperty(required = true)
     private String title;
     @NotBlank(message = "{Offer.description.empty}")
+    @ApiModelProperty(required = true)
     private String description;
     @NotBlank(message = "{Offer.picture_path.empty}")
+    @ApiModelProperty(required = true)
     private String picture_path;
     @NotNull(message = "{Offer.owner_id.empty}")
+    @ApiModelProperty(required = true)
     private String owner_id;
     @NotNull(message = "{Offer.Prices.empty}")
     @Valid
+    @ApiModelProperty(required = true)
     private Prices prices;
 
     private Boolean active;
@@ -38,12 +46,15 @@ public class Offer {
     private float weight;
     @NotBlank(message = "{Offer.size.empty}")
     @Pattern(regexp = "[0-9]+x[0-9]+x[0-9]+", message = "{Offer.size.wrong}")
+    @ApiModelProperty(required = true)
     private String size;
     @NotBlank(message = "{Offer.shipment.empty}")
+    @ApiModelProperty(required = true)
     private String shipment;
 
     @NotBlank(message = "{Offer.category.empty}")
     @Pattern(regexp = "[^0-9]+", message = "{Offer.category.wrong}")
+    @ApiModelProperty(required = true)
     private String category;
 
     public String getTitle() {

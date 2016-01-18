@@ -1,6 +1,8 @@
 package pl.edu.amu.rest.model;
 
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
@@ -8,21 +10,27 @@ import javax.validation.constraints.Pattern;
 import java.sql.Date;
 import java.sql.Timestamp;
 
+@ApiModel(description = "Comment model.")
 public class Comment {
 
     private String id;
     @NotBlank(message = "{Comment.giverId.empty}")
     @Pattern(regexp = "\\d+", message = "{Comment.giverId.wrong}")
+    @ApiModelProperty(required = true)
     private String giverId;
     @NotBlank(message = "{Comment.recieverId.empty}")
     @Pattern(regexp = "\\d+", message = "{Comment.recieverId.wrong}")
+    @ApiModelProperty(required = true)
     private String recieverId;
     @NotBlank(message = "{Comment.offerId.empty}")
     @Pattern(regexp = "\\d+", message = "{Comment.offerId.wrong}")
+    @ApiModelProperty(required = true)
     private String offerId;
     @NotBlank(message = "{Comment.commentText.wrong}")
+    @ApiModelProperty(required = true)
     private String commentText;
     @NotNull(message = "{Comment.positive.empty}")
+    @ApiModelProperty(required = true)
     private Boolean positive;
     private Timestamp createdAt;
 

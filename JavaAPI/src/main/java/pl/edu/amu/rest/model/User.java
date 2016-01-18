@@ -1,6 +1,8 @@
 package pl.edu.amu.rest.model;
 
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -11,37 +13,47 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
+@ApiModel(description = "User model")
 public class User{
 
     private String id;
+    @ApiModelProperty(required = true)
     @NotBlank(message = "{User.login.empty}")
     @Pattern(message = "{User.login.wrong}",regexp = "[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]{2,15}[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]{1,20}")
     private String login;
     @NotBlank(message = "{User.hashPassword.wrong}")
+    @ApiModelProperty(required = true)
     private String hashPassword;
     @NotBlank(message = "{User.firstName.empty}")
     @Pattern(message = "{User.firstName.wrong}",regexp = "[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]{3,15}")
+    @ApiModelProperty(required = true)
     private String firstName;
     @NotBlank(message = "{User.lastName.empty}")
     @Pattern(message = "{User.lastName.wrong}",regexp = "[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]{3,30}")
+    @ApiModelProperty(required = true)
     private String lastName;
 
     private Boolean permissions;
 
     @NotBlank(message = "{User.email.empty}")
     @Pattern(regexp = "\\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}\\b", message = "{User.email.wrong}")
+    @ApiModelProperty(required = true)
     private String email;
     @NotBlank(message = "{User.city.empty}")
     @Pattern(message = "{User.city.wrong}",regexp = "^[a-zA-ZóąśłżźćńĘĄÓĄŚŁŻŹĆŃ]{1,30}(?:[\\s-][a-zA-Z]{1,30})*$")
+    @ApiModelProperty(required = true)
     private String city;
     @NotBlank(message = "{User.address.empty}")
     @Pattern(message = "{User.address.wrong}",regexp = "[a-zA-ZęóąśłżźćńĘĄÓĄŚŁŻŹĆŃ]{1,20}(\\\\.)?[a-zA-ZóąśłżźćńĘĄÓĄŚŁŻŹĆŃ]{1,15} \\d+")
+    @ApiModelProperty(required = true)
     private String address;
     @NotBlank(message = "{User.phone.empty}")
     @Pattern(message = "{User.phone.wrong}",regexp = "^[0-9]{9,9}$")
+    @ApiModelProperty(required = true)
     private String phone;
     @NotBlank(message = "{User.zipCode.empty}")
     @Pattern(message = "{User.zipCode.wrong}",regexp = "[0-9][0-9]\\-[0-9][0-9][0-9]")
+    @ApiModelProperty(required = true)
     private String zipCode;
     //@NotBlank(message = "{User.wrong.createdAt}")
     private Timestamp createdAt;

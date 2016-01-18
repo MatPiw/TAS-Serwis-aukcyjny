@@ -441,31 +441,33 @@ public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase, Comm
     }*/
 
     @Override
-    public Collection<Offer> getOffersWithFilters(String owner_id, String buyer_id, String category) {
+    public Collection<Offer> getOffersWithFilters(String owner_id, String buyer_id, String category, String keyword) {
         Query query;
-        if (owner_id != null || buyer_id != null || category != null) {
+        if (owner_id != null || buyer_id != null || category != null || keyword != null) {
             String constraints = new String();
+
             String owner_idFilter = (owner_id == null) ? "" : " o.owner_id=" + owner_id;
-
             constraints += owner_idFilter;
-
 
             String buyer_idFilter = (buyer_id == null) ? "" : " o.buyer_id=" + buyer_id;
             //buyer_idFilter=buyer_idFilter.replaceAll("\\=null"," is NULL"); TO ZASTOSOWAĆ, GDYBY BUYER_ID BYŁ STRINGIEM NA POCZĄTKU
-
             constraints += buyer_idFilter;
 
             String categoryFilter = (category == null) ? "" : " o.category=" + category;
-
             constraints += categoryFilter;
+
+            String keywordFilter = (keyword == null) ? "" : " o.title LIKE '%" + keyword + "%'";
+            constraints += keywordFilter;
+            System.out.println(keyword + " kurwa");
+
             if (constraints.length() > 3) {
                 constraints = "WHERE" + constraints;
-                int i = constraints.indexOf("o.");
 
                 //WTF
-                String temp = constraints.substring(i + 1);
-                constraints = constraints.substring(0, i + 1);
-                temp = temp.replaceAll("o\\.", "AND o\\.");
+                int i = constraints.indexOf("o.");
+                String temp = constraints.substring(i + 1);     //wyrzuca kropke
+                constraints = constraints.substring(0, i + 1);  //bierze to co przed pierwszym constraint
+                temp = temp.replaceAll("o\\.", "AND o\\.");     //dopisuje AND miedzy warunkami
 
                 constraints = constraints + temp;
 

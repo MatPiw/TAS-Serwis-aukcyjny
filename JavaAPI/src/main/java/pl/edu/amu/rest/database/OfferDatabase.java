@@ -24,6 +24,6 @@ public interface OfferDatabase {
 
     Collection<Offer> getOffersByCategory(String category);
 */
-    Collection<Offer> getOffersWithFilters(String owner_id, String buyer_id, String category);
+    Collection<Offer> getOffersWithFilters(String owner_id, String buyer_id, String category, String keyword);
 
 }
