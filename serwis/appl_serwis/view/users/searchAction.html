@@ -1,0 +1,23 @@
+
+    <div class="row">
+        <div class="col-md-9">
+			<div class="row">
+                {foreach $offers as $i}
+                <div class="col-sm-4 col-lg-4 col-md-4">
+                    <div class="thumbnail">
+                        <img src="{$i->picture_path}" alt="">
+                        <div class="caption">
+                            <h4 class="pull-right">Price: {$i->prices->buy_now_price}</h4>
+                            <h4><a href="{$dirWww}serwis/users/viewOffer/id:{$i->id}/">{$i->title}</a></h4>
+                            <p>{{$i->description}}</p>
+                        </div>
+                        <div class="ratings">
+                            <p class="pull-right">{$i->prices->minimal_price}</p>
+                        </div>
+                    </div>
+                </div>
+                {/foreach}
+            </div>
+        </div>
+    </div>
+
