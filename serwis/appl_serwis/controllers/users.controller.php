@@ -64,13 +64,13 @@ class usersController extends controller
         $json['title']=$_POST['title'];
         $json['description']=$_POST['description'];
         $json['picturePath']=$_POST['picturePath'];
-        $json['ownerId']=$_POST['logino'];
-        $json['buyNowPrice']=$_POST['buyNowPrice'];
-		$json['buyNowPrice']=$_POST['minPrice'];
-		$json['buyNowPrice']=$_POST['weight'];
-		$json['buyNowPrice']=$_POST['size'];
-		$json['buyNowPrice']=$_POST['shipment'];
-		$json['buyNowPrice']=$_POST['category'];
+        $json['owner_id']=$_POST['logino'];
+        $json['buy_now_price']=$_POST['buyNowPrice'];
+		$json['minimal_price']=$_POST['minPrice'];
+		$json['weight']=$_POST['weight'];
+		$json['size']=$_POST['size'];
+		$json['shipment']=$_POST['shipment'];
+		$json['category']=$_POST['category'];
 		
 		
 
