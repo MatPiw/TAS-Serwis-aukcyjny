@@ -4,14 +4,26 @@
         var price=document.getElementById('price').value;
         document.getElementById('price').value=price.replace(/,/g,'.');
 
-        if(document.getElementById('title').value != '' && document.getElementById('title').value != '' && document.getElementById('price').value != '' && isNaN(document.getElementById('price').value) === false )
+        if(document.getElementById('title').value != '' && document.getElementById('title').value != '' && document.getElementById('price').value != '' && isNaN(document.getElementById('price').value) === false && document.getElementById('size').value != '')
         {
-            document.getElementById("offer").submit();
+			var size = document.getElementById('size').value;
+			{literal}var n = size.test(/^[0-9]{,3}x[0-9]{,3}x[0-9]{,3}$/);{/literal}
+			if(n== true){
+				document.getElementById("offer").submit();
+			}			
+			else
+			{
+				alert('Wprowadzono zły format wymiarow');
+			}
         }
         else
         {
             alert('Wprowadzono złe dane');
         }
+
+		
+		
+		
     }
 </script>
 <div class="row">
@@ -20,21 +32,95 @@
 
     <div class="col-md-9">
 
-				<p style="color:red;">{$message}</p>
+		<p style="color:red;">{$message}</p>
 
+			
+        <form method="POST" action="" id="edit">
+            <fieldset>
+                    <legend>Add offer</data></legend>
 
-            <form method="POST" action="" id="offer">
-                <fieldset>
-                    <legend>Add offer</legend>
                     <input type="hidden" name="logino" value="{$profileData->id}">
-                    Title: <input id="title" type="text" name="title"><br>
-                    Description : <input id="desc" type="text" name="description"><br>
-                    PicturePath : <input id="pic" type="text" name="picturePath"><br>
-                    Buy now price : <input id="price" type="text" name="buyNowPrice"><br>
+                    
+                    <table style="font-size: 14px;">
+						<tr>
+							<td style="padding : 10px;">Title:</td>
+							<td> 
+								<input id="title" type="text" name="title">
+							</td>
+						</tr>
+						<tr>
+							<td style="padding : 10px;">Description :</td>
+							<td> 
+								<input id="desc" type="text" name="description">
+							</td>
+						</tr>
+						<tr>
+							<td style="padding : 10px;">PicturePath :</td>
+							<td> 
+								<input id="pic" type="text" name="picturePath">
+							</td>
+						</tr>
+						<tr>
+							<td style="padding : 10px;">Buy now price :</td>
+							<td> 
+								<input id="pricebn" type="text" name="buyNowPrice">
+							</td>
+						</tr>
+						<tr>
+							<td style="padding : 10px;">Minimal price :</td>
+							<td> 
+								<input id="pricemin" type="text" name="minPrice">
+							</td>
+						</tr>
+						<tr>
+							<td style="padding : 10px;">Weight :</td>
+							<td> 
+								<input id="weight" type="text" name="weight">
+							</td>
+						</tr>
+						<tr>
+							<td style="padding : 10px;">Size :</td>
+							<td> 
+								<input id="size" type="text" name="size">  Format: num 'x' num 'x' num 
+							</td>
+						</tr>
+						<tr>
+							<td style="padding : 10px;">Shipment :</td>
+							<td> 
+								<input id="ship" type="text" name="shipment"> 
+							</td>
+						</tr>
+						<tr>
+							<td style="padding : 10px;">Category :</td>
+							<td> 
+								<input id="cat" type="text" name="category">
+							</td>
+						</tr>
+						<tr>
+							<td></td><td style="padding : 10px;">
+								<button onClick="validateForm();">Dodaj ofertę</button>
+							</td>
+						</tr>
+					</table>
+                    
+                    
+                    
+                    
                 </fieldset>
-            </form>
+							
+				
+				
+            
+        </form>			
+			
+			
+			
+			
+			
+			
+			
 
-            <button onClick="validateForm();">Dodaj ofertę</button>
+
 
     </div>
 

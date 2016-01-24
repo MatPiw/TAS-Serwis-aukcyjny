@@ -66,6 +66,13 @@ class usersController extends controller
         $json['picturePath']=$_POST['picturePath'];
         $json['ownerId']=$_POST['logino'];
         $json['buyNowPrice']=$_POST['buyNowPrice'];
+		$json['buyNowPrice']=$_POST['minPrice'];
+		$json['buyNowPrice']=$_POST['weight'];
+		$json['buyNowPrice']=$_POST['size'];
+		$json['buyNowPrice']=$_POST['shipment'];
+		$json['buyNowPrice']=$_POST['category'];
+		
+		
 
         $uri= 'http://localhost:8080/offers/';
         $sendJson=json_encode($json);

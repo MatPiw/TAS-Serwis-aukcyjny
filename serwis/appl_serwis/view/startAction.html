@@ -32,13 +32,14 @@
                     <div class="thumbnail">
                         <img src="{$i->picture_path}" alt="">
                         <div class="caption">
-                            <h4 class="pull-right">Price: {$i->prices->buy_now_price}</h4>
+                            <h4 class="pull-right">Price: {$i->prices->buy_now_price} zl</h4>
                             <h4><a href="{$dirWww}serwis/users/viewOffer/id:{$i->id}/">{$i->title}</a></h4>
                             <p>{{$i->description}}</p>
+							<div class="ratings">
+                            <p class="pull-right"> Minimal: {$i->prices->minimal_price} zl</p>
                         </div>
-                        <div class="ratings">
-                            <p class="pull-right">{$i->prices->minimal_price}</p>
                         </div>
+
                     </div>
                 </div>
                 {/foreach}

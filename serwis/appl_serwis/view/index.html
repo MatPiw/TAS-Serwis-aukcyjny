@@ -31,12 +31,6 @@
                 <li>
                     <a href="#">About</a>
                 </li>
-                <li>
-                    <a href="#">Services</a>
-                </li>
-                <li>
-                    <a href="#">Contact</a>
-                </li>
 
                 {if $smarty.session.logged == true}
                 <li>
@@ -63,13 +57,13 @@
 
 
             </ul>
-            <div id="login">
+            <div id="login"style="padding-top : 3px;">
 
                 {if $smarty.session.logged != true}
                     <form id="logowanie" action="{$dirWww}serwis/users/login/" method="post" align = "center">
                     Login: <input type="text" name="login" id="username">
                     Haslo: <input type="password" name="pass" id="password">
-                    <button id="submit">Login</button>
+                    <button id="submit"  style="color: black; font-size:12px; margin-left:10px;">Login</button>
                     </form>
                 {else}
                     Witaj {$smarty.session.firstName}!
@@ -77,7 +71,6 @@
                 {/if}
 
 
-                <div id="ack"><p style="color:red;">{$message}</p></div>
 
             </div>
         </div>
