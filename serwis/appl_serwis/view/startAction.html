@@ -1,23 +1,22 @@
 <script type="text/javascript">
 
 function cut() 
-{ 
-    var licz = tresc.length; 
-    if (licz>=ile) 
+{
+    var tresc=document.getElementById("title").innerHTML;
+
+    var licz = tresc.length;
+
+    if (licz>=17)
     { 
-        var tnij = tresc.substr(0,10); 
+        var tnij = tresc.substr(0,17);
         var txt = tnij + "..."; 
     } 
     else 
     { 
         var txt = tresc; 
-    } 
-	var tmp1 = document.getElementById('title').value;
+    }
 	
-	
-	return document.getElementById('title').innerHTML = txt;
-	
-	 
+    document.getElementById('title').innerHTML = txt;
 } 
 
 
@@ -73,3 +72,6 @@ function cut()
         </div>
     </div>
 
+<script>
+    cut();
+</script>
