@@ -58,13 +58,9 @@ public class OfferResource {
             @NotBlank(message = "{getOffer.offerId.empty}")
             @Pattern(regexp = "\\d+", message = "{offerId.notDigit}")
             @ApiParam(value = "Offer id from database.", required = true) @PathParam("offerId") String offerId)
-            throws Exception {
+            {
         Bid bid = getDatabase().getHighestBid(offerId);
-        if (bid == null) {
-            throw new OfferNotFoundException("Offer with this id was not found", OfferResource.class);
-        }
-        else
-            return bid;
+        return bid;
     }
 
 

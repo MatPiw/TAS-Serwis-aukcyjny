@@ -17,6 +17,7 @@ class usersController extends controller
 
     public function addOfferAction()
     {
+
       $userLogin=$_SESSION['userLogin'];
       $profileObject= $this->getUserInfo($userLogin);
       $this->view->assign('profileData', $profileObject);
@@ -107,6 +108,13 @@ class usersController extends controller
         $this->view->assign('profileData', $profileObject);
         $this->view->assign('id', $userLogin);
     }
+	public function updateOfferAction($_pars)
+	{
+        $params=$this->params->getParams($_pars);
+        $userLogin=$params['loginof'];
+        $profileObject= $this->getUserInfo($userLogin);
+        $this->view->assign('id', $userLogin);
+    }
 
     public function updateUserAction($_pars)
     {
@@ -134,6 +142,49 @@ class usersController extends controller
         }
 
     }
+	
+    public function deleteOffersAction()
+    {
+        $offerId=$_POST['offerId'];
+        $userId=$_SESSION['userId'];
+        $send=$this->deleter($offerId, $userId);
+            if($send == true)
+            {
+                $this->view->assign("message", "Poprawnie usunięto ofertę!");
+            }
+            else
+            {
+                $this->view->assign("message", "Wystąpił Błąd");
+            }
+
+
+        $this->view->assign("inc_static", "users/viewOfferAction.html");
+        $this->viewOfferAction('id:'.$offerId);
+    }	
+	
+	
+	
+	
+	
+	
+	    private function deleter($offerId, $userId)
+    {
+        $json=array();
+        $json['offerId']=$offerId;
+        $json['userId']=$userId;
+        $json['price']=$price;
+
+        $uri= 'http://localhost:8080/bids/';
+        $sendJson=json_encode($json);
+        $response = \Httpful\Request::delete($uri)
+            ->sendsJson()
+            ->body($sendJson)
+            ->send();
+
+        return $response;
+    }
+	
+	
 
     public function sendBidAction()
     {
@@ -146,7 +197,7 @@ class usersController extends controller
             $send=$this->bidder($bidderId, $offerId, $price);
             if($send == true)
             {
-                $this->view->assign("message", "Wystąpił Błąd");
+                $this->view->assign("message", "Zalicytowano!");
             }
             else
             {

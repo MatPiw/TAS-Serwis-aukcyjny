@@ -15,6 +15,8 @@ import scala.util.parsing.combinator.testing.Str;
 import javax.naming.OperationNotSupportedException;
 import javax.persistence.*;
 import javax.ws.rs.NotSupportedException;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -726,12 +728,18 @@ public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase, Comm
         Query query;
         Long id = getId(offerId);
         query= getEntityManager().createQuery( "SELECT b FROM BidEntity b WHERE b.priceOffered = (SELECT max( p.priceOffered )FROM BidEntity p WHERE p.offerId =" + id + ") AND b.offerId = " + id);
-        System.out.println(query);
-        BidEntity bidEntity = (BidEntity) query.getSingleResult();
-        if (bidEntity != null) {
-            return (Bid) buildResponse(bidEntity);
+        BidEntity bidEntity;
+        Bid bid = new Bid();
+        try {
+            bidEntity = (BidEntity) query.getSingleResult();
+            bid = (Bid) buildResponse(bidEntity);
+        } catch (Exception e) {
+            bid.setBidderId("0");
+            bid.setOfferId(offerId);
+            bid.setPrice(BigDecimal.ZERO);
+            bid.setCreatedAt(new Timestamp(0L));
         }
-        return null;
+        return bid;
     }
 
     @Override

@@ -18,7 +18,7 @@ public class Offer {
 
     private String id;
     @NotBlank(message = "{Offer.title.empty}")
-    @Pattern(message = "{Offer.title.wrong}",regexp = "[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ.,!?;:]{1,40}[^0-9]{3,40}")
+    @Pattern(message = "{Offer.title.wrong}",regexp = "[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]{1,20}[^0-9]{3,40}")
     @ApiModelProperty(required = true)
     private String title;
     @NotBlank(message = "{Offer.description.empty}")
