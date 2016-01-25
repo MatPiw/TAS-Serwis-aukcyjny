@@ -54,7 +54,7 @@
 						<tr>
 							<td style="padding : 10px;">Buy now price :</td>
 							<td> 
-								<input id="pricebn" type="text" name="buyNowPrice">
+								<textarea id="pricebn" type="textarea" name="buyNowPrice" cols="22" rows="7"></textarea>
 							</td>
 						</tr>
 						<tr>
@@ -72,7 +72,7 @@
 						<tr>
 							<td style="padding : 10px;">Size :</td>
 							<td> 
-								<input id="size" type="text" name="size" pattern="/^[0-9]{literal}{,3}{/literal}x[0-9]{literal}{,3}{/literal}x[0-9]{literal}{,3}{/literal}$/">  Format: num 'x' num 'x' num 
+								<input id="size" type="text" name="size">  Format: num 'x' num 'x' num 
 							</td>
 						</tr>
 						<tr>
@@ -89,7 +89,7 @@
 						</tr>
 						<tr>
 							<td></td><td style="padding : 10px;">
-								<button onClick="validateForm();">Dodaj ofertę</button>
+								
 							</td>
 						</tr>
 					</table>
@@ -104,7 +104,7 @@
             
         </form>			
 			
-			
+			<button onClick="validateForm();">Dodaj ofertę</button>
 			
 			
 			
