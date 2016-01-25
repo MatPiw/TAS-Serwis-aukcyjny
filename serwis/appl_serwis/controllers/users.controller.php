@@ -229,6 +229,19 @@ class usersController extends controller
         }
     }
 
+    public function AJAXGetBestPriceAction()
+    {
+        $offerId=$_POST['offerId'];
+        $file = 'localhost:8080/offers/'.$offerId.'/highestBid';
+        $file_headers = @get_headers($file);
+        if($file_headers[0] != 'HTTP/1.1 404 Not Found') {
+            $json = @file_get_contents($file);
+            if($json != '')
+                echo $json;
+
+        }
+        exit();
+    }
 
     private function bidder($bidderId, $offerId, $price)
     {

@@ -19,8 +19,8 @@
             <img src="{$offer->picture_path}" alt="" style=" width: 200px; align : 'center';"> 
             <div class="caption-full">
                 <h4 class="pull-right">Buy now price: {$offer->prices->buy_now_price} {$offer->prices->currency}<br><br>
-                Best price: {$offer->prices->best_price} {$offer->prices->currency}</h4>
-                <form action="{$dirWww}serwis/users/sendBid/" method="POST"><input type="hidden" name="offerId" value="{$offer->id}"><input type="text" name="price" class="form-control"><input type="submit" value="Bid!"></form>
+                Best price: <p id="bestPrice">{$offer->prices->best_price} {$offer->prices->currency}</p></h4>
+                <form id="bidForm" action="{$dirWww}serwis/users/sendBid/" method="POST"><input type="hidden" name="offerId" value="{$offer->id}"><input id="prajs" type="text" name="price" class="form-control"></form><button onClick="validat();">Bid!</button>
                 <h4><a href="">{$offer->title}</a></h4>
                 <p>{$offer->description}</p>
             </div>
@@ -30,3 +30,32 @@
     </div>
 
 </div>
+
+<script>
+    function validat()
+    {
+        var price=document.getElementById("bestPrice").innerHTML;
+        price=price.split(' ');
+        if( document.getElementById("prajs").value == '' ||
+            price[0] >= document.getElementById("prajs").value)
+        {
+            alert('Wrong bidding price!');
+        }
+        else
+        {
+            document.getElementById("bidForm").submit();
+        }
+    }
+
+    {literal}setInterval(function() {
+        $.ajax({
+            url: {/literal}'{$dirWww}serwis/users/AJAXGetBestPrice/',{literal}
+            data: { offerId: {/literal}'{$offer->id}'{literal} },
+            success: function(data) {
+
+            }
+            },
+            type: 'POST'
+        });
+    }, 5000);{/literal}
+</script>
