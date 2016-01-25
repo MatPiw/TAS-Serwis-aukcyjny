@@ -63,7 +63,7 @@ class usersController extends controller
         $json=array();
         $json['title']=$_POST['title'];
         $json['description']=$_POST['description'];
-        $json['picturePath']=$_POST['picturePath'];
+        $json['picture_path']=$_POST['picturePath'];
         $json['owner_id']=$_POST['logino'];
         $json['buy_now_price']=$_POST['buyNowPrice'];
 		$json['minimal_price']=$_POST['minPrice'];
