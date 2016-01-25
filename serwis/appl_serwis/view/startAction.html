@@ -2,21 +2,26 @@
 
 function cut(co, ile)
 {
-    var tresc=document.getElementById(co).innerHTML;
+    var elementy=document.getElementsByName(co);
+    var tresc='';
+    for(var i=0; i<elementy.length; i++)
+    {
+        tresc = elementy[i].innerHTML;
 
-    var licz = tresc.length;
+        var licz = tresc.length;
 
-    if (licz>=ile)
-    { 
-        var tnij = tresc.substr(0,ile);
-        var txt = tnij + "..."; 
-    } 
-    else 
-    { 
-        var txt = tresc; 
+        if (licz>=ile)
+        {
+            var tnij = tresc.substr(0,ile);
+            var txt = tnij + "...";
+        }
+        else
+        {
+            var txt = tresc;
+        }
+
+        elementy[i].innerHTML = txt;
     }
-	
-    document.getElementById(co).innerHTML = txt;
 } 
 
 
@@ -57,7 +62,7 @@ function cut(co, ile)
                         <img src="{$i->picture_path}" alt="">
                         <div class="caption">
                             <h4 class="pull-right">Price: {$i->prices->buy_now_price} zl</h4>
-                            <h4><a href="{$dirWww}serwis/users/viewOffer/id:{$i->id}/"><p id="title" script=cut();>{$i->title}</p></a></h4>
+                            <h4><a href="{$dirWww}serwis/users/viewOffer/id:{$i->id}/"><p name="title" script=cut();>{$i->title}</p></a></h4>
                             <p id="desc">{{$i->description}}</p>
 							<p class="pull-right"> Minimal: {$i->prices->minimal_price} zl</p>
 							<div class="ratings">
