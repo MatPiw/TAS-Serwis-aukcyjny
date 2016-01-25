@@ -8,7 +8,6 @@
     <!-- Custom CSS -->
     <link href="{$dirWww}appl_serwis/view/script/shop-homepage.css" rel="stylesheet">
 </head>
-
 <body>
 <script type="text/javascript" src="{$dirWww}appl_serwis/view/script/validlogin.js"></script>
 <script type="text/javascript" src="{$dirWww}appl_serwis/view/script/jquery-2.1.4.min.js"></script>
@@ -28,9 +27,7 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li>
-                    <form action="{$dirWww}serwis/users/search/" method="POST"><input type="text" name="keywords"><input type="submit" value="search!"> </form>
-                </li>
+                
 
                 {if $smarty.session.logged == true}
                 <li>
@@ -54,25 +51,32 @@
                     <a href="{$dirWww}serwis/users/register/">Rejestracja</a>
                 </li>
                 {/if}
+				<li>
+				{if $smarty.session.logged == true}
 
-
-            </ul>
-            <div id="login"style="padding-top : 3px;">
-
-                {if $smarty.session.logged != true}
-                    <form id="logowanie" action="{$dirWww}serwis/users/login/" method="post" align = "center">
-                    Login: <input type="text" name="login" id="username">
-                    Haslo: <input type="password" name="pass" id="password">
-                    <button id="submit"  style="color: black; font-size:12px; margin-left:10px;">Login</button>
-                    </form>
-                {else}
-                    Witaj {$smarty.session.firstName}!
                     <a href="{$dirWww}serwis/users/logout/">Wyloguj</a>
                 {/if}
+				</li>
+				<li>
+					{if $smarty.session.logged == true}
+						<p style = "padding-top: 16px; padding-left: 50px; color: #9d9d9d">Witaj {$smarty.session.firstName}!</p>
+					{/if}
+				</li>
+            </ul>
+			     
+            <div id="login"style="padding-top : 3px;">
+
+                
+                    <form id="logowanie" action="{$dirWww}serwis/users/login/" method="post" align = "right">
+					<form action="{$dirWww}serwis/users/search/" method="POST"><input type="text" name="keywords" style = "border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; font-size: 12px;"><input type="submit" value="search!" style = "font-size: 12px; color: black;"> </form>
+                   
+						 </form>
 
 
+				
 
             </div>
+			
         </div>
         <!-- /.navbar-collapse -->
     </div>
