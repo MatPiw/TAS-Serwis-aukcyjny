@@ -8,6 +8,7 @@ import pl.edu.amu.rest.exception.OffersUpdateNotFoundException;
 import pl.edu.amu.rest.exception.OfferNotFoundException;
 import pl.edu.amu.rest.exception.SellersOffersNotFoundException;
 import pl.edu.amu.rest.exception.UserNotFoundException;
+import pl.edu.amu.rest.model.Bid;
 import pl.edu.amu.rest.model.Offer;
 import pl.edu.amu.rest.model.error.ErrorInfo;
 
@@ -48,6 +49,23 @@ public class OfferResource {
         System.out.println("działam 2");
         return getDatabase().getOffers();
     }*/
+
+    @Path("/{offerId}/highestBid")
+    @GET
+    @ApiOperation(value = "Get a highest bid for an offer", notes = "Highest bid of an offer.")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Bid getHighestBid(
+            @NotBlank(message = "{getOffer.offerId.empty}")
+            @Pattern(regexp = "\\d+", message = "{offerId.notDigit}")
+            @ApiParam(value = "Offer id from database.", required = true) @PathParam("offerId") String offerId)
+            throws Exception {
+        Bid bid = getDatabase().getHighestBid(offerId);
+        if (bid == null) {
+            throw new OfferNotFoundException("Offer with this id was not found", OfferResource.class);
+        }
+        else
+            return bid;
+    }
 
 
     @Path("/{offerId}")

@@ -691,7 +691,6 @@ public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase, Comm
             constraints += bidderIdFilter;
 
             String offerIdFilter = (offerId == null) ? "" : " b.offerId=" + offerId;
-
             constraints += offerIdFilter;
 
             if (constraints.length() > 2) {
@@ -723,6 +722,17 @@ public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase, Comm
         return list;
     }
 
+    public Bid getHighestBid(String offerId) {
+        Query query;
+        Long id = getId(offerId);
+        query= getEntityManager().createQuery( "SELECT b FROM BidEntity b WHERE b.priceOffered = (SELECT max( p.priceOffered )FROM BidEntity p)AND b.offerI`d = " + id);
+
+        BidEntity bidEntity = (BidEntity) query.getSingleResult();
+        if (bidEntity != null) {
+            return (Bid) buildResponse(bidEntity);
+        }
+        return null;
+    }
 
     @Override
     public Bid saveBid(Bid bid) {
