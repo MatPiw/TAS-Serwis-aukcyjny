@@ -8,7 +8,7 @@ function cut(co, ile)
 
     if (licz>=ile)
     { 
-        var tnij = tresc.substr(0,17);
+        var tnij = tresc.substr(0,ile);
         var txt = tnij + "..."; 
     } 
     else 
@@ -58,7 +58,7 @@ function cut(co, ile)
                         <div class="caption">
                             <h4 class="pull-right">Price: {$i->prices->buy_now_price} zl</h4>
                             <h4><a href="{$dirWww}serwis/users/viewOffer/id:{$i->id}/"><p id="title" script=cut();>{$i->title}</p></a></h4>
-                            <p>{{$i->description}}</p>
+                            <p id="desc">{{$i->description}}</p>
 							<p class="pull-right"> Minimal: {$i->prices->minimal_price} zl</p>
 							<div class="ratings">
                             
@@ -73,5 +73,6 @@ function cut(co, ile)
     </div>
 
 <script>
-    cut("title", 17);
+    cut("title", 14);
+	cut("desc",45);
 </script>
