@@ -67,14 +67,15 @@ class usersController extends controller
         $json['description']=$_POST['description'];
         $json['picture_path']=$_POST['picturePath'];
         $json['owner_id']=$_POST['logino'];
-        $json['buy_now_price']=$_POST['buyNowPrice'];
-		$json['minimal_price']=$_POST['minPrice'];
+        $json['prices']=array();
+        $json['prices']['buy_now_price']=$_POST['buyNowPrice'];
+        $json['prices']['minimal_price']=$_POST['minPrice'];
 		$json['weight']=$_POST['weight'];
 		$json['size']=$_POST['size'];
 		$json['shipment']=$_POST['shipment'];
 		$json['category']=$_POST['category'];
-		
-		
+
+
         $uri= 'http://localhost:8080/offers/';
         $sendJson=json_encode($json);
         $response = \Httpful\Request::post($uri)
@@ -235,10 +236,9 @@ class usersController extends controller
         $file = 'localhost:8080/offers/'.$offerId.'/highestBid';
         $file_headers = @get_headers($file);
         if($file_headers[0] != 'HTTP/1.1 404 Not Found') {
-            $json = @file_get_contents($file);
-            if($json != '')
-                echo $json;
-
+            $json = file_get_contents($file);
+            $obj = json_decode($json);
+            echo $obj->price;
         }
         exit();
     }

@@ -1,10 +1,12 @@
 <script type="text/javascript">
     function validateForm()
     {
-        var price=document.getElementById('price').value;
-        document.getElementById('price').value=price.replace(/,/g,'.');
+        var price=document.getElementById('pricebn').value;
+        document.getElementById('pricebn').value=price.replace(/,/g,'.');
+        var price=document.getElementById('pricemin').value;
+        document.getElementById('pricemin').value=price.replace(/,/g,'.');
 
-        if(document.getElementById('title').value != '' && document.getElementById('title').value != '' && document.getElementById('price').value != '' && isNaN(document.getElementById('price').value) === false && document.getElementById('size').value != '')
+        if(document.getElementById('title').value != '' && document.getElementById('title').value != '' && document.getElementById('pricebn').value != '' && isNaN(document.getElementById('pricebn').value) === false && document.getElementById('pricemin').value != '' && isNaN(document.getElementById('pricemin').value) === false && document.getElementById('size').value != '')
         {
 
 				document.getElementById("offer").submit();
@@ -26,7 +28,7 @@
 		<p style="color:red;">{$message}</p>
 		<p style="color:red;">{$msg2}</p>
 			
-        <form method="POST" action="" id="offer">
+        <form method="POST" action="" id="offer" enctype="multipart/form-data">
             <fieldset>
                     <legend>Add offer</data></legend>
 
@@ -47,8 +49,9 @@
 						</tr>
 						<tr>
 							<td style="padding : 10px;">PicturePath :</td>
-							<td> 
-								<input id="pic" type="text" name="picturePath">
+							<td>
+                                <input type="file" name="picFile">
+								<!--<input id="pic" type="text" name="picturePath">-->
 							</td>
 						</tr>
 						<tr>

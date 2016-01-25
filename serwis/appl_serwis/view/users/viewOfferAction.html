@@ -20,7 +20,9 @@
             <div class="caption-full">
                 <h4 class="pull-right">Buy now price: {$offer->prices->buy_now_price} {$offer->prices->currency}<br><br>
                 Best price: <p id="bestPrice">{$offer->prices->best_price} {$offer->prices->currency}</p></h4>
+                {if $smarty.session.logged == true}
                 <form id="bidForm" action="{$dirWww}serwis/users/sendBid/" method="POST"><input type="hidden" name="offerId" value="{$offer->id}"><input id="prajs" type="text" name="price" class="form-control"></form><button onClick="validat();">Bid!</button>
+                {/if}
                 <h4><a href="">{$offer->title}</a></h4>
                 <p>{$offer->description}</p>
             </div>
@@ -52,8 +54,7 @@
             url: {/literal}'{$dirWww}serwis/users/AJAXGetBestPrice/',{literal}
             data: { offerId: {/literal}'{$offer->id}'{literal} },
             success: function(data) {
-
-            }
+                document.getElementById("bestPrice").innerHTML=data.price;
             },
             type: 'POST'
         });
