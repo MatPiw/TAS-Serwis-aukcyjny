@@ -1,3 +1,28 @@
+<script type="text/javascript">
+
+function cut() 
+{ 
+    var licz = tresc.length; 
+    if (licz>=ile) 
+    { 
+        var tnij = tresc.substr(0,10); 
+        var txt = tnij + "..."; 
+    } 
+    else 
+    { 
+        var txt = tresc; 
+    } 
+	var tmp1 = document.getElementById('title').value;
+	
+	
+	return document.getElementById('title').innerHTML = txt;
+	
+	 
+} 
+
+
+</script>
+
 
     <div class="row">
         <div class="col-md-9">
@@ -33,10 +58,11 @@
                         <img src="{$i->picture_path}" alt="">
                         <div class="caption">
                             <h4 class="pull-right">Price: {$i->prices->buy_now_price} zl</h4>
-                            <h4><a href="{$dirWww}serwis/users/viewOffer/id:{$i->id}/">{$i->title}</a></h4>
+                            <h4><a href="{$dirWww}serwis/users/viewOffer/id:{$i->id}/"><p id="title" script=cut();>{$i->title}</p></a></h4>
                             <p>{{$i->description}}</p>
+							<p class="pull-right"> Minimal: {$i->prices->minimal_price} zl</p>
 							<div class="ratings">
-                            <p class="pull-right"> Minimal: {$i->prices->minimal_price} zl</p>
+                            
                         </div>
                         </div>
 
