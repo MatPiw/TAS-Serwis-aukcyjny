@@ -725,8 +725,8 @@ public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase, Comm
     public Bid getHighestBid(String offerId) {
         Query query;
         Long id = getId(offerId);
-        query= getEntityManager().createQuery( "SELECT b FROM BidEntity b WHERE b.priceOffered = (SELECT max( p.priceOffered )FROM BidEntity p)AND b.offerI`d = " + id);
-
+        query= getEntityManager().createQuery( "SELECT b FROM BidEntity b WHERE b.priceOffered = (SELECT max( p.priceOffered )FROM BidEntity p WHERE p.offerId =" + id + ") AND b.offerId = " + id);
+        System.out.println(query);
         BidEntity bidEntity = (BidEntity) query.getSingleResult();
         if (bidEntity != null) {
             return (Bid) buildResponse(bidEntity);
