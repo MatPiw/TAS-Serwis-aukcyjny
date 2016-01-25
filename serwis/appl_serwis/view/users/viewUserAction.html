@@ -24,11 +24,11 @@ Użytkownik wystawił:<br><br>
     </tr>
 {foreach $profileData->userOffers as $i}
     <tr>
-        <a href="{$dirWww}serwis/viewOffer/id:{$i->id}/">
-        <td>{$i->title}</td>
-        <td>{if {$i->picturePath} != ''}<img width="100" src="{$i->picturePath}">{/if}</td>
+        
+        <td><a href="{$dirWww}serwis//users/viewOffer/id:{$i->id}/">{$i->title}</a></td>
+        <td>{if {$i->picturePath} != ''}<img width="100px" height = "100px" src="{$i->picturePath}">{/if}</td>
         <td>{$i->finishedAt}</td>
-        </a>
+        
     </tr>
 {/foreach}
 </table><br>
@@ -42,8 +42,8 @@ Użytkownik wystawił:<br><br>
         </tr>
         {foreach $profileData->userOffers as $i}
         <tr>
-            <td>{$i->title}</td>
-            <td>{if $i->picture_path != ''}<img width="100" src="{$i->picturePath}">{/if}</td>
+            <td><a href="{$dirWww}serwis//users/viewOffer/id:{$i->id}/">{$i->title}</a></td>
+            <td>{if {$i->picture_path} != ''}<img width="100" src="{$i->picturePath}">{/if}</td>
             <td>{$i->finishedAt}</td>
         </tr>
         {/foreach}
