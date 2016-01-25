@@ -21,6 +21,9 @@ Użytkownik wystawił:<br><br>
         <th>Tytuł</th>
         <th>Zdjęcie</th>
         <th>Data</th>
+        {if $smarty.session.userLogin == $profileData->login}
+        <th>Akcje</th>
+        {/if}
     </tr>
 {foreach $profileData->userOffers as $i}
     <tr>
@@ -28,6 +31,9 @@ Użytkownik wystawił:<br><br>
         <td><a href="{$dirWww}serwis//users/viewOffer/id:{$i->id}/">{$i->title}</a></td>
         <td>{if {$i->picture_path} != ''}<img width="100px" height = "100px" src="{$i->picture_path}">{/if}</td>
         <td>{$i->finishedAt}</td>
+        {if $smarty.session.userLogin == $profileData->login}
+        <td><a href="{$dirWww}serwis/users/updateOffer/id:{$i->id}/">Edycja</a> <a href="{$dirWww}serwis/users/deleteOffer/offerId:{$i->id};userId:$profileData->login/">Usuń</a></td>
+        {/if}
         
     </tr>
 {/foreach}

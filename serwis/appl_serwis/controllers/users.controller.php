@@ -62,6 +62,7 @@ class usersController extends controller
     private function newOffer()
     {
         $target_dir = dirRoot."uploads/";
+
         if(file_exists($target_dir) === false)
         {
             mkdir($target_dir);
@@ -69,7 +70,7 @@ class usersController extends controller
         $ext=explode('.',$_FILES["fileToUpload"]["name"]);
 
         $target_file = $target_dir . basename($_POST['logino'].'_'.$_POST['title'].'_'.time().'.'.$ext[count($ext)-1]);
-        if($ext == 'jpg' || $ext == 'png' || $ext == 'jpeg ' || $ext == 'gif')
+
             move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
 
         $json=array();
@@ -156,6 +157,28 @@ class usersController extends controller
         }
         $this->view->assign("inc_static", "users/viewOfferAction.html");
         $this->viewOfferAction('id:'.$offerId);
+    }
+
+    public function updateOfferAction($_pars)
+    {
+        $params=$this->params->getParams($_pars);
+        $offerId=$params['id'];
+        $file = 'http://localhost:8080/offers/'.$offerId;
+        $file_headers = @get_headers($file);
+        if($file_headers[0] != 'HTTP/1.1 404 Not Found') {
+            $json = file_get_contents($file);
+            $obj = json_decode($json);
+            $this->view->assign("offer", $obj);
+        }
+
+        if($_POST['edit_title'])
+        {
+            $this->updateOffer();
+            $this->view->assign("inc_static", "users/viewUserAction.html");
+            $this->viewUserAction('login:'.$_SESSION['userLogin']);
+        }
+
+
     }
 
     public function searchAction()
@@ -256,6 +279,44 @@ class usersController extends controller
 
         }
         exit();
+    }
+
+    private function updateOffer()
+    {
+        $target_dir = dirRoot."uploads/";
+        if(file_exists($target_dir) === false)
+        {
+            mkdir($target_dir);
+        }
+        $ext=explode('.',$_FILES["fileToUpload"]["name"]);
+
+        $target_file = $target_dir . basename($_POST['userId'].'_'.$_POST['edit_title'].'_'.time().'.'.$ext[count($ext)-1]);
+            move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
+
+        $json=array();
+        $json['title']=$_POST['edit_title'];
+        $json['description']=$_POST['description'];
+        $json['picture_path']=$target_file;
+        $json['owner_id']=$_POST['userId'];
+        $json['prices']=array();
+        $json['prices']['buy_now_price']=$_POST['buyNowPrice'];
+        $json['prices']['minimal_price']=$_POST['minPrice'];
+        $json['prices']['currency']="PLN";
+        $json['weight']=$_POST['weight'];
+        $json['size']=$_POST['size'];
+        $json['shipment']=$_POST['shipment'];
+        $json['category']=$_POST['category'];
+
+
+        $uri= 'http://localhost:8080/offers/'.$_POST['offerId'];
+
+        $sendJson=json_encode($json);
+        $response = \Httpful\Request::put($uri)
+            ->sendsJson()
+            ->body($sendJson)
+            ->send();
+
+        return $response;
     }
 
     private function bidder($bidderId, $offerId, $price)

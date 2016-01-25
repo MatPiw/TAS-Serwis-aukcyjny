@@ -1,0 +1,123 @@
+<script type="text/javascript">
+    function validateForm()
+    {
+        var price=document.getElementById('pricebn').value;
+        document.getElementById('pricebn').value=price.replace(/,/g,'.');
+        var price=document.getElementById('pricemin').value;
+        document.getElementById('pricemin').value=price.replace(/,/g,'.');
+
+        if(document.getElementById('title').value != '' && document.getElementById('title').value != '' && document.getElementById('pricebn').value != '' && isNaN(document.getElementById('pricebn').value) === false && document.getElementById('pricemin').value != '' && isNaN(document.getElementById('pricemin').value) === false && document.getElementById('size').value != '')
+        {
+
+            document.getElementById("offer").submit();
+
+        }
+        else
+        {
+            alert('Wprowadzono złe dane');
+        }
+
+    }
+</script>
+<div class="row">
+{if $offer->owner_id == $smarty.session.userId}
+
+
+    <div class="col-md-9">
+
+        <p style="color:red;">{$message}</p>
+        <p style="color:red;">{$msg2}</p>
+
+        <form method="POST" action="" id="offer" enctype="multipart/form-data">
+            <fieldset>
+                <legend>Update offer</data></legend>
+
+                <input type="hidden" name="userId" value="{$smarty.session.userId}">
+                <input type="hidden" name="offerId" value="{$offer->id}">
+                <table style="font-size: 14px;">
+                    <tr>
+                        <td style="padding : 10px;">Title:</td>
+                        <td>
+                            <input id="title" type="text" name="edit_title" value="{$offer->title}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding : 10px;">Description :</td>
+                        <td>
+                            <textarea id="description" type="textarea" name="description" cols="22" rows="7">{$offer->description}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding : 10px;">PicturePath :</td>
+                        <td>
+                            <input type="file" name="fileToUpload">
+                            <!--<input id="pic" type="text" name="picturePath">--->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding : 10px;">Buy now price :</td>
+                        <td>
+                            <input id="pricebn" type="text" name="buyNowPrice" value="{$offer->prices->buy_now_price}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding : 10px;">Minimal price :</td>
+                        <td>
+                            <input id="pricemin" type="text" name="minPrice" value="{$offer->prices->minimal_price}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding : 10px;">Weight :</td>
+                        <td>
+                            <input id="weight" type="text" name="weight" value="{$offer->weight}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding : 10px;">Size :</td>
+                        <td>
+                            <input id="size" type="text" name="size" value="{$offer->size}">  Format: num 'x' num 'x' num
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding : 10px;">Shipment :</td>
+                        <td>
+                            <input id="ship" type="text" name="shipment" value="{$offer->shipment}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding : 10px;">Category :</td>
+                        <td>
+                            <input id="cat" type="text" name="category" value="{$offer->category}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td><td style="padding : 10px;">
+
+                    </td>
+                    </tr>
+                </table>
+
+
+
+
+            </fieldset>
+
+
+
+
+        </form>
+
+        <button onClick="validateForm();">Update offer</button>
+
+
+
+
+
+
+
+
+    </div>
+{else}
+    Your not the original poster!
+{/if}
+</div>
