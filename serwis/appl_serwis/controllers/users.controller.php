@@ -17,10 +17,10 @@ class usersController extends controller
 
     public function addOfferAction()
     {
+
       $userLogin=$_SESSION['userLogin'];
       $profileObject= $this->getUserInfo($userLogin);
       $this->view->assign('profileData', $profileObject);
-
 
         if($_POST['logino']){
               $response=$this->newOffer();
@@ -61,26 +61,15 @@ class usersController extends controller
 
     private function newOffer()
     {
-        $target_dir = dirRoot."uploads/";
-        if(file_exists($target_dir) === false)
-        {
-            mkdir($target_dir);
-        }
-        $ext=explode('.',$_FILES["fileToUpload"]["name"]);
-
-        $target_file = $target_dir . basename($_POST['logino'].'_'.$_POST['title'].'_'.time().'.'.$ext[count($ext)-1]);
-        if($ext == 'jpg' || $ext == 'png' || $ext == 'jpeg ' || $ext == 'gif')
-            move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
 
         $json=array();
         $json['title']=$_POST['title'];
         $json['description']=$_POST['description'];
-        $json['picture_path']=$target_file;
+        $json['picture_path']=$_POST['picturePath'];
         $json['owner_id']=$_POST['logino'];
         $json['prices']=array();
         $json['prices']['buy_now_price']=$_POST['buyNowPrice'];
         $json['prices']['minimal_price']=$_POST['minPrice'];
-        $json['prices']['currency']="PLN";
 		$json['weight']=$_POST['weight'];
 		$json['size']=$_POST['size'];
 		$json['shipment']=$_POST['shipment'];
@@ -244,16 +233,12 @@ class usersController extends controller
     public function AJAXGetBestPriceAction()
     {
         $offerId=$_POST['offerId'];
-        $file = 'http://localhost:8080/offers/'.$offerId.'/highestBid';
+        $file = 'localhost:8080/offers/'.$offerId.'/highestBid';
         $file_headers = @get_headers($file);
         if($file_headers[0] != 'HTTP/1.1 404 Not Found') {
-            $json = @file_get_contents($file);
-            if($json != '' && isset($json))
-            {
-                $obj=json_decode($json);
-                echo $obj->price;
-            }
-
+            $json = file_get_contents($file);
+            $obj = json_decode($json);
+            echo $obj->price;
         }
         exit();
     }
