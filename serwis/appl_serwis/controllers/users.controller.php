@@ -67,15 +67,14 @@ class usersController extends controller
         $json['description']=$_POST['description'];
         $json['picture_path']=$_POST['picturePath'];
         $json['owner_id']=$_POST['logino'];
-        $json['prices']=array();
-        $json['prices']['buy_now_price']=$_POST['buyNowPrice'];
-        $json['prices']['minimal_price']=$_POST['minPrice'];
+        $json['buy_now_price']=$_POST['buyNowPrice'];
+		$json['minimal_price']=$_POST['minPrice'];
 		$json['weight']=$_POST['weight'];
 		$json['size']=$_POST['size'];
 		$json['shipment']=$_POST['shipment'];
 		$json['category']=$_POST['category'];
-
-
+		
+		
         $uri= 'http://localhost:8080/offers/';
         $sendJson=json_encode($json);
         $response = \Httpful\Request::post($uri)
@@ -86,13 +85,19 @@ class usersController extends controller
 
     }
 
-
     public function viewUserAction($_pars)
     {
         $params=$this->params->getParams($_pars);
         $userLogin=$params['login'];
         $profileObject= $this->getUserInfo($userLogin);
         $this->view->assign('profileData', $profileObject);
+        $this->view->assign('id', $userLogin);
+    }
+	public function updateOfferAction($_pars)
+	{
+        $params=$this->params->getParams($_pars);
+        $userLogin=$params['loginof'];
+        $profileObject= $this->getUserInfo($userLogin);
         $this->view->assign('id', $userLogin);
     }
 
@@ -122,6 +127,49 @@ class usersController extends controller
         }
 
     }
+	
+    public function deleteOffersAction()
+    {
+        $offerId=$_POST['offerId'];
+        $userId=$_SESSION['userId'];
+        $send=$this->deleter($offerId, $userId);
+            if($send == true)
+            {
+                $this->view->assign("message", "Poprawnie usunięto ofertę!");
+            }
+            else
+            {
+                $this->view->assign("message", "Wystąpił Błąd");
+            }
+
+
+        $this->view->assign("inc_static", "users/viewOfferAction.html");
+        $this->viewOfferAction('id:'.$offerId);
+    }	
+	
+	
+	
+	
+	
+	
+	    private function deleter($offerId, $userId)
+    {
+        $json=array();
+        $json['offerId']=$offerId;
+        $json['userId']=$userId;
+        $json['price']=$price;
+
+        $uri= 'http://localhost:8080/bids/';
+        $sendJson=json_encode($json);
+        $response = \Httpful\Request::delete($uri)
+            ->sendsJson()
+            ->body($sendJson)
+            ->send();
+
+        return $response;
+    }
+	
+	
 
     public function sendBidAction()
     {
@@ -134,7 +182,7 @@ class usersController extends controller
             $send=$this->bidder($bidderId, $offerId, $price);
             if($send == true)
             {
-                $this->view->assign("message", "Wystąpił Błąd");
+                $this->view->assign("message", "Zalicytowano!");
             }
             else
             {
@@ -230,18 +278,6 @@ class usersController extends controller
         }
     }
 
-    public function AJAXGetBestPriceAction()
-    {
-        $offerId=$_POST['offerId'];
-        $file = 'localhost:8080/offers/'.$offerId.'/highestBid';
-        $file_headers = @get_headers($file);
-        if($file_headers[0] != 'HTTP/1.1 404 Not Found') {
-            $json = file_get_contents($file);
-            $obj = json_decode($json);
-            echo $obj->price;
-        }
-        exit();
-    }
 
     private function bidder($bidderId, $offerId, $price)
     {
