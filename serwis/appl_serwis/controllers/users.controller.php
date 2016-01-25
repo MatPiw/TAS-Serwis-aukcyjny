@@ -22,6 +22,7 @@ class usersController extends controller
       $profileObject= $this->getUserInfo($userLogin);
       $this->view->assign('profileData', $profileObject);
 
+
         if($_POST['logino']){
               $response=$this->newOffer();
 			  $this->view->assign("msg2", $response);
@@ -233,12 +234,16 @@ class usersController extends controller
     public function AJAXGetBestPriceAction()
     {
         $offerId=$_POST['offerId'];
-        $file = 'localhost:8080/offers/'.$offerId.'/highestBid';
+        $file = 'http://localhost:8080/offers/'.$offerId.'/highestBid';
         $file_headers = @get_headers($file);
         if($file_headers[0] != 'HTTP/1.1 404 Not Found') {
             $json = file_get_contents($file);
-            $obj = json_decode($json);
-            echo $obj->price;
+            if($json != '' && isset($json))
+            {
+                $obj=json_decode($json);
+                echo $obj->price;
+            }
+
         }
         exit();
     }

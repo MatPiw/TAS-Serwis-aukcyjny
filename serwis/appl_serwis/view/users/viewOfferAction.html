@@ -54,7 +54,7 @@
             url: {/literal}'{$dirWww}serwis/users/AJAXGetBestPrice/',{literal}
             data: { offerId: {/literal}'{$offer->id}'{literal} },
             success: function(data) {
-                document.getElementById("bestPrice").innerHTML=data.price;
+                document.getElementById("bestPrice").innerHTML=data;
             },
             type: 'POST'
         });
