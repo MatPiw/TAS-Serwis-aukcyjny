@@ -63,7 +63,7 @@ function cut(co, ile)
                         <div class="caption">
                             <h4 class="pull-right">Price: {$i->prices->buy_now_price} zl</h4>
                             <h4><a href="{$dirWww}serwis/users/viewOffer/id:{$i->id}/"><p name="title" script=cut();>{$i->title}</p></a></h4>
-                            <p id="desc">{{$i->description}}</p>
+                            <p name="desc">{{$i->description}}</p>
 							<p class="pull-right"> Minimal: {$i->prices->minimal_price} zl</p>
 							<div class="ratings">
                             
