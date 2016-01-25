@@ -108,13 +108,7 @@ class usersController extends controller
         $this->view->assign('profileData', $profileObject);
         $this->view->assign('id', $userLogin);
     }
-	public function updateOfferAction($_pars)
-	{
-        $params=$this->params->getParams($_pars);
-        $userLogin=$params['loginof'];
-        $profileObject= $this->getUserInfo($userLogin);
-        $this->view->assign('id', $userLogin);
-    }
+
 
     public function updateUserAction($_pars)
     {
