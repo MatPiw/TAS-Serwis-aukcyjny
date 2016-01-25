@@ -26,7 +26,7 @@ Użytkownik wystawił:<br><br>
     <tr>
         
         <td><a href="{$dirWww}serwis//users/viewOffer/id:{$i->id}/">{$i->title}</a></td>
-        <td>{if {$i->picturePath} != ''}<img width="100px" height = "100px" src="{$i->picturePath}">{/if}</td>
+        <td>{if {$i->picture_path} != ''}<img width="100px" height = "100px" src="{$i->picture_path}">{/if}</td>
         <td>{$i->finishedAt}</td>
         
     </tr>
@@ -43,7 +43,7 @@ Użytkownik wystawił:<br><br>
         {foreach $profileData->userOffers as $i}
         <tr>
             <td><a href="{$dirWww}serwis//users/viewOffer/id:{$i->id}/">{$i->title}</a></td>
-            <td>{if {$i->picture_path} != ''}<img width="100" src="{$i->picturePath}">{/if}</td>
+            <td>{if {$i->picture_path} != ''}<img width="100" src="{$i->picture_path}">{/if}</td>
             <td>{$i->finishedAt}</td>
         </tr>
         {/foreach}
