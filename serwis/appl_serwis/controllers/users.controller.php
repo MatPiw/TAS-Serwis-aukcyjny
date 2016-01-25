@@ -24,10 +24,12 @@ class usersController extends controller
 
         if($_POST['logino']){
               $response=$this->newOffer();
+			  $this->view->assign("msg2", $response);
               if($response != 'HTTP/1.1 404 Not Found')
               {
                   $this->view->assign("message", "Dodałeś aukcje.");
-                  $this->view->assign("inc_static", "users/viewUserAction.html");
+                  $this->view->assign("inc_static", "users/addOfferAction.html");
+				/*$this->view->assign("inc_static", "users/viewUserAction.html");*/
                   $this->viewUserAction('login:'.$_SESSION['userLogin']);
               }
               else
@@ -73,7 +75,6 @@ class usersController extends controller
 		$json['category']=$_POST['category'];
 		
 		
-
         $uri= 'http://localhost:8080/offers/';
         $sendJson=json_encode($json);
         $response = \Httpful\Request::post($uri)

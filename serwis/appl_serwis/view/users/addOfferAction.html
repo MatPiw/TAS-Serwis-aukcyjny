@@ -6,24 +6,15 @@
 
         if(document.getElementById('title').value != '' && document.getElementById('title').value != '' && document.getElementById('price').value != '' && isNaN(document.getElementById('price').value) === false && document.getElementById('size').value != '')
         {
-			var size = document.getElementById('size').value;
-			{literal}var n = size.test(/^[0-9]{,3}x[0-9]{,3}x[0-9]{,3}$/);{/literal}
-			if(n== true){
+
 				document.getElementById("offer").submit();
-			}			
-			else
-			{
-				alert('Wprowadzono zły format wymiarow');
-			}
+
         }
         else
         {
             alert('Wprowadzono złe dane');
         }
 
-		
-		
-		
     }
 </script>
 <div class="row">
@@ -33,9 +24,9 @@
     <div class="col-md-9">
 
 		<p style="color:red;">{$message}</p>
-
+		<p style="color:red;">{$msg2}</p>
 			
-        <form method="POST" action="" id="edit">
+        <form method="POST" action="" id="offer">
             <fieldset>
                     <legend>Add offer</data></legend>
 
@@ -81,7 +72,7 @@
 						<tr>
 							<td style="padding : 10px;">Size :</td>
 							<td> 
-								<input id="size" type="text" name="size">  Format: num 'x' num 'x' num 
+								<input id="size" type="text" name="size" pattern="/^[0-9]{literal}{,3}{/literal}x[0-9]{literal}{,3}{/literal}x[0-9]{literal}{,3}{/literal}$/">  Format: num 'x' num 'x' num 
 							</td>
 						</tr>
 						<tr>
