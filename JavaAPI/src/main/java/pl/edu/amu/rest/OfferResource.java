@@ -129,7 +129,6 @@ public class OfferResource {
                     offer.getCategory()
             );
             Offer createdOffer = getDatabase().saveOffer(dbOffer);
-
             return Response.created(URI.create(uriInfo.getPath() + "/" + createdOffer.getId())).entity(createdOffer).status(Response.Status.CREATED).build();
 
         } else {

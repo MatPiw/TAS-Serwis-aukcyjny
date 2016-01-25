@@ -453,7 +453,7 @@ public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase, Comm
             //buyer_idFilter=buyer_idFilter.replaceAll("\\=null"," is NULL"); TO ZASTOSOWAĆ, GDYBY BUYER_ID BYŁ STRINGIEM NA POCZĄTKU
             constraints += buyer_idFilter;
 
-            String categoryFilter = (category == null) ? "" : " o.category=" + category;
+            String categoryFilter = (category == null) ? "" : " o.category='" + category + "'";
             constraints += categoryFilter;
 
             String keywordFilter = (keyword == null) ? "" : " o.title LIKE '%" + keyword + "%'";
