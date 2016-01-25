@@ -456,9 +456,8 @@ public class MysqlDB implements ObjectBuilder, UserDatabase, OfferDatabase, Comm
             String categoryFilter = (category == null) ? "" : " o.category='" + category + "'";
             constraints += categoryFilter;
 
-            String keywordFilter = (keyword == null) ? "" : " o.title LIKE '%" + keyword + "%'";
+            String keywordFilter = (keyword == null) ? "" : " (o.title LIKE '%" + keyword + "%' OR description LIKE '%" + keyword + "%')";
             constraints += keywordFilter;
-            System.out.println(keyword + " kurwa");
 
             if (constraints.length() > 3) {
                 constraints = "WHERE" + constraints;
