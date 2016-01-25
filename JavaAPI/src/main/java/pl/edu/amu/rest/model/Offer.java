@@ -18,7 +18,7 @@ public class Offer {
 
     private String id;
     @NotBlank(message = "{Offer.title.empty}")
-    @Pattern(message = "{Offer.title.wrong}",regexp = "[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]{1,30}[^0-9]{3,20}")
+    @Pattern(message = "{Offer.title.wrong}",regexp = "[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ.,!?;:]{1,40}[^0-9]{3,40}")
     @ApiModelProperty(required = true)
     private String title;
     @NotBlank(message = "{Offer.description.empty}")
@@ -42,7 +42,7 @@ public class Offer {
     private Timestamp finishedAt;
 
     private String buyer_id;
-    @Min(value = 1L,message = "{Offer.weight.wrong}")
+    @Min(value = 0L,message = "{Offer.weight.wrong}")
     private float weight;
     @NotBlank(message = "{Offer.size.empty}")
     @Pattern(regexp = "[0-9]+x[0-9]+x[0-9]+", message = "{Offer.size.wrong}")
