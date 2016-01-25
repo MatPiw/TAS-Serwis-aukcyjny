@@ -121,7 +121,24 @@ class usersController extends controller
 
     }
 
+    public function searchAction()
+    {
+        $keyword=$_POST['keywords'];
 
+        $file = 'http://localhost:8080/offers?keyword='.$keyword;
+        $file_headers = @get_headers($file);
+        if($file_headers[0] != 'HTTP/1.1 404 Not Found') {
+            $json = file_get_contents($file);
+            $obj = json_decode($json);
+            $nextArray=array();
+            for($i=0; $i<count($obj); $i++)
+            {
+                array_push($nextArray, $obj[$i]);
+            }
+            $this->view->assign("offers", $nextArray);
+        }
+
+    }
 
     public function loginAction()
     {

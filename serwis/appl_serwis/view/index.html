@@ -29,7 +29,7 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="#">About</a>
+                    <form action="{$dirWww}serwis/users/search/" method="POST"><input type="text" name="keywords"><input type="submit" value="search!"> </form>
                 </li>
 
                 {if $smarty.session.logged == true}
