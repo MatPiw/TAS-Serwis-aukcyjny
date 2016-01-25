@@ -122,6 +122,30 @@ class usersController extends controller
 
     }
 
+    public function sendBidAction()
+    {
+        $price=$_POST['price'];
+        $bidderId=$_SESSION['userId'];
+        $offerId=$_POST['offerId'];
+
+        if($bidderId != '' && $bidderId != NULL && isset($bidderId))
+        {
+            $send=$this->bidder($bidderId, $offerId, $price);
+            if($send == true)
+            {
+                $this->view->assign("message", "Wystąpił Błąd");
+            }
+            else
+            {
+                $this->view->assign("message", "Wystąpił Błąd");
+            }
+
+
+        }
+        $this->view->assign("inc_static", "users/viewOfferAction.html");
+        $this->viewOfferAction('id:'.$offerId);
+    }
+
     public function searchAction()
     {
         $keyword=$_POST['keywords'];
@@ -205,6 +229,23 @@ class usersController extends controller
         }
     }
 
+
+    private function bidder($bidderId, $offerId, $price)
+    {
+        $json=array();
+        $json['bidderId']=$bidderId;
+        $json['offerId']=$offerId;
+        $json['price']=$price;
+
+        $uri= 'http://localhost:8080/bids/';
+        $sendJson=json_encode($json);
+        $response = \Httpful\Request::post($uri)
+            ->sendsJson()
+            ->body($sendJson)
+            ->send();
+
+        return $response;
+    }
     private function getUserInfo($_login)
     {
         $file = 'http://localhost:8080/users/'.$_login;
@@ -317,6 +358,7 @@ class usersController extends controller
                 $_SESSION['logged']=true;
                 $_SESSION['userLogin']=$obj->{'login'};
                 $_SESSION['firstName']=$obj->{'firstName'};
+                $_SESSION['userId']=$obj->{'id'};
                 return true;
             }
             else

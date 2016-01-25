@@ -19,7 +19,8 @@
             <img src="{$offer->picture_path}" alt="" style=" width: 200px; align : 'center';"> 
             <div class="caption-full">
                 <h4 class="pull-right">Buy now price: {$offer->prices->buy_now_price} {$offer->prices->currency}<br><br>
-                Minimal price: {$offer->prices->minimal_price} {$offer->prices->currency}</h4>
+                Best price: {$offer->prices->best_price} {$offer->prices->currency}</h4>
+                <form action="{$dirWww}serwis/users/sendBid/" method="POST"><input type="hidden" name="offerId" value="{$offer->id}"><input type="text" name="price" class="form-control"><input type="submit" value="Bid!"></form>
                 <h4><a href="">{$offer->title}</a></h4>
                 <p>{$offer->description}</p>
             </div>
