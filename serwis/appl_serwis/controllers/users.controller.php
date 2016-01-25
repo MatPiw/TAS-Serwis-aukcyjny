@@ -121,6 +121,7 @@ class usersController extends controller
         if($_POST['loginu'])
         {
             $response=$this->updatingData();
+			$this->view->assign("msg2", $response);
             if($response == true)
             {
                 $this->view->assign("message", "Zaktualizowałeś dane");
@@ -145,15 +146,15 @@ class usersController extends controller
             if($send == true)
             {
                 $this->view->assign("message", "Poprawnie usunięto ofertę!");
+				$this->view->assign("inc_static", "users/viewUserAction.html");
             }
             else
             {
-                $this->view->assign("message", "Wystąpił Błąd");
-            }
+				$this->view->assign("message", "Wystąpił Błąd");
+				$this->view->assign("inc_static", "users/viewOfferAction.html");
+				$this->viewOfferAction('id:'.$offerId);
+			}
 
-
-        $this->view->assign("inc_static", "users/viewOfferAction.html");
-        $this->viewOfferAction('id:'.$offerId);
     }	
 	
 	
@@ -165,10 +166,9 @@ class usersController extends controller
     {
         $json=array();
         $json['offerId']=$offerId;
-        $json['userId']=$userId;
-        $json['price']=$price;
+        $json['userId']=$userId;;
 
-        $uri= 'http://localhost:8080/bids/';
+        $uri= 'http://localhost:8080/offers/id';
         $sendJson=json_encode($json);
         $response = \Httpful\Request::delete($uri)
             ->sendsJson()
