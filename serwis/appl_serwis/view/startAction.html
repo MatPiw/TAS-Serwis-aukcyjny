@@ -1,12 +1,12 @@
 <script type="text/javascript">
 
-function cut() 
+function cut(co, ile)
 {
-    var tresc=document.getElementById("title").innerHTML;
+    var tresc=document.getElementById(co).innerHTML;
 
     var licz = tresc.length;
 
-    if (licz>=17)
+    if (licz>=ile)
     { 
         var tnij = tresc.substr(0,17);
         var txt = tnij + "..."; 
@@ -16,7 +16,7 @@ function cut()
         var txt = tresc; 
     }
 	
-    document.getElementById('title').innerHTML = txt;
+    document.getElementById(co).innerHTML = txt;
 } 
 
 
@@ -73,5 +73,5 @@ function cut()
     </div>
 
 <script>
-    cut();
+    cut("title", 17);
 </script>
