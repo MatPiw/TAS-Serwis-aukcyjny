@@ -405,12 +405,12 @@ class usersController extends controller
         $json['zipCode']=$_POST['zipc'];
         $json['phone']=$_POST['phone'];
 
-        $uri= 'http://localhost:8080/users/'.$_POST['loginu'];
+        $uri= 'http://localhost:8080/users/'.$_SESSION['userId'];
+
         $sendJson=json_encode($json);
         $response = \Httpful\Request::put($uri)
-            ->sendsJson()                               // tell it we're sending (Content-Type) JSON...
-            //->authenticateWith('username', 'password')  // authenticate with basic auth...
-            ->body($sendJson)             // attach a body/payload...
+            ->sendsJson()
+            ->body($sendJson)
             ->send();
 
 
