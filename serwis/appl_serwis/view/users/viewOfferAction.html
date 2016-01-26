@@ -18,12 +18,30 @@
         <div class="thumbnail2">
             <img src="{$offer->picture_path}" alt="" style=" width: 200px; align : 'center';"> 
             <div class="caption-full">
-                <h4 class="pull-right">Buy now price: {$offer->prices->buy_now_price} {$offer->prices->currency}<br><br>
-                Best price: <p id="bestPrice">{$offer->prices->best_price} {$offer->prices->currency}</p></h4>
-                {if $smarty.session.logged == true}
-                <form id="bidForm" action="{$dirWww}serwis/users/sendBid/" method="POST"><input type="hidden" name="offerId" value="{$offer->id}"><input id="prajs" type="text" name="price" class="form-control"></form><button onClick="validat();">Bid!</button>
-                {/if}
-                <h4><a href="">{$offer->title}</a></h4>
+				<img src="{$offer->picture_path}" alt="" style=" width: 200px; align : 'center';">
+                <h4 class="pull-right">
+					Buy now price: {$offer->prices->buy_now_price} {$offer->prices->currency}<br><br>
+					Best price: {$offer->prices->best_price} {$offer->prices->currency}
+				</h4>
+				<br><br>
+				<h6 class="pull-right">
+					{if $offer->owner_id == $smarty.session.userId} Edytuj{/if}
+					{if $offer->owner_id == $smarty.session.userId}
+						<form action="{$dirWww}serwis/users/deleteOffers/" method="POST">
+							<input type="submit" value="usun" onClick="myFunction()">
+						</form>
+					{/if}
+				</h6>
+                <form action="{$dirWww}serwis/users/sendBid/" method="POST">
+					<input type="hidden" name="offerId" value="{$offer->id}">
+					<input type="text" name="price" style = "border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; font-size: 12px;">
+					<input type="submit" value="Bid!">
+				</form>
+                <h4>
+					<a href="">
+						{$offer->title}
+					</a>
+				</h4>
                 <p>{$offer->description}</p>
             </div>
 
@@ -34,6 +52,14 @@
 </div>
 
 <script>
+function myFunction() {
+    var x;
+    if (confirm("Jeste� pewny?") == true) {
+        x = "Tak";
+    } else {
+        x = "Wr��";
+    }
+}
     function validat()
     {
         var price=document.getElementById("bestPrice").innerHTML;
