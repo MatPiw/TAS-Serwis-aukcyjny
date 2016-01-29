@@ -12,58 +12,47 @@
                 <legend>Edit your information</data></legend>
 
                     
-                    
-                    <table style="font-size: 14px;">
-						<tr>
-							<td style="padding : 10px;">First name:</td>
-							<td> 
-								<input  id="fname"  type="text" name="fname" value="{$profileData->firstName}">
-							</td>
-						</tr>
-						<tr>
-							<td style="padding : 10px;">Last name:</td>
-							<td> 
+ 
+						First name:
+							 
+						<input  id="fname"  type="text" name="fname" value="{$profileData->firstName}">
+						
+						<br><br>
+						
+						Last name:
+						 
 								<input id="lname" type="text" name="lname" value="{$profileData->lastName}">
 								<input type="hidden" name="loginu" value="{$profileData->login}">
-							</td>
-						</tr>
-						<tr>
-							<td style="padding : 10px;">Email:</td>
-							<td> 
-								<input id="email" type="text" name="email" value="{$profileData->email}">
-							</td>
-						</tr>
-						<tr>
-							<td style="padding : 10px;">City:</td>
-							<td> 
-								<input id="city" type="text" name="city" value="{$profileData->city}">
-							</td>
-						</tr>
-						<tr>
-							<td style="padding : 10px;">Address:</td>
-							<td> 
-								<input id="address" type="text" name="address" value="{$profileData->address}">
-							</td>
-						</tr>
-						<tr>
-							<td style="padding : 10px;">Zip code:</td>
-							<td> 
-								<input id="zipc" type="text" name="zipc" value="{$profileData->zipCode}">
-							</td>
-						</tr>
-						<tr>
-							<td style="padding : 10px;">Phone number:</td>
-							<td> 
-								<input id="phone" type="text" name="phone" value="{$profileData->phone}">
-							</td>
-						</tr>
-						<tr>
-							<td></td><td style="padding : 10px;">
-
-							</td>
-						</tr>
-					</table>
-                    
+						<br><br>
+						
+						Email:
+						 
+						<input id="email" type="text" name="email" value="{$profileData->email}">
+						<br><br>
+						
+						
+						City:
+						 
+						<input id="city" type="text" name="city" value="{$profileData->city}">
+						<br><br>
+						Address:
+						 
+						<input id="address" type="text" name="address" value="{$profileData->address}">
+						
+						<br><br>
+						
+						Zip code:
+						 
+						<input id="zipc" type="text" name="zipc" value="{$profileData->zipCode}">
+						
+						<br><br>
+						
+						Phone number:
+						 
+						<input id="phone" type="text" name="phone" value="{$profileData->phone}">
+						
+						<br><br>
+						<input type="submit" value="Edit">      
                     
                     
                     
@@ -74,7 +63,7 @@
             
         </form>
 
-            <button onClick="validateForm();">Zmień</button>
+            
 
 
 		</div>

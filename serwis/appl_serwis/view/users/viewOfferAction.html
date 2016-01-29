@@ -18,7 +18,6 @@
         <div class="thumbnail2">
             <img src="{$offer->picture_path}" alt="" style=" width: 200px; align : 'center';"> 
             <div class="caption-full">
-				<img src="{$offer->picture_path}" alt="" style=" width: 200px; align : 'center';">
                 <h4 class="pull-right">
 					Buy now price: {$offer->prices->buy_now_price} {$offer->prices->currency}<br><br>
 					Best price: {$offer->prices->best_price} {$offer->prices->currency}
@@ -27,8 +26,8 @@
 				<h6 class="pull-right">
 					{if $offer->owner_id == $smarty.session.userId} Edytuj{/if}
 					{if $offer->owner_id == $smarty.session.userId}
-						<form action="{$dirWww}serwis/users/deleteOffers/" method="POST">
-							<input type="submit" value="usun" onClick="myFunction()">
+						<form action="{$dirWww}serwis/users/deleteOffers/" method="POST" id="delete">
+							<input type="submit" value="usun" onClick="myFunction()"><input type="hidden" name="offerId" value="{$offer->id}">
 						</form>
 					{/if}
 				</h6>
@@ -54,18 +53,17 @@
 <script>
 function myFunction() {
     var x;
-    if (confirm("Jeste� pewny?") == true) {
-        x = "Tak";
+    if (confirm("Jestes pewny, ze chce usunac oferte?") == true) {
+        document.getElementById("delete").submit();
     } else {
-        x = "Wr��";
     }
 }
     function validat()
     {
         var price=document.getElementById("bestPrice").innerHTML;
         price=price.split(' ');
-        if( document.getElementById("prajs").value == '' ||
-            price[0] >= document.getElementById("prajs").value)
+        if( document.getElementById("price").value == '' ||
+            price[0] >= document.getElementById("price").value)
         {
             alert('Wrong bidding price!');
         }

@@ -32,7 +32,7 @@ Użytkownik wystawił:<br><br>
         <td>{if {$i->picture_path} != ''}<img width="100px" height = "100px" src="{$i->picture_path}">{/if}</td>
         <td>{$i->finishedAt}</td>
         {if $smarty.session.userLogin == $profileData->login}
-        <td><a href="{$dirWww}serwis/users/updateOffer/id:{$i->id}/">Edycja</a> <a href="{$dirWww}serwis/users/deleteOffer/offerId:{$i->id};userId:$profileData->login/">Usuń</a></td>
+        <td><a href="{$dirWww}serwis/users/updateOffer/id:{$i->id}/">Edycja</a> <form method="POST" id="deletion" action="{$dirWww}serwis/users/deleteOffers/"><input type="hidden" name="offerId" value="{$i->id}"><a onClick="document.getElementById('deletion').submit();">Usuń</a></form></td>
         {/if}
         
     </tr>
@@ -55,7 +55,7 @@ Użytkownik wystawił:<br><br>
         {/foreach}
     </table><br>
     <br><br>
-Użytkownik otrzymał następujące komentarze:<br><br>
+<!--Użytkownik otrzymał następujące komentarze:<br><br>
 <table border="1px solid" style="border: 1px solid" width="100%">
     <tr>
         <th>Komentarz</th>
@@ -73,9 +73,9 @@ Użytkownik otrzymał następujące komentarze:<br><br>
         <td>{$i->createdAt}</td>
     </tr>
     {/foreach}
-</table>
+</table>-->
 {else}
-    Zaloguj się aby obejżeć stronę.
+    Zaloguj się aby obejrzeć stronę.
     {/if}
 
 

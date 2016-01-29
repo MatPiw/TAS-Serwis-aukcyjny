@@ -1,4 +1,31 @@
+<script type="text/javascript">
 
+function cut(co, ile)
+{
+    var elementy=document.getElementsByName(co);
+    var tresc='';
+    for(var i=0; i<elementy.length; i++)
+    {
+        tresc = elementy[i].innerHTML;
+
+        var licz = tresc.length;
+
+        if (licz>=ile)
+        {
+            var tnij = tresc.substr(0,ile);
+            var txt = tnij + "...";
+        }
+        else
+        {
+            var txt = tresc;
+        }
+
+        elementy[i].innerHTML = txt;
+    }
+} 
+
+
+</script>
     <div class="row">
         <div class="col-md-9">
 			<div class="row">
@@ -8,11 +35,12 @@
                         <img src="{$i->picture_path}" alt="">
                         <div class="caption">
                             <h4 class="pull-right">Price: {$i->prices->buy_now_price}</h4>
-                            <h4><a href="{$dirWww}serwis/users/viewOffer/id:{$i->id}/">{$i->title}</a></h4>
-                            <p>{{$i->description}}</p>
+                            <h4><a href="{$dirWww}serwis/users/viewOffer/id:{$i->id}/"><p name="title">{$i->title}</p></a></h4>
+                            <p name="desc">{{$i->description}}</p>
+							<p class="pull-right">Minimal: {$i->prices->minimal_price}</p>
                         </div>
                         <div class="ratings">
-                            <p class="pull-right">{$i->prices->minimal_price}</p>
+
                         </div>
                     </div>
                 </div>
@@ -20,4 +48,7 @@
             </div>
         </div>
     </div>
-
+<script>
+    cut("title", 14);
+	cut("desc",45);
+</script>

@@ -25,7 +25,6 @@ class usersController extends controller
 
         if($_POST['logino']){
               $response=$this->newOffer();
-			  $this->view->assign("msg2", $response);
               if($response != 'HTTP/1.1 404 Not Found')
               {
                   $this->view->assign("message", "Dodałeś aukcje.");
@@ -73,11 +72,11 @@ class usersController extends controller
         $target_file = $target_dir . basename($_POST['logino'].'_'.$_POST['title'].'_'.time().'.'.$ext[count($ext)-1]);
 
             move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
-
+        $target_db = dirWww.'uploads/' . basename($_POST['logino'].'_'.$_POST['title'].'_'.time().'.'.$ext[count($ext)-1]);
         $json=array();
         $json['title']=$_POST['title'];
         $json['description']=$_POST['description'];
-        $json['picture_path']=$target_file;
+        $json['picture_path']=$target_db;
         $json['owner_id']=$_POST['logino'];
         $json['prices']=array();
         $json['prices']['buy_now_price']=$_POST['buyNowPrice'];
@@ -121,7 +120,7 @@ class usersController extends controller
         if($_POST['loginu'])
         {
             $response=$this->updatingData();
-			$this->view->assign("msg2", $response);
+
             if($response == true)
             {
                 $this->view->assign("message", "Zaktualizowałeś dane");
@@ -147,14 +146,15 @@ class usersController extends controller
             {
                 $this->view->assign("message", "Poprawnie usunięto ofertę!");
 				$this->view->assign("inc_static", "users/viewUserAction.html");
+                $this->viewUserAction('login:'.$_SESSION['userLogin']);
             }
             else
             {
 				$this->view->assign("message", "Wystąpił Błąd");
-				$this->view->assign("inc_static", "users/viewOfferAction.html");
-				$this->viewOfferAction('id:'.$offerId);
+                $this->view->assign("inc_static", "users/viewUserAction.html");
+                $this->viewUserAction('login:'.$_SESSION['userLogin']);
 			}
-
+        exit();
     }	
 	
 	
@@ -168,7 +168,7 @@ class usersController extends controller
         $json['offerId']=$offerId;
         $json['userId']=$userId;;
 
-        $uri= 'http://localhost:8080/offers/id';
+        $uri= 'http://localhost:8080/offers/'.$offerId;
         $sendJson=json_encode($json);
         $response = \Httpful\Request::delete($uri)
             ->sendsJson()
@@ -407,13 +407,11 @@ class usersController extends controller
 
         $uri= 'http://localhost:8080/users/'.$_SESSION['userId'];
 
-        $sendJson=json_encode($json);
-        $response = \Httpful\Request::put($uri)
-            ->sendsJson()
-            ->body($sendJson)
-            ->send();
-
-
+          $sendJson=json_encode($json);
+          $response = \Httpful\Request::put($uri)
+              ->sendsJson()
+              ->body($sendJson)
+              ->send();
       }
 
     }
